@@ -23,6 +23,7 @@ const Footer = () => {
     <StylinFooter
       position="fixed"
       py="2XS"
+      pb="XL"
       width="100%"
       bottom="0"
       mt="auto"
