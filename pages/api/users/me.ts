@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import nookies from 'nookies';
 
 import { prisma } from '@/lib';
+import { handleApiError, validateMethod } from '@/lib/api-utils';
 import { adminAuth } from '@/lib/firebase-admin';
 
 export default async function handler(
@@ -9,10 +10,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // Handle preflight request
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+  validateMethod(req, res, ['GET']);
 
   const cookies = nookies.get({ req });
   const sessionCookie = cookies.session || '';
@@ -31,9 +29,16 @@ export default async function handler(
     );
     const loggedUser = await prisma.user.findUnique({
       where: { email: decodedClaims.email },
-      select: {
-        id: true,
-        email: true,
+      include: {
+        assessments: true,
+        comments: true,
+        enrollments: true,
+        likes: true,
+        payments: true,
+        posts: true,
+        resources: true,
+        responses: true,
+        teachingCourses: true,
       },
     });
 
@@ -42,9 +47,6 @@ export default async function handler(
     }
     return res.status(200).json(loggedUser);
   } catch (error) {
-    console.error('Session cookie verification error:', error);
-    return res
-      .status(401)
-      .json({ error: 'Unauthorized: Invalid session cookie' });
+    handleApiError(res, error, 500);
   }
 }

@@ -1,4 +1,3 @@
-import { User } from '@prisma/client';
 import { NextPage } from 'next';
 
 import { HomePageProps } from '@/views/home/home.types';
@@ -9,8 +8,12 @@ export interface NextPageDefaultProps {
   pageTitle: string;
 }
 
+export interface SessionUserProps {
+  uid: string;
+  email: string | null;
+}
 export interface NextPageWithSessionProps {
-  user: User | null;
+  user: SessionUserProps;
 }
 
 export type NextPageWithSession = NextPage<NextPageWithSessionProps>;

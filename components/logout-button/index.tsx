@@ -1,8 +1,7 @@
-import { Button } from '@stylin.js/elements';
 import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
-// Adjust the import as needed
+import { Button } from '@/elements';
 
 const LogoutButton = () => {
   const router = useRouter();
@@ -20,13 +19,17 @@ const LogoutButton = () => {
         throw new Error('Logout failed on the server');
       }
 
-      router.push('/');
+      router.push('/auth');
     } catch (error) {
       console.error('Logout error:', error);
     }
   };
 
-  return <Button onClick={handleLogout}>Logout</Button>;
+  return (
+    <Button variant="secondary" size="medium" onClick={handleLogout}>
+      Logout
+    </Button>
+  );
 };
 
 export default LogoutButton;

@@ -1,10 +1,10 @@
 import palette from '@/design-system/common/pallete';
 
 const colors = {
-  error: palette.RED_600,
+  error: palette.RED_500,
   success: palette.GREEN_600,
   warning: palette.YELLOW_600,
-  primary: palette.PRIMARY_500,
+  primary: palette.PRIMARY_600,
   tertiary: palette.BLUE_500,
   secondary: palette.GREEN_500,
   text: palette.NEUTRAL_800,
@@ -16,10 +16,10 @@ const colors = {
   surface_x_dark: palette.PRIMARY_900,
   surface_dark: palette.PRIMARY_700,
   surface_smoke: palette.NEUTRAL_200,
-  surface: palette.BLUE_700,
-  surface_light: palette.BLUE_200,
-  surface_x_light: palette.BLUE_50,
-  background: palette.NEUTRAL_900,
+  surface: palette.NEUTRAL_400,
+  surface_light: palette.NEUTRAL_200,
+  surface_x_light: palette.NEUTRAL_100,
+  background: palette.NEUTRAL_50,
   textDisabled: palette.NEUTRAL_50,
   textPlaceholder: palette.NEUTRAL_500,
 };

@@ -10,9 +10,9 @@ export const getSizeStyle = (
 ): ISizeStyle =>
   ({
     headline: {
-      large: { fontSize: '5XL' },
-      medium: { fontSize: '4XL' },
-      small: { fontSize: '3XL' },
+      large: { fontSize: '4XL' },
+      medium: { fontSize: '3XL' },
+      small: { fontSize: '2XL' },
       extraSmall: { fontSize: '3XL' },
       micro: { fontSize: '3XL' },
     },

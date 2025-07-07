@@ -1,17 +1,31 @@
+// theme-manager.tsx
 import { Global } from '@emotion/react';
 import { ThemeProvider } from '@stylin.js/elements';
 import { ThemeProvider as ThemePoviderNormal } from '@stylin.js/react';
-import { FC, PropsWithChildren } from 'react';
-import { SkeletonTheme } from 'react-loading-skeleton';
+import { createContext, FC, PropsWithChildren, useContext } from 'react';
 
-import { GlobalStyles } from '@/design-system';
-import PrimaryTheme from '@/design-system/theme/primary';
+import { DarkTheme, GlobalStyles, LightTheme } from '@/design-system';
+import { useLocalStorage } from '@/hooks';
 
-const Theme: FC<PropsWithChildren> = ({ children }) => {
+import { ThemeProps } from './theme-manager.types';
+
+export const ThemeContext = createContext<ThemeProps>({
+  dark: false,
+  setDark: () => {},
+});
+
+export const useThemeContext = () => useContext(ThemeContext);
+
+const Theme: FC<PropsWithChildren<{ dark: boolean }>> = ({
+  dark,
+  children,
+}) => {
+  const theme = dark ? DarkTheme : LightTheme;
+
   return (
-    <ThemeProvider theme={PrimaryTheme}>
-      <ThemePoviderNormal theme={PrimaryTheme}>
-        <Global styles={GlobalStyles} />
+    <ThemeProvider theme={theme}>
+      <ThemePoviderNormal theme={theme}>
+        <Global styles={GlobalStyles(theme)} />
         {children}
       </ThemePoviderNormal>
     </ThemeProvider>
@@ -19,15 +33,12 @@ const Theme: FC<PropsWithChildren> = ({ children }) => {
 };
 
 const ThemeManager: FC<PropsWithChildren> = ({ children }) => {
+  const [dark, setDark] = useLocalStorage('ISPENSINO-theme', false);
+
   return (
-    <Theme>
-      <SkeletonTheme
-        baseColor={PrimaryTheme.colors.background}
-        highlightColor={PrimaryTheme.colors.foreground}
-      >
-        {children}
-      </SkeletonTheme>
-    </Theme>
+    <ThemeContext.Provider value={{ dark, setDark }}>
+      <Theme dark={dark}>{children}</Theme>
+    </ThemeContext.Provider>
   );
 };
 

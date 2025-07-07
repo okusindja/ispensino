@@ -1,9 +1,9 @@
 import { StylinComponentProps } from '@stylin.js/react';
 import { HTMLAttributes, RefAttributes } from 'react';
 
-import { Theme } from '@/design-system/theme/primary';
+import { DesignSystemTheme } from '@/design-system';
 
-export type TTypographyVariants = keyof Theme['typography'];
+export type TTypographyVariants = keyof DesignSystemTheme['typography'];
 export type TTypographySizes =
   | 'large'
   | 'medium'

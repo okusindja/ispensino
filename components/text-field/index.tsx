@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react';
 
-import { Theme } from '@/design-system/theme/primary';
+import { DesignSystemTheme } from '@/design-system/theme';
 import { Typography } from '@/elements/typography';
 
 import { TextFieldProps } from './text-field.types';
@@ -27,20 +27,18 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
   supportingText,
   ...props
 }) => {
-  const { colors } = useTheme() as Theme;
+  const { colors } = useTheme() as DesignSystemTheme;
   const [focus, setFocus] = useState(false);
   const [value, setValue] = useState<string>();
   const id = useId();
 
-  const statusColor = focus || status === 'none' ? 'text' : status;
+  const statusColor = focus || status === 'none' ? 'transparent' : status;
 
   const handleBorderStatus = () => {
-    const isFocused = focus && !disabled;
     const isError = status === 'error';
     const isSuccess = status === 'success';
     const hasStatus = isError || isSuccess;
     if (disabled) return '1px solid ' + colors.disabled;
-    if (isFocused) return '2px solid ' + colors.textPlaceholder;
     if (hasStatus) return '1px solid ' + colors[status as 'error' | 'success'];
   };
 
@@ -66,24 +64,35 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
       opacity={disabled ? 0.32 : 1}
       cursor={disabled ? 'not-allowed' : 'normal'}
     >
-      {label && (
-        <Label htmlFor={id}>
-          <Typography variant="fancy" size="extraSmall" mb="S" color="primary">
-            {label}
+      <Div display="flex" gap="M" alignItems="center" mb="S">
+        {label && (
+          <Label htmlFor={id}>
+            <Typography variant="fancy" size="extraSmall" color="primary">
+              {label}:
+            </Typography>
+          </Label>
+        )}
+        {supportingText && (
+          <Typography
+            variant="fancy"
+            size="extraSmall"
+            fontSize="0.75rem"
+            color={disabled ? 'surface' : statusColor || 'text'}
+          >
+            {supportingText}
           </Typography>
-        </Label>
-      )}
+        )}
+      </Div>
       <Div
         display="flex"
         borderRadius="M"
-        height="2.5rem"
         alignItems="center"
-        backgroundColor="surface_smoke"
-        border={handleBorderStatus() || '1px solid ' + colors.outlineVariant}
+        backgroundColor="surface_light"
+        border={handleBorderStatus()}
         nHover={{
           borderWidth: focus ? '2px' : disabled ? '1px' : '1px',
           borderStyle: 'solid',
-          borderColor: !disabled ? colors.outline : colors.outlineVariant,
+          borderColor: !disabled ? colors.outline : colors.outline,
         }}
         transition="all 300ms ease-in-out"
         {...fieldProps}
@@ -102,12 +111,11 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
         <Div
           flex="1"
           width="100%"
-          height="2.5rem"
           display="flex"
           alignItems="stretch"
           flexDirection="column"
           justifyContent="center"
-          p={Prefix ? 'XS' : 'M'}
+          p={Prefix ? 'XS' : '0'}
           mr={status ? '0.5rem' : 'unset'}
         >
           <Input
@@ -124,7 +132,8 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
             onBlur={handleBlur}
             onFocus={handleFocus}
             onChange={handleChange}
-            color={statusColor}
+            color={'text'}
+            backgroundColor="transparent"
             fontFamily="'Poppins', serif"
             defaultValue={value || props.defaultValue}
             nPlaceholder={{
@@ -145,15 +154,6 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
           </Div>
         )}
       </Div>
-      {supportingText && (
-        <Div
-          pt="2XS"
-          fontSize="0.75rem"
-          color={disabled ? 'surface' : statusColor}
-        >
-          {supportingText}
-        </Div>
-      )}
     </Div>
   );
 };

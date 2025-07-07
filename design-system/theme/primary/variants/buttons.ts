@@ -1,13 +1,17 @@
 import { css } from '@emotion/react';
 
+import pallete from '@/design-system/common/pallete';
+
 import colors from '../colors';
 
 const common = css`
+  width: 100%;
   border: none;
   outline: none;
   display: flex;
   cursor: pointer;
   position: relative;
+  border-radius: 0.5rem;
   align-items: center;
   display: inline-block;
   justify-content: center;
@@ -32,7 +36,7 @@ const effects = css`
 const primary = css`
   ${shadow};
   ${common};
-  color: ${colors.foreground};
+  color: ${pallete.NEUTRAL_100};
   background: ${colors.primary};
   ${effects};
 `;
@@ -40,8 +44,8 @@ const primary = css`
 const secondary = css`
   ${shadow};
   ${common};
-  color: ${colors.primary};
-  background: ${colors.secondary};
+  color: ${colors.text};
+  background: ${colors['surface_x_light']};
   ${effects};
 `;
 

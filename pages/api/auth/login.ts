@@ -1,30 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { handleApiError, validateMethod } from '@/lib/api-utils';
 import { adminAuth } from '@/lib/firebase-admin';
 
-const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days in milliseconds
+const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 dias
 
-/**
- * API endpoint to log in a user by creating a session cookie.
- * This endpoint expects a Firebase ID token in the Authorization header.
- * It creates a session cookie that can be used for authenticated requests.
- * The session cookie is set to expire in 5 days.
- * The session cookie is set as an HttpOnly cookie to prevent client-side access.
- * The cookie is set to Secure in production to ensure it is only sent over HTTPS.
- * The cookie is set to SameSite=Strict to prevent CSRF attacks.
- */
+// Helper function to map Firebase error codes to user-friendly messages
+const getFirebaseAuthErrorMessage = (code: string): string => {
+  const errorMap: Record<string, string> = {
+    'auth/invalid-email': 'Endereço de email inválido',
+    'auth/invalid-credential': 'Senha incorreta',
+  };
+
+  return errorMap[code] || 'Ocorreu um erro durante o login. Tente novamente.';
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
-    return res.status(405).json({ error: 'Method Not Allowed' });
-  }
+  validateMethod(req, res, ['POST']);
 
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: 'Não autorizado' });
   }
   const idToken = authHeader.split(' ')[1];
 
@@ -39,10 +38,12 @@ export default async function handler(
       `session=${sessionCookie}; Path=/; HttpOnly; ${isProduction ? 'Secure;' : ''} Max-Age=${expiresIn / 1000}; SameSite=Strict`
     );
 
-    return res.status(200).json({ message: 'Login successful' });
+    return res.status(200).json({ message: 'Login bem-sucedido' });
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'Internal Server Error';
-    return res.status(500).json({ error: errorMessage });
+    if (error instanceof Error && 'code' in error) {
+      const errorMessage = getFirebaseAuthErrorMessage(error.code as string);
+      return res.status(401).json({ error: errorMessage });
+    }
+    handleApiError(res, error, 500);
   }
 }

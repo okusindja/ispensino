@@ -1,95 +1,71 @@
 import { Div, Footer as StylinFooter, Li, Ul } from '@stylin.js/elements';
 import Link from 'next/link';
 
+import { BookSVG, ContentSVG, HomeSVG, UserSVG } from '@/components/svg';
 import { Routes, RoutesEnum } from '@/constants';
 import { Box } from '@/elements';
 import { Typography } from '@/elements/typography';
 
+const iconMapping = {
+  [RoutesEnum.Home]: HomeSVG,
+  [RoutesEnum.User]: UserSVG,
+  [RoutesEnum.Library]: BookSVG,
+  [RoutesEnum.Content]: ContentSVG,
+};
+
+const renderIcon = (routeKey: RoutesEnum) => {
+  const IconComponent = iconMapping[routeKey] || HomeSVG;
+  return <IconComponent maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />;
+};
+
 const Footer = () => {
   return (
-    <>
-      <StylinFooter py="3XL" mt="3XL" color="white" bg="surface_x_dark">
-        <Box variant="container">
-          <Div
-            gridColumn="1/-1"
+    <StylinFooter
+      position="fixed"
+      py="2XS"
+      width="100%"
+      bottom="0"
+      mt="auto"
+      color="text"
+      bg="surface"
+    >
+      <Box variant="container">
+        <Div
+          gap="4XL"
+          width="100%"
+          display="flex"
+          flexWrap="wrap"
+          gridColumn="1/-1"
+        >
+          <Ul
             width="100%"
             display="flex"
-            flexWrap="wrap"
-            gap="4XL"
-          >
-            <Div>
-              <Typography variant="fancy" size="medium" mb="L" fontWeight="400">
-                Conteúdo informativo
-              </Typography>
-              <Ul display="flex" flexDirection="column" gap="M">
-                {Object.values(RoutesEnum)
-                  .slice(0, 8)
-                  .map((routeKey) => (
-                    <Li key={routeKey} textTransform="capitalize">
-                      <Link href={Routes[routeKey]}>
-                        <Typography variant="body" size="extraSmall">
-                          {routeKey}
-                        </Typography>
-                      </Link>
-                    </Li>
-                  ))}
-              </Ul>
-            </Div>
-            <Div>
-              <Typography variant="fancy" size="medium" mb="L" fontWeight="400">
-                Navegação
-              </Typography>
-              <Ul display="flex" flexDirection="column" gap="M">
-                {Object.values(RoutesEnum)
-                  .slice(8, -3)
-                  .map((routeKey) => (
-                    <Li key={routeKey} textTransform="capitalize">
-                      <Link href={Routes[routeKey]}>
-                        <Typography variant="body" size="extraSmall">
-                          {routeKey}
-                        </Typography>
-                      </Link>
-                    </Li>
-                  ))}
-              </Ul>
-            </Div>
-            <Div>
-              <Typography variant="fancy" size="medium" mb="L" fontWeight="400">
-                Institucional
-              </Typography>
-              <Ul display="flex" flexDirection="column" gap="M">
-                {Object.values(RoutesEnum)
-                  .slice(-3, Object.values(RoutesEnum).length)
-                  .map((routeKey) => (
-                    <Li key={routeKey} textTransform="capitalize">
-                      <Link href={Routes[routeKey]}>
-                        <Typography variant="body" size="extraSmall">
-                          {routeKey}
-                        </Typography>
-                      </Link>
-                    </Li>
-                  ))}
-              </Ul>
-            </Div>
-          </Div>
-        </Box>
-      </StylinFooter>
-      <Div bg="white">
-        <Box variant="container">
-          <Div
-            display="flex"
-            gridColumn="1/-1"
-            justifyContent="space-between"
+            gap="3XL"
             alignItems="center"
-            py="M"
+            justifyContent="center"
           >
-            <Typography size="medium" variant="fancy">
-              © {new Date().getFullYear()} - Todos os direitos reservados
-            </Typography>
-          </Div>
-        </Box>
-      </Div>
-    </>
+            {Object.values(RoutesEnum).map((routeKey) => (
+              <Li key={routeKey} textTransform="capitalize">
+                <Link href={Routes[routeKey]}>
+                  <Div
+                    display="flex"
+                    gap="S"
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection="column"
+                  >
+                    {renderIcon(routeKey)}
+                    <Typography variant="body" size="extraSmall">
+                      {routeKey}
+                    </Typography>
+                  </Div>
+                </Link>
+              </Li>
+            ))}
+          </Ul>
+        </Div>
+      </Box>
+    </StylinFooter>
   );
 };
 

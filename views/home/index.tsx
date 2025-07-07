@@ -1,39 +1,33 @@
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
 
-import { Layout } from '@/components';
-import Tabs from '@/components/tabs';
+import { Layout, TextField } from '@/components';
+import AddPostButton from '@/components/add-post-button';
+import { SearchSVG } from '@/components/svg';
 import { Box } from '@/elements';
-import { Typography } from '@/elements/typography';
+
+import PostItem from './components/post-item';
 
 const Home: FC = () => {
   return (
     <Layout>
-      <Div mt="XL">
-        <Tabs
-          px="M"
-          variant="secondary"
-          tabList={['Notícias recentes', 'Tudo']}
-          tabContent={[
-            <Div key="tab1">
-              <Typography
-                as="h3"
-                variant="large"
-                color="primary"
-                size="small"
-                mb="XL"
-              >
-                Notícias recentes
-              </Typography>
-            </Div>,
-            <Box key="tab2" variant="container">
-              <Div gridColumn="1/-1" width="100%" pb="XL">
-                Informacoes
-              </Div>
-            </Box>,
-          ]}
-        />
-      </Div>
+      <Box variant="container">
+        <Div width="100%" position="relative" height="100%" gridColumn="1/-1">
+          <TextField
+            py="M"
+            Prefix={
+              <SearchSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
+            }
+            placeholder="Procure um nome ou username"
+          />
+          <Div display="grid" mt="L" gap="L">
+            <PostItem />
+            <PostItem />
+            <PostItem />
+          </Div>
+        </Div>
+        <AddPostButton />
+      </Box>
     </Layout>
   );
 };

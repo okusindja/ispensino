@@ -1,23 +1,34 @@
-import { Header as StylinHeader, Li, Ul } from '@stylin.js/elements';
+import { Div, Header as StylinHeader } from '@stylin.js/elements';
+import Link from 'next/link';
 
-import { useIsMobile } from '@/hooks';
-
-import Mobile from './mobile';
+import { LogoSVG } from '@/components/svg';
+import { Routes, RoutesEnum } from '@/constants';
+import { Box } from '@/elements';
 
 const Header = () => {
-  const isMobile = useIsMobile();
   return (
     <>
-      {!isMobile && (
-        <StylinHeader zIndex="10" width="100%">
-          <Ul>
-            <Li>Home</Li>
-            <Li>News</Li>
-            <Li>About</Li>
-          </Ul>
-        </StylinHeader>
-      )}
-      {isMobile && <Mobile />}
+      <StylinHeader
+        zIndex="10"
+        position="absolute"
+        top="0"
+        width="100%"
+        backgroundColor="surface"
+      >
+        <Box variant="container">
+          <Div
+            gridColumn="1/-1"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+          >
+            <Link href={Routes[RoutesEnum.Home]}>
+              <LogoSVG width="100%" maxWidth="2.5rem" maxHeight="2.5rem" />
+            </Link>
+          </Div>
+        </Box>
+      </StylinHeader>
     </>
   );
 };

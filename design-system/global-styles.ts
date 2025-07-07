@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 
-import PrimaryTheme from '@/design-system/theme/primary';
+import { DesignSystemTheme } from './theme';
 
-export const GlobalStyles = css`
+export const GlobalStyles = (theme: DesignSystemTheme) => css`
   * {
     margin: 0;
     padding: 0;
@@ -17,6 +17,7 @@ export const GlobalStyles = css`
   body,
   html {
     overflow-x: hidden;
+    background-color: ${theme.colors.background};
   }
 
   a {
@@ -53,36 +54,39 @@ export const GlobalStyles = css`
   }
 
   .TabsTrigger[data-state='active'] {
-    color: ${PrimaryTheme.colors.primary};
-    background-color: #fff;
+    color: ${theme.colors.text};
+    background-color: ${theme.colors.surface_light};
+  }
+  .TabsTrigger:not([data-state='active']) {
+    color: ${theme.colors.text};
   }
 
   .TabsTrigger--secondary {
     transition: all 300ms ease-in-out;
-    color: ${PrimaryTheme.colors.foreground};
+    color: ${theme.colors.foreground};
   }
 
   .TabsTrigger--secondary[data-state='active'] {
-    color: ${PrimaryTheme.colors.primary};
-    background-color: ${PrimaryTheme.colors.foreground};
+    color: ${theme.colors.primary};
+    background-color: ${theme.colors.foreground};
   }
 
   .TabsTrigger--secondary:not([data-state='active']):hover {
-    color: ${PrimaryTheme.colors.secondary};
+    color: ${theme.colors.secondary};
     transition: all 300ms ease-in-out;
   }
 
   .TabsTrigger--tertiary {
     transition: all 300ms ease-in-out;
-    color: ${PrimaryTheme.colors.foreground};
+    color: ${theme.colors.foreground};
   }
 
   .TabsTrigger--tertiary[data-state='active'] {
-    background-color: ${PrimaryTheme.colors.tertiary};
+    background-color: ${theme.colors.tertiary};
   }
 
   .TabsTrigger--tertiary:not([data-state='active']):hover {
-    color: ${PrimaryTheme.colors.secondary};
+    color: ${theme.colors.secondary};
     transition: all 300ms ease-in-out;
   }
 `;

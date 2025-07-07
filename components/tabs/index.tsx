@@ -10,12 +10,23 @@ const Tabs: FC<TabsProps> = ({
   px,
   tabContent,
   tabList,
+  position = 'top',
   variant = 'primary',
 }) => {
   return (
     <>
       <RadixTabs.Root asChild className="TabsRoot" defaultValue="Tab0">
         <Div gridColumn="1/-1" width="100%">
+          {position === 'bottom' &&
+            tabContent.map((content, index) => (
+              <RadixTabs.Content
+                key={'Tab' + index}
+                className="TabsContent"
+                value={'Tab' + index}
+              >
+                {content}
+              </RadixTabs.Content>
+            ))}
           <RadixTabs.List
             asChild
             className="TabsList"
@@ -24,24 +35,22 @@ const Tabs: FC<TabsProps> = ({
             <Div
               mx={px}
               pb="0"
+              {...(position === 'bottom' && { mt: 'XL' })}
               p={
                 variant === 'secondary'
                   ? 'S'
                   : variant === 'tertiary'
                     ? '0'
-                    : 'XS'
+                    : 'M'
               }
               mb={variant !== 'tertiary' ? 'XL' : '2XL'}
-              borderTopLeftRadius={variant !== 'tertiary' ? 'M' : '0'}
-              borderTopRightRadius={variant !== 'tertiary' ? 'M' : '0'}
-              borderBottomLeftRadius={variant !== 'secondary' ? '0' : 'M'}
-              borderBottomRightRadius={variant !== 'secondary' ? '0' : 'M'}
+              borderRadius="M"
               background={
                 variant === 'tertiary'
                   ? 'surface_dark'
                   : variant === 'secondary'
                     ? 'primary'
-                    : 'disabled'
+                    : 'surface'
               }
             >
               <Div display="flex">
@@ -58,14 +67,7 @@ const Tabs: FC<TabsProps> = ({
                       p={variant !== 'tertiary' ? 'M' : 'L'}
                       cursor="pointer"
                       flex={variant !== 'tertiary' ? '1' : 'unset'}
-                      borderTopLeftRadius={variant !== 'tertiary' ? 'M' : '0'}
-                      borderTopRightRadius={variant !== 'tertiary' ? 'M' : '0'}
-                      borderBottomLeftRadius={
-                        variant !== 'secondary' ? '0' : 'M'
-                      }
-                      borderBottomRightRadius={
-                        variant !== 'secondary' ? '0' : 'M'
-                      }
+                      borderRadius="S"
                     >
                       <Typography
                         size="small"
@@ -86,15 +88,16 @@ const Tabs: FC<TabsProps> = ({
               </Div>
             </Div>
           </RadixTabs.List>
-          {tabContent.map((content, index) => (
-            <RadixTabs.Content
-              key={'Tab' + index}
-              className="TabsContent"
-              value={'Tab' + index}
-            >
-              {content}
-            </RadixTabs.Content>
-          ))}
+          {position === 'top' &&
+            tabContent.map((content, index) => (
+              <RadixTabs.Content
+                key={'Tab' + index}
+                className="TabsContent"
+                value={'Tab' + index}
+              >
+                {content}
+              </RadixTabs.Content>
+            ))}
         </Div>
       </RadixTabs.Root>
     </>

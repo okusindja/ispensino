@@ -8,7 +8,9 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       <Header />
-      <Main>{children}</Main>
+      <Main mb="3XL" mt="3rem">
+        {children}
+      </Main>
       <Footer />
     </>
   );
