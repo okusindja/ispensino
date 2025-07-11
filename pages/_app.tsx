@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { ThemeManager } from '@/components';
-import { AuthProvider } from '@/contexts';
+import { AuthProvider, DialogProvider } from '@/contexts';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -13,11 +13,13 @@ const App = ({ Component, pageProps }: AppProps) => {
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
       </Head>
-      <AuthProvider>
-        <ThemeManager>
-          <Component {...pageProps} />
-        </ThemeManager>
-      </AuthProvider>
+      <ThemeManager>
+        <DialogProvider>
+          <AuthProvider>
+            <Component {...pageProps} />
+          </AuthProvider>
+        </DialogProvider>
+      </ThemeManager>
     </>
   );
 };

@@ -21,14 +21,15 @@ const renderIcon = (routeKey: RoutesEnum) => {
 const Footer = () => {
   return (
     <StylinFooter
-      position="fixed"
-      py="2XS"
       pb="XL"
-      width="100%"
-      bottom="0"
+      py="2XS"
       mt="auto"
+      bottom="0"
+      width="100%"
       color="text"
-      bg="surface"
+      position="fixed"
+      backgroundColor="surface"
+      boxShadow="1px -5px 10px rgba(0, 0, 0, 0.06)"
     >
       <Box variant="container">
         <Div
@@ -39,9 +40,9 @@ const Footer = () => {
           gridColumn="1/-1"
         >
           <Ul
+            gap="3XL"
             width="100%"
             display="flex"
-            gap="3XL"
             alignItems="center"
             justifyContent="center"
           >
@@ -49,11 +50,11 @@ const Footer = () => {
               <Li key={routeKey} textTransform="capitalize">
                 <Link href={Routes[routeKey]}>
                   <Div
-                    display="flex"
                     gap="S"
-                    justifyContent="center"
+                    display="flex"
                     alignItems="center"
                     flexDirection="column"
+                    justifyContent="center"
                   >
                     {renderIcon(routeKey)}
                     <Typography variant="body" size="extraSmall">

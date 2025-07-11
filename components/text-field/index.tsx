@@ -84,10 +84,11 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
         )}
       </Div>
       <Div
+        py="L"
         display="flex"
         borderRadius="M"
         alignItems="center"
-        backgroundColor="surface_light"
+        backgroundColor="surface"
         border={handleBorderStatus()}
         nHover={{
           borderWidth: focus ? '2px' : disabled ? '1px' : '1px',
@@ -115,7 +116,7 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
           alignItems="stretch"
           flexDirection="column"
           justifyContent="center"
-          p={Prefix ? 'XS' : '0'}
+          px={Prefix ? 'XS' : 'L'}
           mr={status ? '0.5rem' : 'unset'}
         >
           <Input

@@ -5,6 +5,7 @@ import nookies from 'nookies';
 
 import { NextPageWithSession } from '@/interface/declaration';
 import { adminAuth } from '@/lib';
+import { LibraryView } from '@/views';
 
 const LibraryPage: NextPageWithSession = ({ user }) => {
   if (!user) {
@@ -16,7 +17,7 @@ const LibraryPage: NextPageWithSession = ({ user }) => {
     );
   }
 
-  return <Div>LibraryPage</Div>;
+  return <LibraryView />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

@@ -1,17 +1,23 @@
-import { getAuth } from 'firebase-admin/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { prisma } from '.';
+import { adminAuth } from './firebase-admin';
+import { prisma } from './prisma';
 
-// Verify Firebase token and get user
 export const authenticateUser = async (req: NextApiRequest) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith('Bearer ')) return null;
+  if (!authHeader?.startsWith('Bearer ')) {
+    console.log('No Bearer token found in Authorization header');
+    return null;
+  }
 
   const idToken = authHeader.split(' ')[1];
   try {
-    const decodedToken = await getAuth().verifyIdToken(idToken);
-    return await prisma.user.findUnique({
+    console.log('Verifying ID token');
+    const decodedToken = await adminAuth.verifyIdToken(idToken);
+    console.log('Decoded token:', decodedToken);
+
+    console.log('Looking up user by firebaseId:', decodedToken.uid);
+    const user = await prisma.user.findUnique({
       where: { firebaseId: decodedToken.uid },
       include: {
         enrollments: true,
@@ -25,9 +31,33 @@ export const authenticateUser = async (req: NextApiRequest) => {
         comments: true,
       },
     });
+
+    if (!user) {
+      console.log(
+        `User with firebaseId ${decodedToken.uid} not found in database`
+      );
+      return null;
+    }
+
+    console.log('Authenticated user:', user.email);
+    return user;
   } catch (error) {
+    console.error('Error verifying token or fetching user:', error);
     return null;
   }
+};
+
+export const enableCors = (req: NextApiRequest, res: NextApiResponse) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return true;
+  }
+
+  return false;
 };
 
 // Handle API errors

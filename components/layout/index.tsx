@@ -4,11 +4,14 @@ import { FC, PropsWithChildren } from 'react';
 import Footer from './footer';
 import Header from './header';
 
-const Layout: FC<PropsWithChildren> = ({ children }) => {
+const Layout: FC<PropsWithChildren<{ hasGoBack?: boolean }>> = ({
+  hasGoBack = false,
+  children,
+}) => {
   return (
     <>
-      <Header />
-      <Main mb="3XL" mt="3rem">
+      <Header hasGoBack={hasGoBack} />
+      <Main mb="5XL" mt="3rem">
         {children}
       </Main>
       <Footer />

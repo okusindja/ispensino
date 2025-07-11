@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Div } from '@stylin.js/elements';
-import React from 'react';
+import { Div, Input, Label } from '@stylin.js/elements';
 import {
   Control,
   Controller,
@@ -14,9 +13,9 @@ import {
 import { ZodSchema } from 'zod';
 
 import { TextField } from '@/components';
+import { Box } from '@/elements';
 import { Button } from '@/elements';
 
-// Generic Form Field Component
 type FormFieldProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
@@ -37,7 +36,6 @@ export const FormField = <T extends FieldValues>({
       control={control}
       render={({ field }) => (
         <TextField
-          p="1rem"
           width="100%"
           label={label}
           id={String(name)}
@@ -54,20 +52,17 @@ export const FormField = <T extends FieldValues>({
   </Div>
 );
 
-// Submit Button Component
 type SubmitButtonProps = {
   loading: boolean;
   children: React.ReactNode;
 };
 
-// export const SubmitButton = ({ loading, children }: SubmitButtonProps) => (
 export const SubmitButton = ({ children }: SubmitButtonProps) => (
   <Button variant="primary" size="medium">
     {children}
   </Button>
 );
 
-// Define a strict type for our form hook
 type UseZodFormReturn<T extends FieldValues> = {
   control: Control<T>;
   handleSubmit: (
@@ -81,7 +76,6 @@ type UseZodFormReturn<T extends FieldValues> = {
   trigger: (fieldNames?: (keyof T)[]) => Promise<boolean>;
 };
 
-// Form Hook
 export const useZodForm = <T extends FieldValues>(
   schema: ZodSchema<T>,
   defaultValues?: Partial<T>
@@ -112,3 +106,45 @@ export const useZodForm = <T extends FieldValues>(
     },
   };
 };
+
+export const CheckboxField = ({
+  name,
+  label,
+  value,
+  control,
+}: {
+  name: string;
+  label: string;
+  value?: string;
+  control: any;
+}) => (
+  <Controller
+    name={name}
+    control={control}
+    render={({ field }) => (
+      <Box display="flex" alignItems="center">
+        <Input
+          type="checkbox"
+          id={`${name}-${value || ''}`}
+          checked={value ? (field.value || []).includes(value) : field.value}
+          onChange={(e) => {
+            if (value) {
+              const newValue = [...(field.value || [])];
+              if (e.target.checked) {
+                newValue.push(value);
+              } else {
+                const index = newValue.indexOf(value);
+                if (index !== -1) newValue.splice(index, 1);
+              }
+              field.onChange(newValue);
+            } else {
+              field.onChange(e.target.checked);
+            }
+          }}
+          style={{ marginRight: '0.5rem' }}
+        />
+        <Label htmlFor={`${name}-${value || ''}`}>{label}</Label>
+      </Box>
+    )}
+  />
+);

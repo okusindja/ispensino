@@ -1,25 +1,21 @@
-import { User } from '@prisma/client';
+import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
-import useSWR from 'swr';
 
 import { Layout } from '@/components';
-import { fetcherWithCredentials } from '@/constants/swr';
+import { Box } from '@/elements';
+
+import ContentItem from './components/content-item';
 
 const Content: FC = () => {
-  const { data, isLoading, error } = useSWR<User>(
-    `/api/users/me`,
-    fetcherWithCredentials
-  );
-
-  const user = data;
-
   return (
     <Layout>
-      <div>
-        <h1>Content Page</h1>
-        {isLoading ? <p>Loading...</p> : <p>Welcome, {user?.name}!</p>}
-        {error && <p>Error loading user data: {error.message}</p>}
-      </div>
+      <Box variant="container">
+        <Div mt="L" width="100%" display="grid" gap="L" gridColumn="1/-1">
+          <ContentItem to="content/courses" title="courses" />
+          <ContentItem to="content/courses" title="courses" />
+          <ContentItem to="content/courses" title="courses" />
+        </Div>
+      </Box>
     </Layout>
   );
 };

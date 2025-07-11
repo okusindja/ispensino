@@ -1,9 +1,11 @@
 export { default as ArrowDownSVG } from './arrow-down';
+export { default as ArrowLeftSVG } from './arrow-left';
 export { default as ArrowUpSVG } from './arrow-up';
 export { default as BarsSVG } from './bars';
 export { default as BookSVG } from './book';
 export { default as BookmarkSVG } from './bookmarks';
 export { default as ContentSVG } from './content';
+export { default as FolderSVG } from './folder';
 export { default as GroupSVG } from './group';
 export { default as HeartSVG } from './heart';
 export { default as HomeSVG } from './home';
@@ -15,4 +17,5 @@ export { default as PlusSVG } from './plus';
 export { default as SearchSVG } from './search';
 export { default as ShareSVG } from './share';
 export { default as SunSVG } from './sun';
+export { default as TagSVG } from './tag';
 export { default as UserSVG } from './user';

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import {
   authenticateUser,
+  enableCors,
   handleApiError,
   validateMethod,
 } from '@/lib/api-utils';
@@ -11,10 +12,34 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (enableCors(req, res)) return;
   try {
     validateMethod(req, res, ['GET', 'POST']);
+    const { courseId } = req.query;
     const user = await authenticateUser(req);
+    console.log('Authenticated user:', user);
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
+
+    if (courseId && typeof courseId === 'string') {
+      if (req.method === 'GET') {
+        const course = await prisma.course.findUnique({
+          where: { id: courseId },
+          include: { teacher: true, categories: true },
+        });
+
+        if (!course) {
+          return res.status(404).json({ error: 'Course not found' });
+        }
+
+        if (!course.isPublished && course.teacherId !== user.id) {
+          return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        return res.status(200).json(course);
+      }
+
+      return res.status(405).json({ error: 'Method Not Allowed' });
+    }
 
     if (req.method === 'GET') {
       const courses = await prisma.course.findMany({

@@ -1,5 +1,5 @@
 import { StylinComponentProps } from '@stylin.js/react';
-import { HTMLAttributes, RefAttributes } from 'react';
+import { ButtonHTMLAttributes, RefAttributes } from 'react';
 
 import { DesignSystemTheme } from '@/design-system/theme';
 
@@ -7,7 +7,7 @@ export type TButtonVariants = keyof DesignSystemTheme['buttons'];
 export type TButtonSizes = 'small' | 'medium' | 'large';
 
 export type ButtonElementProps = Omit<
-  HTMLAttributes<HTMLElement>,
+  ButtonHTMLAttributes<HTMLElement>,
   'color' | 'translate' | 'content'
 > &
   RefAttributes<unknown> & { variant: TButtonVariants };
