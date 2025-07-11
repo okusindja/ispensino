@@ -24,10 +24,30 @@ export interface NextPageWithUserProps {
   loggedUser: UserProps;
   user: SessionUserProps;
 }
+export interface NextPageWithCourseAndTeacherProps {
+  course: Course;
+  teacher: UserProps;
+  user: SessionUserProps;
+}
+export interface NextPageWithCourseProps {
+  course: Course;
+}
 
-export type NextPageWithUser = NextPage<NextPageWithUserProps>;
+export type NextPageWithUser = NextPage<
+  NextPageWithUserProps & NextPageDefaultProps
+>;
 
-export type NextPageWithSession = NextPage<NextPageWithSessionProps>;
+export type NextPageWithCourse = NextPage<
+  NextPageWithCourseProps & NextPageDefaultProps
+>;
+
+export type NextPageWithCourseAndTeacher = NextPage<
+  NextPageWithCourseAndTeacherProps & NextPageDefaultProps
+>;
+
+export type NextPageWithSession = NextPage<
+  NextPageWithSessionProps & NextPageDefaultProps
+>;
 
 export type NextPageWithProps = NextPage<NextPageDefaultProps>;
 
