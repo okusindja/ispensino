@@ -1,4 +1,6 @@
+import { randomUUID } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
+import slugify from 'slugify';
 
 import {
   authenticateUser,
@@ -58,13 +60,25 @@ export default async function handler(
           .json({ error: 'Only teachers can create courses' });
       }
 
-      const { title, description, price, categories } = req.body;
+      const {
+        title,
+        description,
+        thumbnail,
+        startDate,
+        price,
+        categories,
+        isPublished,
+      } = req.body;
       const isFree = !price || price <= 0;
 
       const course = await prisma.course.create({
         data: {
           title,
+          slug: slugify(title + '+' + randomUUID().slice(0, 5)),
           description,
+          thumbnail: thumbnail || '',
+          startDate: new Date(startDate) || new Date(),
+          isPublished: isPublished !== undefined ? isPublished : false,
           price: isFree ? null : price,
           isFree,
           teacherId: user.id,

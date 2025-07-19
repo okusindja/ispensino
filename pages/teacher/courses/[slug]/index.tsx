@@ -38,7 +38,7 @@ const TeacherCourseDetailPage: NextPageWithCourseAndTeacher = ({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx);
   const { query } = ctx;
-  const courseId = query.id as string;
+  const courseSlug = query.slug as string;
   const sessionCookie = cookies.session || '';
   let user = null;
   let teacher = null;
@@ -64,7 +64,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     }
     course = await prisma.course.findUnique({
-      where: { id: courseId, teacherId: teacher.id },
+      where: { slug: courseSlug, teacherId: teacher.id },
+      include: {
+        categories: true,
+        enrollments: true,
+        lessons: true,
+      },
     });
   } catch (error) {
     console.error('Session cookie verification error:', error);

@@ -16,7 +16,9 @@ const CoursesView: FC<{ user: UserProps }> = ({ user }) => {
               <ul>
                 {user.teachingCourses.map((course) => (
                   <li key={course.id}>
-                    <a href={`/teacher/courses/${course.id}`}>{course.title}</a>
+                    <a href={`/teacher/courses/${course.slug}`}>
+                      {course.title}
+                    </a>
                   </li>
                 ))}
               </ul>

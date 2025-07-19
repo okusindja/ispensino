@@ -1,4 +1,4 @@
-import { Course, User } from '@prisma/client';
+import { Category, Course, Enrollment, Lesson, User } from '@prisma/client';
 import { NextPage } from 'next';
 
 import { HomePageProps } from '@/views/home/home.types';
@@ -25,7 +25,11 @@ export interface NextPageWithUserProps {
   user: SessionUserProps;
 }
 export interface NextPageWithCourseAndTeacherProps {
-  course: Course;
+  course: Course & {
+    lessons: Lesson[];
+    categories: Category[];
+    enrollments: Enrollment[];
+  };
   teacher: UserProps;
   user: SessionUserProps;
 }

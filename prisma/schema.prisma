@@ -11,28 +11,28 @@ datasource db {
 }
 
 model User {
-  id              String       @id @default(uuid())
-  firebaseId      String       @unique
-  email           String       @unique
-  createdAt       DateTime     @default(now())
+  id              String           @id @default(uuid())
+  firebaseId      String           @unique
+  email           String           @unique
+  createdAt       DateTime         @default(now())
   name            String
   phone           String?
   address         String?
-  role            Role         @default(STUDENT)
+  role            Role             @default(STUDENT)
   posts           Post[]
   comments        Comment[]
   likes           Like[]
   enrollments     Enrollment[]
-  teachingCourses Course[]     @relation("TeacherCourses")
+  teachingCourses Course[]         @relation("TeacherCourses")
   resources       Resource[]
   assessments     UserAssessment[]
   payments        Payment[]
   responses       UserResponse[]
-  
+
   // Teacher-specific fields
-  bio             String?
-  qualifications  String[]
-  specialization  String?
+  bio            String?
+  qualifications String[]
+  specialization String?
 }
 
 enum Role {
@@ -43,64 +43,64 @@ enum Role {
 
 // Social models
 model Post {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   content     String
-  author      User        @relation(fields: [authorId], references: [id])
+  author      User         @relation(fields: [authorId], references: [id])
   authorId    String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   likes       Like[]
   comments    Comment[]
   tags        Tag[]
   attachments Attachment[]
-  
+
   // References to educational content
-  course      Course?     @relation(fields: [courseId], references: [id])
-  courseId    String?
-  resource    Resource?   @relation(fields: [resourceId], references: [id])
-  resourceId  String?
+  course     Course?   @relation(fields: [courseId], references: [id])
+  courseId   String?
+  resource   Resource? @relation(fields: [resourceId], references: [id])
+  resourceId String?
 }
 
 model Comment {
-  id          String      @id @default(uuid())
-  content     String
-  author      User        @relation(fields: [authorId], references: [id])
-  authorId    String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  post        Post?       @relation(fields: [postId], references: [id])
-  postId      String?
-  lesson      Lesson?     @relation(fields: [lessonId], references: [id])
-  lessonId    String?
-  parent      Comment?    @relation("Replies", fields: [parentId], references: [id])
-  parentId    String?
-  replies     Comment[]   @relation("Replies")
-  likes       Like[]
+  id        String    @id @default(uuid())
+  content   String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  post      Post?     @relation(fields: [postId], references: [id])
+  postId    String?
+  lesson    Lesson?   @relation(fields: [lessonId], references: [id])
+  lessonId  String?
+  parent    Comment?  @relation("Replies", fields: [parentId], references: [id])
+  parentId  String?
+  replies   Comment[] @relation("Replies")
+  likes     Like[]
 }
 
 model Like {
-  id          String      @id @default(uuid())
-  user        User        @relation(fields: [userId], references: [id])
-  userId      String
-  post        Post?       @relation(fields: [postId], references: [id])
-  postId      String?
-  comment     Comment?    @relation(fields: [commentId], references: [id])
-  commentId   String?
-  createdAt   DateTime    @default(now())
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post?    @relation(fields: [postId], references: [id])
+  postId    String?
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?
+  createdAt DateTime @default(now())
 }
 
 model Tag {
-  id          String      @id @default(uuid())
-  name        String      @unique
-  posts       Post[]
+  id    String @id @default(uuid())
+  name  String @unique
+  posts Post[]
 }
 
 model Attachment {
-  id          String      @id @default(uuid())
-  url         String
-  type        MediaType
-  post        Post        @relation(fields: [postId], references: [id])
-  postId      String
+  id     String    @id @default(uuid())
+  url    String
+  type   MediaType
+  post   Post      @relation(fields: [postId], references: [id])
+  postId String
 }
 
 enum MediaType {
@@ -112,18 +112,18 @@ enum MediaType {
 
 // Educational content models
 model Resource {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   description String
   type        ResourceType
   url         String
-  author      User        @relation(fields: [authorId], references: [id])
+  author      User         @relation(fields: [authorId], references: [id])
   authorId    String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   posts       Post[]
   categories  Category[]
-  license     LicenseType @default(CC_BY)
+  license     LicenseType  @default(CC_BY)
 }
 
 enum ResourceType {
@@ -144,9 +144,15 @@ enum LicenseType {
   PUBLIC_DOMAIN
 }
 
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 model Category {
-  id          String      @id @default(uuid())
-  name        String      @unique
+  id          String     @id @default(uuid())
+  name        String     @unique
   description String
   resources   Resource[]
   courses     Course[]
@@ -154,15 +160,19 @@ model Category {
 
 // Course models
 model Course {
-  id          String        @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   description String
-  price       Float?        @default(0.0)
-  isFree      Boolean       @default(true)
-  isPublished Boolean       @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  teacher     User          @relation("TeacherCourses", fields: [teacherId], references: [id])
+  price       Float?       @default(0.0)
+  isFree      Boolean      @default(true)
+  isPublished Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  thumbnail   String?
+  slug        String       @unique
+  startDate   DateTime?
+  level       CourseLevel  @default(BEGINNER)
+  teacher     User         @relation("TeacherCourses", fields: [teacherId], references: [id])
   teacherId   String
   lessons     Lesson[]
   enrollments Enrollment[]
@@ -171,28 +181,28 @@ model Course {
 }
 
 model Enrollment {
-  id          String      @id @default(uuid())
-  user        User        @relation(fields: [userId], references: [id])
+  id          String    @id @default(uuid())
+  user        User      @relation(fields: [userId], references: [id])
   userId      String
-  course      Course      @relation(fields: [courseId], references: [id])
+  course      Course    @relation(fields: [courseId], references: [id])
   courseId    String
-  enrolledAt  DateTime    @default(now())
+  enrolledAt  DateTime  @default(now())
   completedAt DateTime?
-  progress    Float       @default(0.0)
+  progress    Float     @default(0.0)
   payments    Payment[]
 }
 
 model Payment {
-  id          String      @id @default(uuid())
-  amount      Float
-  currency    String      @default("USD")
-  status      PaymentStatus @default(PENDING)
-  user        User        @relation(fields: [userId], references: [id])
-  userId      String
-  enrollment  Enrollment  @relation(fields: [enrollmentId], references: [id])
+  id           String        @id @default(uuid())
+  amount       Float
+  currency     String        @default("USD")
+  status       PaymentStatus @default(PENDING)
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String
+  enrollment   Enrollment    @relation(fields: [enrollmentId], references: [id])
   enrollmentId String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 enum PaymentStatus {
@@ -203,54 +213,55 @@ enum PaymentStatus {
 }
 
 model Lesson {
-  id          String          @id @default(uuid())
-  title       String
-  description String
-  order       Int
-  videoUrl    String
-  course      Course          @relation(fields: [courseId], references: [id])
-  courseId    String
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  materials   LessonMaterial[]
-  assessment  LessonAssessment?
-  comments    Comment[]
-  isPreview   Boolean         @default(false)
+  id            String            @id @default(uuid())
+  title         String
+  description   String
+  order         Int
+  videoUrl      String
+  estimatedTime Int?
+  course        Course            @relation(fields: [courseId], references: [id])
+  courseId      String
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  materials     LessonMaterial[]
+  assessment    LessonAssessment?
+  comments      Comment[]
+  isPreview     Boolean           @default(false)
 }
 
 model LessonMaterial {
-  id          String      @id @default(uuid())
-  name        String
-  url         String
-  type        MediaType
-  lesson      Lesson      @relation(fields: [lessonId], references: [id])
-  lessonId    String
+  id       String    @id @default(uuid())
+  name     String
+  url      String
+  type     MediaType
+  lesson   Lesson    @relation(fields: [lessonId], references: [id])
+  lessonId String
 }
 
 model LessonAssessment {
-  id          String        @id @default(uuid())
-  title       String
-  description String
-  lesson      Lesson        @relation(fields: [lessonId], references: [id])
-  lessonId    String        @unique
-  questions   Question[]
-  passScore   Int           @default(75)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id              String           @id @default(uuid())
+  title           String
+  description     String
+  lesson          Lesson           @relation(fields: [lessonId], references: [id])
+  lessonId        String           @unique
+  questions       Question[]
+  passScore       Int              @default(75)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   userAssessments UserAssessment[]
 }
 
 model Question {
-  id          String        @id @default(uuid())
-  text        String
-  type        QuestionType  @default(SINGLE_CHOICE)
-  explanation String?
-  assessment  LessonAssessment @relation(fields: [assessmentId], references: [id])
+  id           String           @id @default(uuid())
+  text         String
+  type         QuestionType     @default(SINGLE_CHOICE)
+  explanation  String?
+  assessment   LessonAssessment @relation(fields: [assessmentId], references: [id])
   assessmentId String
-  options     QuestionOption[]
-  order       Int
-  createdAt   DateTime      @default(now())
-  responses   UserResponse[]
+  options      QuestionOption[]
+  order        Int
+  createdAt    DateTime         @default(now())
+  responses    UserResponse[]
 }
 
 enum QuestionType {
@@ -262,35 +273,35 @@ enum QuestionType {
 }
 
 model QuestionOption {
-  id          String      @id @default(uuid())
-  text        String
-  isCorrect   Boolean     @default(false)
-  question    Question    @relation(fields: [questionId], references: [id])
-  questionId  String
+  id         String   @id @default(uuid())
+  text       String
+  isCorrect  Boolean  @default(false)
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
 }
 
 model UserAssessment {
-  id          String        @id @default(uuid())
-  user        User          @relation(fields: [userId], references: [id])
-  userId      String
-  assessment  LessonAssessment @relation(fields: [assessmentId], references: [id])
+  id           String           @id @default(uuid())
+  user         User             @relation(fields: [userId], references: [id])
+  userId       String
+  assessment   LessonAssessment @relation(fields: [assessmentId], references: [id])
   assessmentId String
-  score       Float
-  isPassed    Boolean
-  startedAt   DateTime
-  completedAt DateTime
-  responses   UserResponse[]
+  score        Float
+  isPassed     Boolean
+  startedAt    DateTime
+  completedAt  DateTime
+  responses    UserResponse[]
 }
 
 model UserResponse {
-  id          String          @id @default(uuid())
-  user        User            @relation(fields: [userId], references: [id])
-  userId      String
-  assessment  UserAssessment  @relation(fields: [assessmentId], references: [id])
+  id           String         @id @default(uuid())
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String
+  assessment   UserAssessment @relation(fields: [assessmentId], references: [id])
   assessmentId String
-  question    Question        @relation(fields: [questionId], references: [id])
-  questionId  String
-  answer      Json            // Stores user's answer (could be text, option IDs, etc.)
-  isCorrect   Boolean
-  answeredAt  DateTime        @default(now())
+  question     Question       @relation(fields: [questionId], references: [id])
+  questionId   String
+  answer       Json
+  isCorrect    Boolean
+  answeredAt   DateTime       @default(now())
 }

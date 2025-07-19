@@ -33,7 +33,7 @@ export default async function handler(
       const lessons = await prisma.lesson.findMany({
         where: { courseId: course.id },
         orderBy: { order: 'asc' },
-        include: { materials: true },
+        include: { materials: true, assessment: true },
       });
 
       return res.status(200).json(lessons);
