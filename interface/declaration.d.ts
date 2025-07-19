@@ -36,6 +36,13 @@ export interface NextPageWithCourseAndTeacherProps {
 export interface NextPageWithCourseProps {
   course: Course;
 }
+export interface NextPageWithLessonProps {
+  lesson: Lesson;
+  lessonId: string;
+  teacher: UserProps;
+  user: SessionUserProps;
+  courseSlug?: string;
+}
 
 export type NextPageWithUser = NextPage<
   NextPageWithUserProps & NextPageDefaultProps
@@ -43,6 +50,9 @@ export type NextPageWithUser = NextPage<
 
 export type NextPageWithCourse = NextPage<
   NextPageWithCourseProps & NextPageDefaultProps
+>;
+export type NextPageWithLesson = NextPage<
+  NextPageWithLessonProps & NextPageDefaultProps
 >;
 
 export type NextPageWithCourseAndTeacher = NextPage<
