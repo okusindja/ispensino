@@ -1,6 +1,7 @@
 import { Course, Lesson } from '@prisma/client';
 import { Div } from '@stylin.js/elements';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import { Layout } from '@/components';
@@ -9,6 +10,7 @@ import { Box, Button } from '@/elements';
 const CourseDetails: FC<{ course: Course & { lessons: Lesson[] } }> = ({
   course,
 }) => {
+  const router = useRouter();
   return (
     <Layout hasGoBack>
       <Box variant="container">
@@ -40,19 +42,27 @@ const CourseDetails: FC<{ course: Course & { lessons: Lesson[] } }> = ({
               Excluir
             </Button>
           </Div>
+          <Div mt="XL" display="flex" gap="M">
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={() =>
+                router.push(`/teacher/courses/${course.slug}/lessons/create`)
+              }
+            >
+              Criar
+            </Button>
+          </Div>
 
           <Div>
-            <h2>Conteúdo do Curso</h2>
-            <p>
-              Esta seção exibirá o conteúdo do curso, incluindo aulas e
-              materiais.
-            </p>
+            <h2>Conteúdo</h2>
+            <p>Esta seção exibirá o conteúdo, incluindo aulas e materiais.</p>
             {course.lessons.length > 0 ? (
               <ul>
                 {course.lessons.map((lesson) => (
                   <li key={lesson.id}>
                     <a
-                      href={`/teacher/courses/${course.slug}/lessons/${lesson.id}`}
+                      href={`/content/courses/${course.slug}/lessons/${lesson.id}`}
                     >
                       {lesson.title}
                     </a>

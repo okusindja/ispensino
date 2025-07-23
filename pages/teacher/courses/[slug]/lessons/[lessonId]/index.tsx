@@ -11,7 +11,6 @@ const TeacherLessonDetailPage: NextPageWithLesson = ({
   user,
   teacher,
   lesson,
-  courseSlug,
 }) => {
   if (!user) {
     return (
@@ -33,13 +32,7 @@ const TeacherLessonDetailPage: NextPageWithLesson = ({
     );
   }
 
-  return (
-    <LessonDetailsView
-      lessonId={lesson.id}
-      teacherId={teacher.id}
-      courseSlug={courseSlug!}
-    />
-  );
+  return <LessonDetailsView lesson={lesson} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -48,7 +41,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const lessonId = query.lessonId as string;
   const sessionCookie = cookies.session || '';
   let user = null;
-  let teacher = null;
   let lesson = null;
   try {
     const decodedClaims = await adminAuth.verifySessionCookie(
@@ -59,17 +51,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       uid: decodedClaims.uid,
       email: decodedClaims.email || null,
     };
-    teacher = await prisma.user.findUnique({
-      where: { firebaseId: user.uid, role: 'TEACHER' },
-    });
-    if (!teacher) {
-      return {
-        redirect: {
-          destination: '/auth',
-          permanent: false,
-        },
-      };
-    }
     lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
       include: {
@@ -93,9 +74,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       user,
-      courseSlug: JSON.parse(JSON.stringify(lesson?.course.slug)),
       lesson: JSON.parse(JSON.stringify(lesson)),
-      teacher: JSON.parse(JSON.stringify(teacher)),
     },
   };
 };

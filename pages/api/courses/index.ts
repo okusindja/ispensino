@@ -37,6 +37,18 @@ export default async function handler(
           return res.status(403).json({ error: 'Forbidden' });
         }
 
+        // const lessonStatus = await prisma.userAssessment.findMany({
+        //         where: { userId: user.id, assessment: { lesson: {
+        //           id: { in: lessons.map(lesson => lesson.id) }
+        //         } } },
+        //         select: { assessment: true, isPassed: true },
+        //       });
+
+        //       return res.status(200).json(lessons.map(lesson =>({
+        //         ...lesson,
+        //         isPassed: lessonStatus.find(status => status.assessment.lessonId === lesson.id)?.isPassed || false,
+        //       })));
+
         return res.status(200).json(course);
       }
 

@@ -24,13 +24,12 @@ const CreateAssessment: FC<CreateAssessmentProps> = ({ lessonId }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-      });
+      }).then((res) => res.json());
 
       if (response.ok) {
         setSuccess(true);
-        // Redirect after 2 seconds
         setTimeout(() => {
-          router.push(`/lessons/${lessonId}`);
+          router.back();
         }, 2000);
       } else {
         const errorData = await response.json();

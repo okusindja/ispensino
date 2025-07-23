@@ -12,16 +12,29 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    validateMethod(req, res, ['GET', 'POST']);
+    validateMethod(req, res, ['GET']);
     const user = await authenticateUser(req);
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-    const { id } = req.query;
+    const { id, lessonId } = req.query;
 
     // Verify user has access to course
     const course = await prisma.course.findUnique({
       where: { id: id as string },
-      include: { enrollments: { where: { userId: user.id } } },
+      include: {
+        enrollments: { where: { userId: user.id } },
+        lessons: {
+          include: {
+            assessment: {
+              include: {
+                userAssessments: {
+                  where: { userId: user.id },
+                },
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!course) return res.status(404).json({ error: 'Course not found' });
@@ -30,6 +43,43 @@ export default async function handler(
     }
 
     if (req.method === 'GET') {
+      if (lessonId) {
+        const lesson = await prisma.lesson.findUnique({
+          where: {
+            id: lessonId as string,
+            courseId: course.id,
+          },
+          include: {
+            materials: true,
+            assessment: true,
+            course: {
+              include: {
+                lessons: true,
+              },
+            },
+          },
+        });
+
+        if (!lesson) {
+          return res.status(404).json({ error: 'Lesson not found' });
+        }
+
+        const assessmentStatus = lesson.assessment
+          ? await prisma.userAssessment.findFirst({
+              where: {
+                userId: user.id,
+                assessmentId: lesson.assessment.id,
+              },
+              select: { isPassed: true },
+            })
+          : null;
+
+        return res.status(200).json({
+          ...lesson,
+          isPassed: assessmentStatus?.isPassed || false,
+        });
+      }
+
       const lessons = await prisma.lesson.findMany({
         where: { courseId: course.id },
         orderBy: { order: 'asc' },
@@ -57,44 +107,6 @@ export default async function handler(
             )?.isPassed || false,
         }))
       );
-    }
-
-    if (req.method === 'POST') {
-      if (course.teacherId !== user.id) {
-        return res
-          .status(403)
-          .json({ error: 'Only course teacher can add lessons' });
-      }
-
-      const { title, description, videoUrl, isPreview, materials } = req.body;
-
-      // Get next order number
-      const lastLesson = await prisma.lesson.findFirst({
-        where: { courseId: course.id },
-        orderBy: { order: 'desc' },
-      });
-
-      const lesson = await prisma.lesson.create({
-        data: {
-          title,
-          description,
-          videoUrl,
-          isPreview,
-          order: lastLesson ? lastLesson.order + 1 : 1,
-          courseId: course.id,
-          materials: {
-            create: materials.map(
-              (mat: { name: string; url: string; type: string }) => ({
-                name: mat.name,
-                url: mat.url,
-                type: mat.type,
-              })
-            ),
-          },
-        },
-      });
-
-      return res.status(201).json(lesson);
     }
   } catch (error) {
     handleApiError(res, error);

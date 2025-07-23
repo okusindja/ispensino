@@ -3,11 +3,11 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import nookies from 'nookies';
 
-import { NextPageWithSession } from '@/interface/declaration';
-import { adminAuth } from '@/lib';
+import { NextPageWithCourses } from '@/interface/declaration';
+import { adminAuth, prisma } from '@/lib';
 import { CoursesView } from '@/views';
 
-const CoursesPage: NextPageWithSession = ({ user }) => {
+const CoursesPage: NextPageWithCourses = ({ user, courses }) => {
   if (!user) {
     return (
       <Div>
@@ -17,13 +17,14 @@ const CoursesPage: NextPageWithSession = ({ user }) => {
     );
   }
 
-  return <CoursesView />;
+  return <CoursesView courses={courses} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx);
   const sessionCookie = cookies.session || '';
   let user = null;
+  let courses = null;
   try {
     const decodedClaims = await adminAuth.verifySessionCookie(
       sessionCookie,
@@ -33,6 +34,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       uid: decodedClaims.uid,
       email: decodedClaims.email || null,
     };
+    courses = await prisma.course.findMany({
+      // where: { isPublished: true },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        lessons: true,
+      },
+    });
   } catch (error) {
     console.error('Session cookie verification error:', error);
     return {
@@ -42,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  return { props: { user } };
+  return { props: { user, courses: JSON.parse(JSON.stringify(courses)) } };
 };
 
 export default CoursesPage;

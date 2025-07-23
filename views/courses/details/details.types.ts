@@ -1,3 +1,5 @@
+import { Course, Lesson, User } from '@prisma/client';
+
 export interface CourseDetailsProps {
-  courseId: string;
+  course: Course & { lessons: Lesson[]; teacher: User };
 }

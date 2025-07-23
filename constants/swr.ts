@@ -2,7 +2,9 @@ import { getAuth } from 'firebase/auth';
 
 export const fetcherWithCredentials = async (
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {
+    method: 'GET',
+  }
 ) => {
   const auth = getAuth();
   await auth.authStateReady();
@@ -37,7 +39,10 @@ export const fetcherWithCredentials = async (
   return response.json();
 };
 
-export const fetcher = async (url: string, options?: RequestInit) => {
+export const fetcher = async (
+  url: string,
+  options: RequestInit = { method: 'GET' }
+) => {
   const res = await fetch(url, {
     ...options,
     headers: {

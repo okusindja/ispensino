@@ -13,8 +13,8 @@ export const getSizeStyle = (
       large: { fontSize: '4XL' },
       medium: { fontSize: '3XL' },
       small: { fontSize: '2XL' },
-      extraSmall: { fontSize: '3XL' },
-      micro: { fontSize: '3XL' },
+      extraSmall: { fontSize: 'XL' },
+      micro: { fontSize: 'L' },
     },
     title: {
       large: { fontSize: '4XL', fontWeight: '800' },

@@ -12,8 +12,10 @@ import { Box, Button } from '@/elements';
 
 const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
   const router = useRouter();
+  const path = router.pathname;
+  const isCoursesPage =
+    path.includes('/content/courses/') || path.includes('/teacher/courses/');
   const { data, isLoading } = useSWR<User>('/api/users/me', fetcher);
-  console.log('Header data:', data);
   const isTeacher = data?.role === 'TEACHER';
 
   if (!data && !isLoading) return <>Erro</>;
@@ -27,16 +29,16 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
         zIndex="10"
         width="100%"
         position="fixed"
-        backgroundColor="surface"
         boxShadow="1px 5px 10px rgba(0, 0, 0, 0.06)"
+        backgroundColor={!isCoursesPage ? 'surface' : 'primary'}
       >
         <Box variant="container">
           <Div
-            gridColumn="1/-1"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
             width="100%"
+            display="flex"
+            gridColumn="1/-1"
+            alignItems="center"
+            justifyContent="space-between"
           >
             {!hasGoBack ? (
               <Link href={Routes[RoutesEnum.Home]}>
@@ -44,20 +46,21 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
               </Link>
             ) : (
               <Button
-                variant="neutral"
-                size="medium"
                 isIcon
+                size="medium"
+                variant="neutral"
                 onClick={() => router.back()}
+                color={!isCoursesPage ? 'text' : 'textInverted'}
               >
                 <ArrowLeftSVG width="100%" maxWidth="3rem" maxHeight="3rem" />
               </Button>
             )}
             {isTeacher && (
               <Button
-                variant="neutral"
-                size="medium"
                 isIcon
-                color="text"
+                color={!isCoursesPage ? 'text' : 'textInverted'}
+                size="medium"
+                variant="neutral"
                 onClick={() => router.push('/teacher')}
               >
                 <FolderSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />

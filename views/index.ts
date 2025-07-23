@@ -1,3 +1,4 @@
+export { default as AssessmentView } from './assessment';
 export { default as AuthView } from './auth';
 export { default as ContentView } from './content';
 export { default as CoursesView } from './courses';

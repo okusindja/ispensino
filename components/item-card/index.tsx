@@ -8,7 +8,13 @@ import { Typography } from '@/elements/typography';
 import { TagSVG } from '../svg';
 import { ItemCardProps } from './item-card.types';
 
-const ItemCard: FC<ItemCardProps> = ({ title, to }) => {
+const ItemCard: FC<ItemCardProps> = ({
+  title,
+  to,
+  description,
+  thumbnail,
+  introduction,
+}) => {
   return (
     <Div
       p="M"
@@ -33,7 +39,7 @@ const ItemCard: FC<ItemCardProps> = ({ title, to }) => {
             quality={100}
             alt="Placeholder"
             style={{ objectFit: 'cover' }}
-            src="https://picsum.photos/200/300"
+            src={thumbnail || 'https://picsum.photos/200/300'}
           />
         </Div>
         <Div
@@ -48,14 +54,14 @@ const ItemCard: FC<ItemCardProps> = ({ title, to }) => {
           <Div display="flex" alignItems="center" gap="S" color="text">
             <TagSVG maxWidth=".875rem" maxHeight="14px" width="100%" />
             <Typography variant="fancy" size="small" color="text">
-              12,000.00 AOA
+              {introduction}
             </Typography>
           </Div>
           <Typography variant="fancy" size="large" color="text">
-            Title
+            {title}
           </Typography>
           <Typography variant="body" size="extraSmall" color="text">
-            13 Aulas
+            {description}
           </Typography>
         </Div>
       </Link>

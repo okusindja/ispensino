@@ -2,10 +2,12 @@ import { Category, Course, Enrollment, Lesson, User } from '@prisma/client';
 import { NextPage } from 'next';
 
 import { HomePageProps } from '@/views/home/home.types';
+import { LessonPageProps } from '@/views/lessons/details/lesson-details.types';
 
 export interface NextPageDefaultProps {
   now: number;
   pageTitle: string;
+  user: SessionUserProps;
 }
 
 export interface UserProps extends User {
@@ -34,14 +36,17 @@ export interface NextPageWithCourseAndTeacherProps {
   user: SessionUserProps;
 }
 export interface NextPageWithCourseProps {
-  course: Course;
+  course: Course & { lessons: Lesson[]; teacher: User };
 }
-export interface NextPageWithLessonProps {
-  lesson: Lesson;
+export interface NextPageWithCoursesArrayProps {
+  courses: Array<Course & { lessons: Lesson[] }>;
+}
+export interface NextPageWithLessonProps extends LessonPageProps {
   lessonId: string;
   teacher: UserProps;
   user: SessionUserProps;
-  courseSlug?: string;
+  courseSlug: string;
+  courseId: string;
 }
 
 export type NextPageWithUser = NextPage<
@@ -50,6 +55,9 @@ export type NextPageWithUser = NextPage<
 
 export type NextPageWithCourse = NextPage<
   NextPageWithCourseProps & NextPageDefaultProps
+>;
+export type NextPageWithCourses = NextPage<
+  NextPageWithCoursesArrayProps & NextPageDefaultProps
 >;
 export type NextPageWithLesson = NextPage<
   NextPageWithLessonProps & NextPageDefaultProps

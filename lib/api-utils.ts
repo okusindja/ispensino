@@ -6,17 +6,12 @@ import { prisma } from './prisma';
 export const authenticateUser = async (req: NextApiRequest) => {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
-    console.log('No Bearer token found in Authorization header');
     return null;
   }
 
   const idToken = authHeader.split(' ')[1];
   try {
-    console.log('Verifying ID token');
     const decodedToken = await adminAuth.verifyIdToken(idToken);
-    console.log('Decoded token:', decodedToken);
-
-    console.log('Looking up user by firebaseId:', decodedToken.uid);
     const user = await prisma.user.findUnique({
       where: { firebaseId: decodedToken.uid },
       include: {
@@ -33,13 +28,8 @@ export const authenticateUser = async (req: NextApiRequest) => {
     });
 
     if (!user) {
-      console.log(
-        `User with firebaseId ${decodedToken.uid} not found in database`
-      );
       return null;
     }
-
-    console.log('Authenticated user:', user.email);
     return user;
   } catch (error) {
     console.error('Error verifying token or fetching user:', error);

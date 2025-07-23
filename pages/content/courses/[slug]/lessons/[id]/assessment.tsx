@@ -1,13 +1,18 @@
 import { Div } from '@stylin.js/elements';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import nookies from 'nookies';
 
-import { NextPageWithCourse } from '@/interface/declaration';
+import { NextPageWithLesson } from '@/interface/declaration';
 import { adminAuth, prisma } from '@/lib';
-import { CourseDetailsView } from '@/views';
 
-const CourseDetailsPage: NextPageWithCourse = ({ user, course }) => {
+const AssessmentView = dynamic(() => import('@/views/assessment'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
+
+const LessonDetailPage: NextPageWithLesson = ({ user, lessonId, courseId }) => {
   if (!user) {
     return (
       <Div>
@@ -17,21 +22,24 @@ const CourseDetailsPage: NextPageWithCourse = ({ user, course }) => {
     );
   }
 
-  return <CourseDetailsView course={course} />;
+  return <AssessmentView lessonId={lessonId} courseId={courseId} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx);
+  const { slug, id } = ctx.query;
   const sessionCookie = cookies.session || '';
-  const slug = ctx.params?.slug;
+
   let user = null;
   let course = null;
 
   try {
+    // Verifica a sessão com Firebase Admin SDK
     const decodedClaims = await adminAuth.verifySessionCookie(
       sessionCookie,
       true
     );
+
     user = {
       uid: decodedClaims.uid,
       email: decodedClaims.email || null,
@@ -39,13 +47,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     course = await prisma.course.findUnique({
       where: { slug: slug as string },
-      include: {
-        lessons: true,
-        teacher: true,
+      select: {
+        id: true,
       },
     });
+
+    if (!course) {
+      return {
+        notFound: true,
+      };
+    }
   } catch (error) {
-    console.error('Session cookie verification error:', error);
+    console.error(
+      'Erro na verificação de sessão ou carregamento da lição:',
+      error
+    );
     return {
       redirect: {
         destination: '/auth',
@@ -53,7 +69,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  return { props: { user, course: JSON.parse(JSON.stringify(course)) } };
+
+  return {
+    props: {
+      user,
+      lessonId: id,
+      courseId: JSON.parse(JSON.stringify(course)).id,
+    },
+  };
 };
 
-export default CourseDetailsPage;
+export default LessonDetailPage;
