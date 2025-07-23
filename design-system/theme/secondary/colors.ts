@@ -14,7 +14,7 @@ const colors = {
   lightText: palette.NEUTRAL_50,
   textVariant: palette.NEUTRAL_600,
   foreground: palette.NEUTRAL_50,
-  outline: palette.NEUTRAL_400,
+  outline: palette.NEUTRAL_800,
   outlineVariant: 'rgba(255, 255, 255, .1)',
   disabled: palette.NEUTRAL_300,
   surface_x_dark: palette.PRIMARY_900,

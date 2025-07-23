@@ -13,11 +13,7 @@ const LessonDetailsView = dynamic(() => import('@/views/lessons/details'), {
   loading: () => <p>Loading...</p>,
 });
 
-const LessonDetailPage: NextPageWithLesson = ({
-  user,
-  lesson,
-  // teacher,
-}) => {
+const LessonDetailPage: NextPageWithLesson = ({ user, lesson }) => {
   if (!user) {
     return (
       <Div>
@@ -27,12 +23,7 @@ const LessonDetailPage: NextPageWithLesson = ({
     );
   }
 
-  return (
-    <LessonDetailsView
-      lesson={lesson}
-      // teacher={teacher!}
-    />
-  );
+  return <LessonDetailsView lesson={lesson} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -45,7 +36,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let course = null;
 
   try {
-    // Verifica a sessão com Firebase Admin SDK
     const decodedClaims = await adminAuth.verifySessionCookie(
       sessionCookie,
       true
@@ -56,7 +46,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       email: decodedClaims.email || null,
     };
 
-    // Busca o curso pelo slug
     course = await prisma.course.findUnique({
       where: { slug: slug as string },
       select: {
@@ -77,7 +66,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       return { notFound: true };
     }
 
-    // Verifica se o usuário é o professor OU está matriculado
     const isTeacher = teacher?.firebaseId === decodedClaims.uid;
     const isEnrolled = course.enrollments.length > 0;
 
@@ -94,7 +82,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     //   };
     // }
 
-    // Busca a lição com todos os dados relacionados
     const foundLesson = await prisma.lesson.findUnique({
       where: {
         id: id as string,
@@ -118,6 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             lessons: {
               orderBy: { order: 'asc' },
               include: {
+                course: true,
                 assessment: {
                   include: {
                     userAssessments: {
@@ -140,11 +128,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       return { notFound: true };
     }
 
-    // Extrai status de avaliação (isPassed)
     const isPassed =
       foundLesson.assessment?.userAssessments[0]?.isPassed || false;
 
-    // Serializa a lição para evitar erros com Date/BigInt/etc
     lesson = {
       ...foundLesson,
       isPassed,

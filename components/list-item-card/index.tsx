@@ -28,9 +28,9 @@ const ListItemCard: FC<ListItemCardProps> = ({
           display="flex"
           paddingBottom="M"
           alignItems="center"
-          borderColor="outline"
           justifyContent="space-between"
           borderBottom={footerRight || footerLeft ? '1px solid' : 0}
+          borderColor="outline"
         >
           <Div display="grid" gap="M">
             <Typography
@@ -55,7 +55,9 @@ const ListItemCard: FC<ListItemCardProps> = ({
               </Typography>
             )}
           </Div>
-          {Icon && <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />}
+          <Div color="text">
+            {Icon && <Icon maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />}
+          </Div>
         </Div>
         <Div
           display="flex"

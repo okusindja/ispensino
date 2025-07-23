@@ -21,6 +21,7 @@ export interface LessonPageProps {
     course: Course & {
       lessons: Array<
         Lesson & {
+          course: Course;
           assessment: LessonAssessment & {
             userAssessments: UserAssessment[];
           };
