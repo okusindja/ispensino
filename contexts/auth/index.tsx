@@ -1,3 +1,4 @@
+import { User as PrismaUser } from '@prisma/client';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import {
   createContext,
@@ -7,12 +8,14 @@ import {
   useEffect,
   useState,
 } from 'react';
+import useSWR from 'swr';
 
+import { fetcherWithCredentials } from '@/constants/swr';
 import { auth } from '@/lib/firebase';
 
 // type Roles = 'admin' | 'promoter' | 'common';
 interface AuthContextType {
-  user: User | null;
+  user: (User & PrismaUser) | null;
   // role: Roles;
   loading: boolean;
 }
@@ -24,13 +27,21 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<(User & PrismaUser) | null>(null);
   // const [role, setRole] = useState<Roles>('common');
   const [loading, setLoading] = useState(true);
+  const { data: userData } = useSWR<PrismaUser>(
+    `/api/users/me`,
+    fetcherWithCredentials
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      if (currentUser && userData) {
+        setUser({ ...currentUser, ...userData });
+      } else {
+        setUser(null);
+      }
       // if (currentUser) {
       //   const tokenResult = await getIdTokenResult(currentUser);
       //   setRole(tokenResult.claims.role as Roles);
@@ -40,7 +51,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [userData]);
 
   return (
     <AuthContext.Provider value={{ user, loading }}>

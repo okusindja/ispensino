@@ -18,7 +18,7 @@ const colors = {
   outlineVariant: 'rgba(255, 255, 255, .1)',
   disabled: palette.NEUTRAL_300,
   surface_x_dark: palette.PRIMARY_900,
-  surface_dark: palette.PRIMARY_900,
+  surface_dark: palette.NEUTRAL_1000,
   surface_smoke: palette.NEUTRAL_200,
   surface: palette.NEUTRAL_900,
   surface_light: palette.NEUTRAL_900,

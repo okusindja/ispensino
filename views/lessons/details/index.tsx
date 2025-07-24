@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 
 import { Layout } from '@/components';
+import CommentsSection from '@/components/comments-section';
 import ListItemCard from '@/components/list-item-card';
 import { DoneSVG, PaperSVG } from '@/components/svg';
 import { useAuth } from '@/contexts';
@@ -61,39 +62,20 @@ const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
 
   return (
     <Layout hasGoBack>
-      {/* Header Section */}
-      <Div color="text" width="100%" mb="XL" bg="surface" py="L">
-        <Box variant="container">
-          <Div
-            width="100%"
-            gridColumn="1 / -1"
-            display="flex"
-            justifyContent="flex-end"
-          >
-            <Typography variant="fancy" size="medium" color="text">
-              Comentários
-            </Typography>
-          </Div>
-        </Box>
-      </Div>
-
-      {/* Course Title */}
-      <Box variant="container">
-        <Div width="100%" gridColumn="1 / -1">
-          <Typography variant="fancy" size="medium" color="text">
-            {lesson.course.title}
-          </Typography>
-        </Div>
-      </Box>
-
       {/* Video Player */}
-      <Video
-        width="100%"
-        height="14rem"
-        src={lesson.videoUrl}
-        title={lesson.title}
-        controls
-      />
+      <Div display="flex" justifyContent="center" mt="L">
+        <Video
+          controls
+          bg="#000"
+          mx="auto"
+          width="100%"
+          maxWidth="60rem"
+          objectFit="contain"
+          title={lesson.title}
+          src={lesson.videoUrl}
+          height={['14rem', '20rem', '30rem', '40rem']}
+        />
+      </Div>
 
       {/* Lesson Details */}
       <Box variant="container" backgroundColor="surface">
@@ -120,6 +102,27 @@ const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
           </Typography>
         </Div>
       </Box>
+
+      <Div
+        py="L"
+        mb="XL"
+        color="text"
+        width="100%"
+        bg="surface_dark"
+        borderTop="1px solid"
+        borderColor="outline"
+      >
+        <Box variant="container">
+          <Div
+            width="100%"
+            gridColumn="1 / -1"
+            display="flex"
+            justifyContent="flex-end"
+          >
+            <CommentsSection lessonId={lesson.id} />
+          </Div>
+        </Box>
+      </Div>
 
       {/* Materials and Assessment */}
       <Box variant="container" mt="L">

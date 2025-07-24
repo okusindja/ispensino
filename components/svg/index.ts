@@ -17,6 +17,7 @@ export { default as MoonSVG } from './moon';
 export { default as OptionsHorizontalSVG } from './options-horizontal';
 export { default as PaperSVG } from './paper';
 export { default as PlusSVG } from './plus';
+export { default as ReplySVG } from './reply';
 export { default as SearchSVG } from './search';
 export { default as ShareSVG } from './share';
 export { default as SpinnerSVG } from './spinner';

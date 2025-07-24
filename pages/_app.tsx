@@ -3,6 +3,7 @@ import Head from 'next/head';
 
 import { ThemeManager } from '@/components';
 import { AuthProvider, DialogProvider } from '@/contexts';
+import { ToastProvider } from '@/contexts/toast';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -14,11 +15,13 @@ const App = ({ Component, pageProps }: AppProps) => {
         />
       </Head>
       <ThemeManager>
-        <DialogProvider>
-          <AuthProvider>
-            <Component {...pageProps} />
-          </AuthProvider>
-        </DialogProvider>
+        <ToastProvider>
+          <DialogProvider>
+            <AuthProvider>
+              <Component {...pageProps} />
+            </AuthProvider>
+          </DialogProvider>
+        </ToastProvider>
       </ThemeManager>
     </>
   );

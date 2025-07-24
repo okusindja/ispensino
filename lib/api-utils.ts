@@ -1,3 +1,15 @@
+import {
+  Comment,
+  Course,
+  Enrollment,
+  Like,
+  Payment,
+  Post,
+  Resource,
+  User,
+  UserAssessment,
+  UserResponse,
+} from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { adminAuth } from './firebase-admin';
@@ -12,7 +24,19 @@ export const authenticateUser = async (req: NextApiRequest) => {
   const idToken = authHeader.split(' ')[1];
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken);
-    const user = await prisma.user.findUnique({
+    const user:
+      | (User & {
+          enrollments: Enrollment[];
+          assessments: UserAssessment[];
+          likes: Like[];
+          payments: Payment[];
+          posts: Post[];
+          resources: Resource[];
+          responses: UserResponse[];
+          teachingCourses: Course[];
+          comments: Comment[];
+        })
+      | null = await prisma.user.findUnique({
       where: { firebaseId: decodedToken.uid },
       include: {
         enrollments: true,
