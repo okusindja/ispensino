@@ -26,13 +26,14 @@ const CommentsSection: FC<CommentsSectionProps> = ({ lessonId }) => {
     fetcherWithCredentials
   );
 
+  const safeComments = Array.isArray(comments) ? comments : [];
+
   const handleSubmit = async () => {
     if (!commentContent.trim()) return;
 
     setIsSubmitting(true);
     setError(null);
 
-    // Declare tempId outside the try block so it's accessible in the catch block
     const tempId = `temp-${uuidv4()}`;
 
     try {
@@ -57,7 +58,8 @@ const CommentsSection: FC<CommentsSectionProps> = ({ lessonId }) => {
         replies: [],
       };
 
-      mutate([optimisticComment, ...(comments || [])], false);
+      mutate([optimisticComment, ...safeComments], false);
+
       // Actual API call
       await fetcherWithCredentials(`/api/comments?lessonId=${lessonId}`, {
         method: 'POST',
@@ -78,15 +80,19 @@ const CommentsSection: FC<CommentsSectionProps> = ({ lessonId }) => {
 
       setCommentContent('');
       mutate();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error posting comment');
+    } catch (err: any) {
+      const errorMessage = err.message || 'Error posting comment';
+      setError(errorMessage);
       addToast({
         title: 'Erro ao adicionar comentário',
-        description: error || 'Ocorreu um erro ao adicionar seu comentário.',
+        description: errorMessage,
         type: 'error',
       });
       // Revert optimistic comment
-      mutate(comments?.filter((c: any) => c.tempId !== tempId) || [], false);
+      mutate(
+        safeComments.filter((c: any) => c.tempId !== tempId),
+        false
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -94,7 +100,10 @@ const CommentsSection: FC<CommentsSectionProps> = ({ lessonId }) => {
 
   const handleDeleteComment = (commentId: string) => {
     // Optimistic deletion
-    mutate(comments?.filter((c: any) => c.id !== commentId) || [], false);
+    mutate(
+      safeComments.filter((c: any) => c.id !== commentId),
+      false
+    );
     addToast({
       title: 'Comentário excluído',
       description: 'Seu comentário foi excluído com sucesso.',
@@ -148,14 +157,14 @@ const CommentsSection: FC<CommentsSectionProps> = ({ lessonId }) => {
         </Div>
       )}
 
-      {comments?.length === 0 ? (
+      {safeComments.length === 0 ? (
         <Div p="M" bg="surface_dark" borderRadius="M" textAlign="center">
           <Typography variant="body" size="small" color="text">
             Nenhum comentário ainda. Seja o primeiro a comentar!
           </Typography>
         </Div>
       ) : (
-        comments?.map((comment) => (
+        safeComments.map((comment) => (
           <Div key={comment.id} mb="L">
             <CommentItem
               comment={comment}
