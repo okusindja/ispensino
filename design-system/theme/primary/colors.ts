@@ -16,6 +16,7 @@ const colors = {
   foreground: palette.NEUTRAL_50,
   outline: palette.NEUTRAL_400,
   outlineVariant: 'rgba(255, 255, 255, .1)',
+  outlineBorder: 'rgba(189, 189, 189, 1)',
   disabled: palette.NEUTRAL_300,
   surface_x_dark: palette.PRIMARY_900,
   surface_dark: palette.NEUTRAL_400,

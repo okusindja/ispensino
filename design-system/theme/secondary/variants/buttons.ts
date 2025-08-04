@@ -29,7 +29,8 @@ const effects = css`
   }
   &:disabled {
     cursor: not-allowed;
-    background: ${colors.disabled};
+    pointer-events: none;
+    opacity: 0.5;
   }
 `;
 

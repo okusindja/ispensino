@@ -1,15 +1,22 @@
-import { Div, Li, Ul, Video } from '@stylin.js/elements';
+import { Div, Video } from '@stylin.js/elements';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import { Layout } from '@/components';
 import ListItemCard from '@/components/list-item-card';
-import { Box } from '@/elements';
+import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
 
 import { CourseDetailsProps } from './details.types';
 
-const CourseDetails: FC<CourseDetailsProps> = ({ course }) => {
+const CourseDetails: FC<CourseDetailsProps> = ({ course, isEnrolled }) => {
+  const firstLesson = course.lessons.find((lesson) => lesson.order === 1);
+  const router = useRouter();
+  const handleEnroll = () => {
+    router.push(`/content/courses/${course.slug}/checkout`);
+  };
+
   return (
     <Layout hasGoBack>
       <Div backgroundColor="primary" width="100%" py="M" pt="L">
@@ -58,46 +65,45 @@ const CourseDetails: FC<CourseDetailsProps> = ({ course }) => {
         </Div>
       </Box>
       <Box variant="container" mt="L">
-        <Div width="100%" gridColumn="1 / -1" color="text">
-          <Ul
-            display="grid"
-            gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
-            gap="L"
-          >
-            {course.lessons.map((lesson) => (
-              <Li key={lesson.id}>
-                <ListItemCard
-                  to={`/content/courses/${course.slug}/lessons/${lesson.id}`}
-                  title={lesson.title}
-                  footerLeft={
-                    <Typography
-                      variant="body"
-                      size="small"
-                      color="text"
-                      display="flex"
-                    >
-                      Por:{' '}
-                      <Typography
-                        as="span"
-                        ml="S"
-                        variant="body"
-                        size="small"
-                        color="primary"
-                      >
-                        {course.teacher.name}
-                      </Typography>
-                    </Typography>
-                  }
-                />
-              </Li>
-            ))}
-          </Ul>
-          {course.lessons.length === 0 && (
-            <Typography variant="body" size="medium" color="text">
-              Nenhuma aula disponível
-            </Typography>
-          )}
-        </Div>
+        {isEnrolled && (
+          <Div width="100%" gridColumn="1 / -1" color="text">
+            <ListItemCard
+              to={`/content/courses/${course.slug}/lessons/${firstLesson?.id}`}
+              title={firstLesson?.title as string}
+              footerLeft={
+                <Typography
+                  variant="body"
+                  size="small"
+                  color="text"
+                  display="flex"
+                >
+                  Por:{' '}
+                  <Typography
+                    as="span"
+                    ml="S"
+                    variant="body"
+                    size="small"
+                    color="primary"
+                  >
+                    {course.teacher.name}
+                  </Typography>
+                </Typography>
+              }
+            />
+            {course.lessons.length === 0 && (
+              <Typography variant="body" size="medium" color="text">
+                Nenhuma aula disponível
+              </Typography>
+            )}
+          </Div>
+        )}
+        {!isEnrolled && (
+          <Div width="100%" gridColumn="1 / -1">
+            <Button size="medium" variant="primary" onClick={handleEnroll}>
+              Matricular-se
+            </Button>
+          </Div>
+        )}
       </Box>
     </Layout>
   );

@@ -112,24 +112,26 @@ const CommentsSection: FC<CommentsSectionProps> = ({ lessonId }) => {
   };
 
   return (
-    <Div mt="XL" width="100%" gridColumn="1 / -1">
-      <Typography variant="headline" size="small" color="text" mb="M">
-        Comentários
-      </Typography>
-
+    <Div mt="M" width="100%" gridColumn="1 / -1">
       {user ? (
         <Div mb="L">
           <Textarea
-            value={commentContent}
-            onChange={(e: any) => setCommentContent(e.target.value)}
-            placeholder="Adicione um comentário..."
             p="M"
-            width="100%"
-            minHeight="100px"
-            border="1px solid"
-            borderColor="outline"
-            borderRadius="M"
             mb="S"
+            width="100%"
+            color="text"
+            borderRadius="M"
+            border="1px solid"
+            minHeight="6.25rem"
+            borderColor="outline"
+            value={commentContent}
+            backgroundColor="surface"
+            placeholder="Adicione um comentário..."
+            onChange={(e: any) => setCommentContent(e.target.value)}
+            nPlaceholder={{
+              color: 'gray',
+              fontSize: 'small',
+            }}
           />
 
           {error && (
@@ -173,9 +175,8 @@ const CommentsSection: FC<CommentsSectionProps> = ({ lessonId }) => {
               onDelete={handleDeleteComment}
             />
 
-            {/* Render replies */}
             {comment.replies?.length > 0 && (
-              <Div ml={['M', 'L', 'XL']} mt="M">
+              <Div ml={['XL', 'L', 'XL', 'XL']} mt="M">
                 {comment.replies.map((reply) => (
                   <CommentItem
                     key={reply.id}

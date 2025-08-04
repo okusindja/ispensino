@@ -2,12 +2,18 @@ import { Div } from '@stylin.js/elements';
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { OptionsHorizontalSVG } from '@/components/svg';
 import { Typography } from '@/elements/typography';
 
 import { ContentItemProps } from './content-item.types';
 
-const ContentItem: FC<ContentItemProps> = ({ to, title }) => {
+const ContentItem: FC<ContentItemProps> = ({
+  to,
+  title,
+  description,
+  Icon,
+  footerLeft,
+  footerRight,
+}) => {
   return (
     <Link href={to} title={title}>
       <Div
@@ -24,28 +30,24 @@ const ContentItem: FC<ContentItemProps> = ({ to, title }) => {
             borderRadius="M"
             backgroundColor="onPrimary"
           >
-            <OptionsHorizontalSVG
-              maxHeight="1.5rem"
-              maxWidth="1.5rem"
-              width="100%"
-            />
+            <Icon maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
           </Div>
           <Typography variant="fancy" size="large" color="textInverted">
-            Content Author
+            {title}
           </Typography>
           <Typography variant="fancy" size="small" color="textInverted">
-            2 Cursos
+            {description}
           </Typography>
         </Div>
-        <Div p="L" backgroundColor="surface">
-          <Typography
-            variant="fancy"
-            textAlign="right"
-            color="text"
-            size="medium"
-          >
-            Content Title
-          </Typography>
+        <Div
+          p="L"
+          backgroundColor="surface"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          {footerLeft}
+          {footerRight}
         </Div>
       </Div>
     </Link>

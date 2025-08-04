@@ -37,6 +37,7 @@ export interface NextPageWithCourseAndTeacherProps {
 }
 export interface NextPageWithCourseProps {
   course: Course & { lessons: Lesson[]; teacher: User };
+  isEnrolled: boolean;
 }
 export interface NextPageWithCoursesArrayProps {
   courses: Array<Course & { lessons: Lesson[] }>;

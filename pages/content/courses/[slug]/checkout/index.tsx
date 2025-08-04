@@ -5,13 +5,9 @@ import nookies from 'nookies';
 
 import { NextPageWithCourse } from '@/interface/declaration';
 import { adminAuth, prisma } from '@/lib';
-import { CourseDetailsView } from '@/views';
+import Enroll from '@/views/courses/details/enroll';
 
-const CourseDetailsPage: NextPageWithCourse = ({
-  user,
-  course,
-  isEnrolled,
-}) => {
+const CourseCheckout: NextPageWithCourse = ({ user, course }) => {
   if (!user) {
     return (
       <Div>
@@ -21,7 +17,7 @@ const CourseDetailsPage: NextPageWithCourse = ({
     );
   }
 
-  return <CourseDetailsView course={course} isEnrolled={isEnrolled} />;
+  return <Enroll course={course} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -68,6 +64,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         userId: dbUser?.id,
       },
     });
+
+    if (enrollment) {
+      return {
+        redirect: {
+          destination: `/content/courses/${course.slug}`,
+          permanent: false,
+        },
+      };
+    }
   } catch (error) {
     console.error('Session cookie verification error:', error);
     return {
@@ -81,9 +86,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       user,
       course: JSON.parse(JSON.stringify(course)),
-      isEnrolled: !!enrollment,
     },
   };
 };
 
-export default CourseDetailsPage;
+export default CourseCheckout;

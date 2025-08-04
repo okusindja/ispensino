@@ -234,8 +234,6 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
         }
       );
 
-      if (!response.ok) throw new Error('Submission failed');
-
       const result = await response.json();
       setScore(result.score);
       setIsPassed(result.isPassed);

@@ -2,15 +2,16 @@
 import { Comment, User } from '@prisma/client';
 import { Div, Textarea } from '@stylin.js/elements';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, PropsWithChildren, useState } from 'react';
 import { mutate } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ArrowDownSVG, HeartSVG, ReplySVG } from '@/components/svg';
+import { HeartSVG, ReplySVG, TrashSVG } from '@/components/svg';
 import { fetcherWithCredentials } from '@/constants/swr';
 import { useAuth, useToast } from '@/contexts';
 import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
+import { formatRelativeDate } from '@/utils';
 
 export interface CommentProps extends Comment {
   author: {
@@ -38,12 +39,13 @@ interface CommentItemProps {
   onDelete?: (id: string) => void;
 }
 
-const CommentItem: FC<CommentItemProps> = ({
+const CommentItem: FC<PropsWithChildren<CommentItemProps>> = ({
   comment,
   lessonId,
   isReply = false,
   onReply,
   onDelete,
+  children,
 }) => {
   const { user } = useAuth();
   const { addToast } = useToast();
@@ -303,6 +305,10 @@ const CommentItem: FC<CommentItemProps> = ({
       borderRadius="M"
       bg={isReply ? 'surface_dark' : 'surface'}
       opacity={comment.tempId ? 0.75 : 1}
+      {...(!isReply && {
+        borderLeft: '3px solid',
+        borderLeftColor: 'primary',
+      })}
     >
       <Div
         display="flex"
@@ -318,9 +324,14 @@ const CommentItem: FC<CommentItemProps> = ({
             style={{ borderRadius: '100%', marginRight: '0.5rem' }}
             src={`https://ui-avatars.com/api/?name=${comment.author.name}&background=random`}
           />
-          <Typography variant="body" size="small" fontWeight="bold">
-            {comment.author.name}
-          </Typography>
+          <Div display="flex" flexDirection="column" gap="XS">
+            <Typography variant="fancy" size="medium">
+              {comment.author.name}
+            </Typography>
+            <Typography variant="body" size="extraSmall" color="text">
+              {formatRelativeDate(comment.createdAt)}
+            </Typography>
+          </Div>
         </Div>
 
         {isOwner && (
@@ -328,53 +339,48 @@ const CommentItem: FC<CommentItemProps> = ({
             variant="neutral"
             size="small"
             isIcon
+            color="text"
             onClick={handleDelete}
             disabled={isSubmitting}
           >
-            <ArrowDownSVG maxWidth="16px" maxHeight="16px" width="100%" />
+            <TrashSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
           </Button>
         )}
       </Div>
 
-      <Typography variant="body" size="small" mb="M">
+      <Typography variant="body" size="small" mb="M" mt="L">
         {comment.content}
       </Typography>
 
-      {error && (
-        <Typography variant="body" size="small" color="error" mb="M">
-          {error}
-        </Typography>
-      )}
+      {!isReply && (
+        <Div display="flex" alignItems="center">
+          <Button
+            variant="neutral"
+            size="small"
+            isIcon
+            display="flex"
+            alignItems="center"
+            color={userLiked ? 'primary' : 'text'}
+            onClick={handleLike}
+            disabled={!user || isLiking}
+          >
+            <HeartSVG
+              width="100%"
+              strokeColor="currentColor"
+              maxWidth="1rem"
+              maxHeight="1rem"
+            />
+            <Typography variant="body" size="small" ml="XS">
+              {likeCount}
+            </Typography>
+          </Button>
 
-      <Div display="flex" alignItems="center">
-        <Button
-          variant="neutral"
-          size="small"
-          isIcon
-          display="flex"
-          alignItems="center"
-          onClick={handleLike}
-          disabled={!user || isLiking}
-        >
-          <HeartSVG
-            width="100%"
-            strokeColor="currentColor"
-            maxWidth="16px"
-            maxHeight="16px"
-            fill={userLiked ? '#FF0000' : 'currentColor'}
-          />
-          <Typography variant="body" size="small" ml="XS">
-            {likeCount}
-          </Typography>
-        </Button>
+          {likeError && (
+            <Typography variant="body" size="small" color="error" ml="S">
+              {likeError}
+            </Typography>
+          )}
 
-        {likeError && (
-          <Typography variant="body" size="small" color="error" ml="S">
-            {likeError}
-          </Typography>
-        )}
-
-        {!isReply && (
           <Button
             variant="secondary"
             size="small"
@@ -385,13 +391,13 @@ const CommentItem: FC<CommentItemProps> = ({
             onClick={() => setIsReplying(!isReplying)}
             disabled={!user}
           >
-            <ReplySVG width="100%" maxWidth="16px" maxHeight="16px" />
+            <ReplySVG width="100%" maxWidth="1rem" maxHeight="1rem" />
             <Typography variant="body" size="small" ml="XS">
               {replyCount}
             </Typography>
           </Button>
-        )}
-      </Div>
+        </Div>
+      )}
 
       {isReplying && (
         <Div mt="M">
@@ -426,6 +432,7 @@ const CommentItem: FC<CommentItemProps> = ({
               {isSubmitting ? 'Enviando...' : 'Responder'}
             </Button>
           </Box>
+          {children && <Div mt="M">{children}</Div>}
         </Div>
       )}
     </Div>

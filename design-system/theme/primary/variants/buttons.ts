@@ -18,23 +18,23 @@ const common = css`
 `;
 
 const shadow = css`
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
 `;
 
 const effects = css`
   transition: all 300ms ease-in-out;
   &:hover {
     transform: scale(0.95);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
   }
   &:disabled {
     cursor: not-allowed;
-    background: ${colors.disabled};
+    pointer-events: none;
+    opacity: 0.5;
   }
 `;
 
 const primary = css`
-  ${shadow};
+  // ${shadow};
   ${common};
   color: ${pallete.NEUTRAL_100};
   background: ${colors.primary};
@@ -42,7 +42,7 @@ const primary = css`
 `;
 
 const secondary = css`
-  ${shadow};
+  // ${shadow};
   ${common};
   color: ${colors.text};
   background: ${colors['surface_x_light']};
@@ -50,7 +50,7 @@ const secondary = css`
 `;
 
 const tertiary = css`
-  ${shadow};
+  // ${shadow};
   ${common};
   background: ${colors.tertiary};
   color: ${colors.primary};

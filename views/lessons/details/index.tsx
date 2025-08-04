@@ -2,7 +2,7 @@ import { Div, Video } from '@stylin.js/elements';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 import { Layout } from '@/components';
 import CommentsSection from '@/components/comments-section';
@@ -17,6 +17,7 @@ import { LessonPageProps } from './lesson-details.types';
 const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
   const router = useRouter();
   const { user } = useAuth();
+  const [toggleComments, setToggleComments] = useState(false);
 
   // Determine if current user is the course teacher
   const isTeacher = lesson.course.teacher.firebaseId === user?.uid;
@@ -100,29 +101,40 @@ const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
           <Typography variant="body" size="small" color="text" mt="XL">
             {lesson.description}
           </Typography>
+
+          <Button
+            my="XL"
+            variant="primary"
+            size="small"
+            onClick={() => setToggleComments((prev) => !prev)}
+          >
+            {toggleComments ? 'Ocultar comentários' : 'Mostrar comentários'}
+          </Button>
         </Div>
       </Box>
 
-      <Div
-        py="L"
-        mb="XL"
-        color="text"
-        width="100%"
-        bg="surface_dark"
-        borderTop="1px solid"
-        borderColor="outline"
-      >
-        <Box variant="container">
-          <Div
-            width="100%"
-            gridColumn="1 / -1"
-            display="flex"
-            justifyContent="flex-end"
-          >
-            <CommentsSection lessonId={lesson.id} />
-          </Div>
-        </Box>
-      </Div>
+      {toggleComments && (
+        <Div
+          py="L"
+          mb="XL"
+          color="text"
+          width="100%"
+          bg="surface_dark"
+          borderTop="1px solid"
+          borderColor="outline"
+        >
+          <Box variant="container">
+            <Div
+              width="100%"
+              gridColumn="1 / -1"
+              display="flex"
+              justifyContent="flex-end"
+            >
+              <CommentsSection lessonId={lesson.id} />
+            </Div>
+          </Box>
+        </Div>
+      )}
 
       {/* Materials and Assessment */}
       <Box variant="container" mt="L">

@@ -28,6 +28,10 @@ model User {
   assessments     UserAssessment[]
   payments        Payment[]
   responses       UserResponse[]
+  followers       User[]           @relation("UserFollows")
+  following       User[]           @relation("UserFollows")
+  balance         Float            @default(0.0)
+  notifications   Notification[]
 
   // Teacher-specific fields
   bio            String?
@@ -181,15 +185,16 @@ model Course {
 }
 
 model Enrollment {
-  id          String    @id @default(uuid())
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String
-  course      Course    @relation(fields: [courseId], references: [id])
-  courseId    String
-  enrolledAt  DateTime  @default(now())
-  completedAt DateTime?
-  progress    Float     @default(0.0)
-  payments    Payment[]
+  id                     String    @id @default(uuid())
+  user                   User      @relation(fields: [userId], references: [id])
+  userId                 String
+  course                 Course    @relation(fields: [courseId], references: [id])
+  courseId               String
+  enrolledAt             DateTime  @default(now())
+  completedAt            DateTime?
+  progress               Float     @default(0.0)
+  assessmentScoreAverage Float     @default(0.0)
+  payments               Payment[]
 }
 
 model Payment {
@@ -304,4 +309,25 @@ model UserResponse {
   answer       Json
   isCorrect    Boolean
   answeredAt   DateTime       @default(now())
+}
+
+enum NotificationType {
+  ENROLLMENT
+  ASSESSMENT
+  PAYMENT
+  GENERAL
+  LIKE
+  COMMENT
+  FOLLOW
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  type        NotificationType
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

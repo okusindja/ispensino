@@ -7,7 +7,7 @@ import useSWR from 'swr';
 
 import { ArrowLeftSVG, FolderSVG, LogoSVG } from '@/components/svg';
 import { Routes, RoutesEnum } from '@/constants';
-import { fetcher } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/swr';
 import { Box, Button } from '@/elements';
 
 const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
@@ -15,7 +15,10 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
   const path = router.pathname;
   const isCoursesPage =
     path.includes('/content/courses/') || path.includes('/teacher/courses/');
-  const { data, isLoading } = useSWR<User>('/api/users/me', fetcher);
+  const { data, isLoading } = useSWR<User>(
+    '/api/users/me',
+    fetcherWithCredentials
+  );
   const isTeacher = data?.role === 'TEACHER';
 
   if (!data && !isLoading) return <>Erro</>;

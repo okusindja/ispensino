@@ -4,7 +4,6 @@ import { Div } from '@stylin.js/elements';
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Box } from '@/elements';
 import { Typography } from '@/elements/typography';
 
 type ToastType = 'success' | 'error' | 'info';
@@ -78,7 +77,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
                 </ToastPrimitive.Description>
               )}
 
-              <ToastPrimitive.Close asChild>
+              {/* <ToastPrimitive.Close asChild>
                 <Box
                   as="button"
                   position="absolute"
@@ -90,7 +89,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
                 >
                   <CloseIcon />
                 </Box>
-              </ToastPrimitive.Close>
+              </ToastPrimitive.Close> */}
             </Div>
           </ToastPrimitive.Root>
         ))}
@@ -122,35 +121,6 @@ const getTitleColor = (type: ToastType) => {
       return 'text';
   }
 };
-
-// Simple close icon component (replace with your icon)
-const CloseIcon = () => (
-  <Box
-    width="16px"
-    height="16px"
-    position="relative"
-    nBefore={{
-      content: '""',
-      position: 'absolute',
-      top: '50%',
-      left: '0',
-      width: '100%',
-      height: '2px',
-      bg: 'text',
-      transform: 'rotate(45deg)',
-    }}
-    nAfter={{
-      content: '""',
-      position: 'absolute',
-      top: '50%',
-      left: '0',
-      width: '100%',
-      height: '2px',
-      bg: 'text',
-      transform: 'rotate(-45deg)',
-    }}
-  />
-);
 
 export const useToast = () => {
   const context = useContext(ToastContext);
