@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import useSWR from 'swr';
 
+import { Notification } from '@/components';
 import { ArrowLeftSVG, FolderSVG, LogoSVG } from '@/components/svg';
 import { Routes, RoutesEnum } from '@/constants';
 import { fetcherWithCredentials } from '@/constants/swr';
@@ -69,6 +70,7 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
                 <FolderSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
               </Button>
             )}
+            <Notification />
           </Div>
         </Box>
       </StylinHeader>
