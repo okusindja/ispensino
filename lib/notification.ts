@@ -1,13 +1,16 @@
 import { NotificationType } from '@prisma/client';
 
+import { auth } from './firebase';
+
 export async function sendNotification(
   userId: string,
   message: string,
   type?: NotificationType
 ): Promise<void> {
+  const user = auth.currentUser?.uid;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/notifications/send`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${user}/notifications/send`,
       {
         method: 'POST',
         headers: {
