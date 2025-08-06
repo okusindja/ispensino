@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { sendNotification } from '@/lib';
 import {
   authenticateUser,
   handleApiError,
@@ -17,41 +18,56 @@ export default async function handler(
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
     const { commentId } = req.body;
-
-    if (!commentId) {
+    if (!commentId)
       return res.status(400).json({ error: 'Comment ID is required' });
-    }
 
-    // Check if user already liked the comment
+    // First get the comment with author information
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+      select: {
+        id: true,
+        content: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!comment) return res.status(404).json({ error: 'Comment not found' });
+
+    // Check for existing like
     const existingLike = await prisma.like.findFirst({
       where: {
-        user: {
-          firebaseId: user.firebaseId,
-        },
         userId: user.id,
+        commentId: commentId,
       },
     });
 
     if (existingLike) {
-      // Unlike the comment
-      await prisma.like.delete({
-        where: { id: existingLike.id },
-      });
+      await prisma.like.delete({ where: { id: existingLike.id } });
       return res.status(200).json({ liked: false });
-    } else {
-      // Like the comment
-      await prisma.like.create({
-        data: {
-          comment: {
-            connect: { id: commentId },
-          },
-          user: {
-            connect: { firebaseId: user.firebaseId },
-          },
-        },
-      });
-      return res.status(200).json({ liked: true });
     }
+
+    // Create new like
+    await prisma.like.create({
+      data: {
+        commentId: commentId,
+        userId: user.id,
+      },
+    });
+
+    if (comment.author.id !== user.id) {
+      await sendNotification(
+        comment.author.id,
+        `${user.name} liked your comment`,
+        'LIKE'
+      );
+    }
+
+    return res.status(200).json({ liked: true });
   } catch (error) {
     handleApiError(res, error);
   }

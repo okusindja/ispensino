@@ -1,5 +1,8 @@
 import { Category, Course, Enrollment, Lesson, User } from '@prisma/client';
+import { Server as NetServer } from 'net';
 import { NextPage } from 'next';
+import { NextApiResponse } from 'next';
+import { Server as SocketIOServer } from 'socket.io';
 
 import { HomePageProps } from '@/views/home/home.types';
 import { LessonPageProps } from '@/views/lessons/details/lesson-details.types';
@@ -9,6 +12,24 @@ export interface NextPageDefaultProps {
   pageTitle: string;
   user: SessionUserProps;
 }
+
+export type NextApiResponseWithSocket = NextApiResponse & {
+  socket: {
+    server: NetServer & {
+      io?: SocketIOServer;
+    };
+  };
+};
+
+export type NotificationType = {
+  id: string;
+  userId: string;
+  type: string;
+  message: string;
+  isRead: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export interface UserProps extends User {
   teachingCourses: Course[];

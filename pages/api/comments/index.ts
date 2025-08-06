@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { sendNotification } from '@/lib';
 import {
   authenticateUser,
   handleApiError,
@@ -74,6 +75,7 @@ export default async function handler(
         return res.status(400).json({ error: 'Content is required' });
       }
 
+      // First create the comment
       const comment = await prisma.comment.create({
         data: {
           content,
@@ -86,7 +88,6 @@ export default async function handler(
             select: {
               id: true,
               name: true,
-              firebaseId: true,
             },
           },
           likes: {
@@ -100,6 +101,53 @@ export default async function handler(
         },
       });
 
+      // Then fetch additional relations if needed for notifications
+      if (parentId) {
+        const parentComment = await prisma.comment.findUnique({
+          where: { id: parentId },
+          select: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        });
+
+        if (parentComment && parentComment.author.id !== user.id) {
+          await sendNotification(
+            parentComment.author.id,
+            `${user.name} replied to your comment`,
+            'COMMENT'
+          );
+        }
+      } else {
+        const lessonWithTeacher = await prisma.lesson.findUnique({
+          where: { id: lessonId as string },
+          select: {
+            course: {
+              select: {
+                teacher: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        if (lessonWithTeacher?.course.teacher.id !== user.id) {
+          await sendNotification(
+            lessonWithTeacher?.course.teacher.id as string,
+            `${user.name} commented on your lesson`,
+            'COMMENT'
+          );
+        }
+      }
+
       return res.status(201).json({ ...comment, tempId });
     }
 
@@ -108,7 +156,6 @@ export default async function handler(
       if (!commentId)
         return res.status(400).json({ error: 'Comment ID required' });
 
-      // Verify comment ownership
       const comment = await prisma.comment.findUnique({
         where: { id: commentId },
         select: { authorId: true },
@@ -118,10 +165,7 @@ export default async function handler(
       if (comment.authorId !== user.id)
         return res.status(403).json({ error: 'Unauthorized' });
 
-      await prisma.comment.delete({
-        where: { id: commentId },
-      });
-
+      await prisma.comment.delete({ where: { id: commentId } });
       return res.status(200).json({ success: true });
     }
   } catch (error) {

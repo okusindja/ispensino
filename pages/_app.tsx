@@ -2,7 +2,12 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { ThemeManager } from '@/components';
-import { AuthProvider, DialogProvider } from '@/contexts';
+import {
+  AuthProvider,
+  DialogProvider,
+  NotificationProvider,
+  SocketProvider,
+} from '@/contexts';
 import { ToastProvider } from '@/contexts/toast';
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -15,13 +20,17 @@ const App = ({ Component, pageProps }: AppProps) => {
         />
       </Head>
       <ThemeManager>
-        <ToastProvider>
-          <DialogProvider>
-            <AuthProvider>
-              <Component {...pageProps} />
-            </AuthProvider>
-          </DialogProvider>
-        </ToastProvider>
+        <SocketProvider>
+          <ToastProvider>
+            <DialogProvider>
+              <AuthProvider>
+                <NotificationProvider>
+                  <Component {...pageProps} />
+                </NotificationProvider>
+              </AuthProvider>
+            </DialogProvider>
+          </ToastProvider>
+        </SocketProvider>
       </ThemeManager>
     </>
   );
