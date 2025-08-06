@@ -1,6 +1,8 @@
 // contexts/notification-context.tsx
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import { fetcherWithCredentials } from '@/constants/swr';
+
 import { useAuth } from '../auth';
 import { useSocket } from '../socket';
 
@@ -33,11 +35,13 @@ export const NotificationProvider = ({
 
     const fetchNotifications = async () => {
       try {
-        const res = await fetch(`/api/user/${user.id}/notifications`);
-        const data = await res.json();
-        setNotifications(data);
+        const data = await fetcherWithCredentials(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${user.id}/notifications`
+        );
+        setNotifications(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Failed to fetch notifications', error);
+        setNotifications([]);
       }
     };
 
@@ -46,7 +50,9 @@ export const NotificationProvider = ({
     socket.emit('subscribe', user.id);
 
     socket.on('notification', (newNotification: Notification) => {
-      setNotifications((prev) => [newNotification, ...prev]);
+      if (newNotification && typeof newNotification === 'object') {
+        setNotifications((prev) => [newNotification, ...prev]);
+      }
     });
 
     return () => {
@@ -56,9 +62,12 @@ export const NotificationProvider = ({
 
   const markAsRead = async (id: string) => {
     try {
-      await fetch(`/api/notifications/${id}/read`, {
-        method: 'PATCH',
-      });
+      await fetcherWithCredentials(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${user?.id}/notifications/${id}/read`,
+        {
+          method: 'PATCH',
+        }
+      );
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
       );
@@ -77,7 +86,6 @@ export const NotificationProvider = ({
     </NotificationContext.Provider>
   );
 };
-
 export const useNotifications = () => {
   const context = useContext(NotificationContext);
   if (!context) {
