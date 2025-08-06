@@ -24,13 +24,13 @@ const NotificationBell = () => {
         <Div
           display="flex"
           alignItems="center"
-          top="-12px"
-          right="-12px"
+          top="0px"
+          right="0.5rem"
           position="absolute"
           zIndex="2"
         >
           <Typography variant="fancy" size="small" color="text" ml="S">
-            {unreadCount > 0 ? `${unreadCount} new` : 'No new notifications'}
+            {unreadCount > 0 ? `${unreadCount}` : '0'}
           </Typography>
         </Div>
       </Button>
