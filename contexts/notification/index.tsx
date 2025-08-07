@@ -1,5 +1,7 @@
 // contexts/notification-context.tsx
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect } from 'react';
+import toast from 'react-hot-toast';
+import useSWR from 'swr';
 
 import { fetcherWithCredentials } from '@/constants/swr';
 
@@ -27,52 +29,83 @@ export const NotificationProvider = ({
   children: React.ReactNode;
 }) => {
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
   const socket = useSocket();
+
+  const { data: notifications = [], mutate } = useSWR<Notification[]>(
+    user?.id
+      ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${user.id}/notifications`
+      : null,
+    fetcherWithCredentials,
+    {
+      refreshInterval: 30000,
+      revalidateOnFocus: true,
+    }
+  );
 
   useEffect(() => {
     if (!user?.id || !socket) return;
 
-    const fetchNotifications = async () => {
-      try {
-        const data = await fetcherWithCredentials(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${user.id}/notifications`
-        );
-        setNotifications(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error('Failed to fetch notifications', error);
-        setNotifications([]);
-      }
-    };
+    const handleNewNotification = (newNotification: Notification) => {
+      mutate(
+        (prev) => {
+          if (!prev) return [newNotification];
+          if (prev.some((n) => n.id === newNotification.id)) return prev;
+          return [newNotification, ...prev];
+        },
+        { revalidate: false }
+      );
 
-    fetchNotifications();
+      // Accessible toast notification
+      toast.custom(
+        (t) => (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => toast.dismiss(t.id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                toast.dismiss(t.id);
+              }
+            }}
+            className="focus:outline-none focus:ring-2 focus:ring-primary-500"
+          >
+            <div className="p-3 rounded-lg bg-white shadow-lg border border-gray-200">
+              <p className="font-medium">{newNotification.message}</p>
+              <p className="text-sm text-gray-500">
+                {new Date(newNotification.createdAt).toLocaleTimeString()}
+              </p>
+            </div>
+          </div>
+        ),
+        {
+          duration: 5000,
+        }
+      );
+    };
 
     socket.emit('subscribe', user.id);
-
-    socket.on('notification', (newNotification: Notification) => {
-      if (newNotification && typeof newNotification === 'object') {
-        setNotifications((prev) => [newNotification, ...prev]);
-      }
-    });
+    socket.on('notification', handleNewNotification);
 
     return () => {
-      socket.off('notification');
+      socket.off('notification', handleNewNotification);
+      socket.emit('unsubscribe', user.id);
     };
-  }, [user?.id, socket]);
+  }, [user?.id, socket, mutate]);
 
   const markAsRead = async (id: string) => {
     try {
       await fetcherWithCredentials(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${user?.id}/notifications/${id}/read`,
-        {
-          method: 'PATCH',
-        }
+        { method: 'PATCH' }
       );
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+
+      mutate(
+        (prev) => prev?.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+        false
       );
     } catch (error) {
       console.error('Failed to mark notification as read', error);
+      mutate();
     }
   };
 
@@ -86,6 +119,7 @@ export const NotificationProvider = ({
     </NotificationContext.Provider>
   );
 };
+
 export const useNotifications = () => {
   const context = useContext(NotificationContext);
   if (!context) {

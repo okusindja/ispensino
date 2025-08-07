@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { Toaster } from 'react-hot-toast';
 
 import { ThemeManager } from '@/components';
 import {
@@ -26,6 +27,7 @@ const App = ({ Component, pageProps }: AppProps) => {
               <AuthProvider>
                 <NotificationProvider>
                   <Component {...pageProps} />
+                  <Toaster position="top-right" />
                 </NotificationProvider>
               </AuthProvider>
             </DialogProvider>
