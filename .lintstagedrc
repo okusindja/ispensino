@@ -1,4 +1,8 @@
 {
-  "*.{js, jsx,ts,tsx}": ["eslint --quiet --fix"],
-  "*.{json,js,ts,jsx,tsx,html}": ["prettier --write --ignore-unknown"]
+  "*.{js,jsx,ts,tsx,json,html}": [
+    "biome check --write"
+  ],
+  "*.{js,jsx,ts,tsx}": [
+    "eslint --quiet --fix"
+  ]
 }
