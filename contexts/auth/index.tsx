@@ -10,7 +10,7 @@ import {
 } from 'react';
 import useSWR from 'swr';
 
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 import { auth } from '@/lib/firebase';
 
 // type Roles = 'admin' | 'promoter' | 'common';

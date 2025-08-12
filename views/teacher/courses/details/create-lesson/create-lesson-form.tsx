@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { FileUploader } from '@/components';
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 
 // Zod validation schema
 const lessonSchema = z.object({

@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 import { CourseFormData } from '@/zod/course';
 
 interface UseCreateCourse {

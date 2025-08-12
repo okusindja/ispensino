@@ -1,9 +1,8 @@
-// contexts/notification-context.tsx
 import { createContext, useContext, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 
 import { useAuth } from '../auth';
 import { useSocket } from '../socket';
@@ -55,7 +54,6 @@ export const NotificationProvider = ({
         { revalidate: false }
       );
 
-      // Accessible toast notification
       toast.custom(
         (t) => (
           <div

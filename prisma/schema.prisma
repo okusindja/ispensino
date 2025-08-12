@@ -16,9 +16,12 @@ model User {
   email           String           @unique
   createdAt       DateTime         @default(now())
   name            String
+  username        String?          @unique
   phone           String?
   address         String?
   role            Role             @default(STUDENT)
+  image           String?
+  bio             String?
   posts           Post[]
   comments        Comment[]
   likes           Like[]
@@ -32,11 +35,10 @@ model User {
   following       User[]           @relation("UserFollows")
   balance         Float            @default(0.0)
   notifications   Notification[]
-
-  // Teacher-specific fields
-  bio            String?
-  qualifications String[]
-  specialization String?
+  taggedPosts     Post[]           @relation("UserTags")
+  tags            Tag[]            @relation("UserTags")
+  qualifications  String[]
+  specialization  String?
 }
 
 enum Role {
@@ -45,7 +47,6 @@ enum Role {
   ADMIN
 }
 
-// Social models
 model Post {
   id          String       @id @default(uuid())
   content     String
@@ -57,12 +58,26 @@ model Post {
   comments    Comment[]
   tags        Tag[]
   attachments Attachment[]
+  taggedUsers User[]       @relation("UserTags")
+  course      Course?      @relation(fields: [courseId], references: [id])
+  courseId    String?
+  resource    Resource?    @relation(fields: [resourceId], references: [id])
+  resourceId  String?
+}
 
-  // References to educational content
-  course     Course?   @relation(fields: [courseId], references: [id])
-  courseId   String?
-  resource   Resource? @relation(fields: [resourceId], references: [id])
-  resourceId String?
+model Tag {
+  id        String    @id @default(uuid())
+  name      String
+  type      TagType
+  posts     Post[]
+  users     User[]    @relation("UserTags")
+  resources Resource[] @relation("ResourceTags")
+}
+
+enum TagType {
+  USER
+  RESOURCE
+  TOPIC
 }
 
 model Comment {
@@ -93,12 +108,6 @@ model Like {
   createdAt DateTime @default(now())
 }
 
-model Tag {
-  id    String @id @default(uuid())
-  name  String @unique
-  posts Post[]
-}
-
 model Attachment {
   id     String    @id @default(uuid())
   url    String
@@ -114,7 +123,6 @@ enum MediaType {
   AUDIO
 }
 
-// Educational content models
 model Resource {
   id          String       @id @default(uuid())
   title       String
@@ -128,6 +136,7 @@ model Resource {
   posts       Post[]
   categories  Category[]
   license     LicenseType  @default(CC_BY)
+  tags        Tag[]        @relation("ResourceTags")
 }
 
 enum ResourceType {
@@ -162,7 +171,6 @@ model Category {
   courses     Course[]
 }
 
-// Course models
 model Course {
   id          String       @id @default(uuid())
   title       String
@@ -319,6 +327,7 @@ enum NotificationType {
   LIKE
   COMMENT
   FOLLOW
+  TAG
 }
 
 model Notification {

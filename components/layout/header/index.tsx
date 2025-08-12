@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { Notification } from '@/components';
 import { ArrowLeftSVG, FolderSVG, LogoSVG } from '@/components/svg';
 import { Routes, RoutesEnum } from '@/constants';
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 import { Box, Button } from '@/elements';
 
 const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {

@@ -6,7 +6,7 @@ import useSWR from 'swr';
 
 import { Layout } from '@/components';
 import { ArrowUpSVG, SpinnerSVG } from '@/components/svg';
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 import { useAuth } from '@/contexts';
 import { Button } from '@/elements';
 import { Typography } from '@/elements/typography';

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
 
 import { Layout } from '@/components';
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 import { AssessmentType } from '@/zod';
 
 import AssessmentForm from './assessment-form';

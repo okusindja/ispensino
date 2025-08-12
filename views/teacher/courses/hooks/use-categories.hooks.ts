@@ -1,7 +1,7 @@
 // src/hooks/useCategories.ts
 import useSWR from 'swr';
 
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 import { CategoryFormData } from '@/zod';
 
 interface Category {

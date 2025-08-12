@@ -7,7 +7,7 @@ import { mutate } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 
 import { HeartSVG, ReplySVG, TrashSVG } from '@/components/svg';
-import { fetcherWithCredentials } from '@/constants/swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 import { useAuth, useToast } from '@/contexts';
 import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
