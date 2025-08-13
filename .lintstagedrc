@@ -1,8 +1,8 @@
 {
-  "*.{js,jsx,ts,tsx,json,html}": [
+  "*.{jsx,ts,tsx,json,html}": [
     "biome check --write"
   ],
-  "*.{js,jsx,ts,tsx}": [
+  "*.{jsx,ts,tsx}": [
     "eslint --quiet --fix"
   ]
 }
