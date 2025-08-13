@@ -9,8 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "format": "prettier --write .",
-    "check-format": "prettier --check ."
+    "format": "biome lint --write .",
+    "check-format": "biome lint --check ."
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -52,6 +52,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.4",
     "@emotion/eslint-plugin": "^11.11.0",
     "@types/formidable": "^3.4.5",
     "@types/lodash.debounce": "^4.0.9",
