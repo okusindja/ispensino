@@ -1,11 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextApiRequest, NextApiResponse } from 'next';
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
 import { parseCookies } from 'nookies';
 
 import { adminAuth as firebaseAuth } from './firebase-admin';
 
 // For client-side and getServerSideProps
-export async function auth(ctx?: any) {
+export async function auth(ctx: GetServerSidePropsContext | null) {
   try {
     const cookies = parseCookies(ctx);
     const sessionCookie = cookies.session;

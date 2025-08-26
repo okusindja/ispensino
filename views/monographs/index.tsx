@@ -94,17 +94,17 @@ const MonographListView = ({
                   Prefix={
                     <SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />
                   }
-                  placeholder="Procure por um curso..."
+                  placeholder="Procure por uma monografia..."
                 />
               </Div>
               {monographs.map((monograph) => (
                 <ItemCard
                   key={monograph.id}
-                  to={`/content/courses/${monograph.id}`}
                   title={monograph.title}
-                  thumbnail={'https://picsum.photos/200/300'}
                   introduction={monograph.author}
                   description={monograph.tags.join(', ')}
+                  to={`/content/monographs/${monograph.id}`}
+                  thumbnail={'https://picsum.photos/200/300'}
                 />
               ))}
             </Box>

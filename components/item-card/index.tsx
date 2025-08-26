@@ -53,11 +53,11 @@ const ItemCard: FC<ItemCardProps> = ({
         >
           <Div display="flex" alignItems="center" gap="S" color="text">
             <TagSVG maxWidth=".875rem" maxHeight="14px" width="100%" />
-            <Typography variant="fancy" size="small" color="text">
+            <Typography variant="fancy" size="small" color="text" lines={1}>
               {introduction}
             </Typography>
           </Div>
-          <Typography variant="fancy" size="large" color="text">
+          <Typography variant="fancy" size="large" color="text" lines={2}>
             {title}
           </Typography>
           <Typography variant="body" size="extraSmall" color="text">
