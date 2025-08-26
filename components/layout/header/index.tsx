@@ -6,7 +6,7 @@ import { FC } from 'react';
 import useSWR from 'swr';
 
 import { Notification } from '@/components';
-import { ArrowLeftSVG, FolderSVG, LogoSVG } from '@/components/svg';
+import { ArrowLeftSVG, FolderSVG, LogoSVG, UserSVG } from '@/components/svg';
 import { Routes, RoutesEnum } from '@/constants';
 import { fetcherWithCredentials } from '@/constants/fetchers';
 import { Box, Button } from '@/elements';
@@ -59,18 +59,39 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
                 <ArrowLeftSVG width="100%" maxWidth="3rem" maxHeight="3rem" />
               </Button>
             )}
-            {isTeacher && (
-              <Button
-                isIcon
-                color={!isCoursesPage ? 'text' : 'textInverted'}
-                size="medium"
-                variant="neutral"
-                onClick={() => router.push('/teacher')}
-              >
-                <FolderSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
-              </Button>
-            )}
-            <Notification />
+            <Div display="flex" alignItems="center" gap="L">
+              {isTeacher && (
+                <>
+                  <Button
+                    isIcon
+                    color={!isCoursesPage ? 'text' : 'textInverted'}
+                    size="medium"
+                    variant="neutral"
+                    onClick={() => router.push('/teacher')}
+                  >
+                    <FolderSVG
+                      width="100%"
+                      maxWidth="1.5rem"
+                      maxHeight="1.5rem"
+                    />
+                  </Button>
+                  <Button
+                    isIcon
+                    color={!isCoursesPage ? 'text' : 'textInverted'}
+                    size="medium"
+                    variant="neutral"
+                    onClick={() => router.push('/adm')}
+                  >
+                    <UserSVG
+                      width="100%"
+                      maxWidth="1.5rem"
+                      maxHeight="1.5rem"
+                    />
+                  </Button>
+                </>
+              )}
+              <Notification />
+            </Div>
           </Div>
         </Box>
       </StylinHeader>

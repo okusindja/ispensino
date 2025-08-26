@@ -71,6 +71,22 @@ export interface NextPageWithLessonProps extends LessonPageProps {
   courseId: string;
 }
 
+export interface NextPageWithMonographProps {
+  monograph: Monograph | null;
+}
+
+export interface NextPageWithMonographsProps {
+  monographs: Monograph[];
+}
+
+export type NextPageWithMonographs = NextPage<
+  NextPageWithMonographsProps & NextPageDefaultProps
+>;
+
+export type NextPageWithMonograph = NextPage<
+  NextPageWithMonographProps & NextPageDefaultProps
+>;
+
 export type NextPageWithUser = NextPage<
   NextPageWithUserProps & NextPageDefaultProps
 >;

@@ -29,3 +29,4 @@ export { default as TagSVG } from './tag';
 export { default as TestSVG } from './test';
 export { default as TrashSVG } from './trash';
 export { default as UserSVG } from './user';
+export { default as SendSVG } from './send';

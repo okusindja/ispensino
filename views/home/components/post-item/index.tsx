@@ -8,6 +8,7 @@ import {
   MessageSVG,
   // MessageFilledSVG,
   OptionsHorizontalSVG,
+  SendSVG,
   // SendSVG,
 } from '@/components/svg';
 import { useAuth } from '@/contexts';
@@ -328,7 +329,10 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
                 sizes="100%"
                 quality={100}
                 alt={currentUser?.name || 'You'}
-                src={currentUser?.image || '/default-avatar.png'}
+                src={
+                  currentUser?.image ||
+                  'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                }
                 style={{ objectFit: 'cover' }}
               />
             </Div>
@@ -338,18 +342,22 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
               onChange={(e) => setCommentContent(e.target.value)}
               placeholder="Write a comment..."
               flex="1"
-              p="S"
+              py="L"
+              px="M"
               borderRadius="M"
               border={`1px solid ${colors.outline}`}
             />
             <Button
               type="submit"
-              variant="primary"
+              variant="neutral"
               size="small"
               isIcon
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
               disabled={isCommenting || !commentContent.trim()}
             >
-              Enviar
+              <SendSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
             </Button>
           </Form>
         </Div>

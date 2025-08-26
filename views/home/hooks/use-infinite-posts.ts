@@ -139,9 +139,9 @@ export const useInfinitePosts = () => {
       );
 
       // Perform the actual API call
-      await fetcherWithCredentials(`/api/posts/${postId}/comments`, {
+      await fetcherWithCredentials(`/api/comments`, {
         method: 'POST',
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ content, parentId: postId, tempId: v4() }),
       });
 
       // Revalidate the data

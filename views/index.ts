@@ -6,3 +6,8 @@ export { default as CourseDetailsView } from './courses/details';
 export { default as LibraryView } from './library';
 export { default as ProfileView } from './profile';
 export { default as TeacherHomeView } from './teacher';
+export { default as MonographDetailView } from './monographs/details';
+export { default as MonographListView } from './monographs';
+export { default as MonographCreateView } from './monographs/create-monograph';
+export { default as MonographEditView } from './monographs/edit-monograph';
+export { default as AdminDashboard } from './adm';

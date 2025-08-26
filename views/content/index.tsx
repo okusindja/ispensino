@@ -31,7 +31,7 @@ const Content: FC = () => {
           />
           <ContentItem
             title="Monografias"
-            to="content/courses"
+            to="content/monographs"
             Icon={GraduateHatSVG}
             description="1 Monografia"
             footerLeft={
