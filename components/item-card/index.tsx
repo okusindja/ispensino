@@ -39,7 +39,7 @@ const ItemCard: FC<ItemCardProps> = ({
             quality={100}
             alt="Placeholder"
             style={{ objectFit: 'cover' }}
-            src={thumbnail || 'https://picsum.photos/200/300'}
+            src={thumbnail || '/icons/icon-512x512.png'}
           />
         </Div>
         <Div

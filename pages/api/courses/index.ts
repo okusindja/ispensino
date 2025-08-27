@@ -19,7 +19,6 @@ export default async function handler(
     validateMethod(req, res, ['GET', 'POST']);
     const { courseId } = req.query;
     const user = await authenticateUser(req);
-    console.log('Authenticated user:', user);
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
     if (courseId && typeof courseId === 'string') {

@@ -3,6 +3,8 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { uploadToCloudinary } from '@/lib/cloudinary';
+import { Div } from '@stylin.js/elements';
+import { Typography } from '@/elements/typography';
 
 interface FileUploaderProps {
   onUploadStart: () => void;
@@ -65,44 +67,27 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   });
 
   return (
-    <div className="space-y-2">
-      <div
-        {...getRootProps()}
-        className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
-          isDragActive
-            ? 'border-blue-500 bg-blue-50'
-            : 'border-gray-300 hover:border-gray-400'
-        }`}
-      >
+    <Div mb="L">
+      <Div {...getRootProps()}>
         <input {...getInputProps()} />
-        <div className="space-y-2">
-          <svg
-            className={`mx-auto h-12 w-12 ${
-              isDragActive ? 'text-blue-500' : 'text-gray-400'
-            }`}
-            stroke="currentColor"
-            fill="none"
-            viewBox="0 0 48 48"
-            aria-hidden="true"
-          >
-            <path
-              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <div className="flex flex-col items-center justify-center text-sm">
-            <p className="font-medium text-gray-700">{label}</p>
-            <p className="text-xs text-gray-500 mt-1">
-              {accept.join(', ').replace(/\*/g, '')} files up to{' '}
+        <Div border="1px dashed gray" p="L" borderRadius="M">
+          <Div display="grid" gap="M">
+            <Typography variant="body" size="medium" color="text">
+              {label}
+            </Typography>
+            <Typography variant="body" size="medium" color="text">
+              {accept.join(', ').replace(/\*/g, '')} com limite máximo de{' '}
               {maxSize / 1024 / 1024}MB
-            </p>
-          </div>
-        </div>
-      </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-    </div>
+            </Typography>
+          </Div>
+        </Div>
+      </Div>
+      {error && (
+        <Typography variant="body" size="medium" color="error">
+          {error}
+        </Typography>
+      )}
+    </Div>
   );
 };
 

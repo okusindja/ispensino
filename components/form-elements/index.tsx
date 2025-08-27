@@ -18,6 +18,7 @@ import { ZodSchema } from 'zod';
 import { TextField } from '@/components';
 import { Box } from '@/elements';
 import { Button } from '@/elements';
+import { Typography } from '@/elements/typography';
 
 type FormFieldProps<T extends FieldValues> = {
   name: Path<T>;
@@ -75,9 +76,11 @@ export const SelectField = <T extends FieldValues>({
   isMulti = false,
 }: SelectFieldProps<T>) => (
   <Div mb="1.5rem">
-    <Label htmlFor={String(name)} mb="0.5rem" display="block" fontWeight="500">
-      {label}
-    </Label>
+    <Typography variant="fancy" size="small" mb="M" color="primary">
+      <Label htmlFor={String(name)} display="block">
+        {label}:
+      </Label>
+    </Typography>
     <Controller
       name={name}
       control={control}

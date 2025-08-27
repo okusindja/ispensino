@@ -17,7 +17,7 @@ import { AcademicalCourses } from '@prisma/client';
 import { MonographFormData, MonographSchema } from '@/zod/monograph';
 import useCreateMonograph from './create-monograph.hook';
 import CreateTagForm from './create-tag-form';
-import { FileUploader } from '@/components';
+import { FileUploader, Layout } from '@/components';
 
 const CreateMonographView = () => {
   const [isPdfUploading, setIsPdfUploading] = useState<boolean>(false);
@@ -79,165 +79,160 @@ const CreateMonographView = () => {
   const currentTags = getValues().tags || [];
 
   return (
-    <Box variant="container">
-      <Div
-        p="L"
-        mx="auto"
-        width="100%"
-        display="flex"
-        maxWidth="800px"
-        gridColumn="1/-1"
-        flexDirection="column"
-      >
-        <Typography variant="body" size="large" mb="L">
-          Adicionar Nova Monografia
-        </Typography>
+    <Layout hasGoBack>
+      <Box variant="container">
+        <Div
+          p="L"
+          mx="auto"
+          width="100%"
+          display="flex"
+          maxWidth="800px"
+          gridColumn="1/-1"
+          flexDirection="column"
+        >
+          <Typography variant="title" size="small" color="text" mb="2XL">
+            Adicionar Nova Monografia
+          </Typography>
 
-        <Form onSubmit={handleSubmit(handleFormSubmit)} width="100%">
-          <FormField<MonographFormData>
-            name="title"
-            label="Título da Monografia"
-            type="text"
-            placeholder="Título da pesquisa ou estudo"
-            control={control}
-            error={errors.title?.message}
-          />
+          <Form onSubmit={handleSubmit(handleFormSubmit)} width="100%">
+            <FormField<MonographFormData>
+              name="title"
+              label="Título da Monografia"
+              type="text"
+              placeholder="Título da pesquisa ou estudo"
+              control={control}
+              error={errors.title?.message}
+            />
 
-          <FormField<MonographFormData>
-            name="author"
-            label="Autor"
-            type="text"
-            placeholder="Nome completo do autor"
-            control={control}
-            error={errors.author?.message}
-          />
+            <FormField<MonographFormData>
+              name="author"
+              label="Autor"
+              type="text"
+              placeholder="Nome completo do autor"
+              control={control}
+              error={errors.author?.message}
+            />
 
-          <FormField<MonographFormData>
-            name="advisor"
-            label="Orientador"
-            type="text"
-            placeholder="Nome completo do orientador"
-            control={control}
-            error={errors.advisor?.message}
-          />
+            <FormField<MonographFormData>
+              name="advisor"
+              label="Orientador"
+              type="text"
+              placeholder="Nome completo do orientador"
+              control={control}
+              error={errors.advisor?.message}
+            />
 
-          <SelectField<MonographFormData>
-            name="course"
-            label="Curso Acadêmico"
-            control={control}
-            error={errors.course?.message}
-            options={Object.values(AcademicalCourses).map((course) => ({
-              value: course,
-              label: course
-                .split('_')
-                .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
-                .join(' '),
-            }))}
-          />
+            <SelectField<MonographFormData>
+              name="course"
+              label="Curso Acadêmico"
+              control={control}
+              error={errors.course?.message}
+              options={Object.values(AcademicalCourses).map((course) => ({
+                value: course,
+                label: course
+                  .split('_')
+                  .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+                  .join(' '),
+              }))}
+            />
 
-          <FormField<MonographFormData>
-            name="publishedAt"
-            label="Data de Publicação"
-            type="date"
-            control={control}
-            error={errors.publishedAt?.message}
-          />
+            <FormField<MonographFormData>
+              name="publishedAt"
+              label="Data de Publicação"
+              type="date"
+              control={control}
+              error={errors.publishedAt?.message}
+            />
 
-          <FileUploader
-            onUploadStart={() => setIsPdfUploading(true)}
-            onUploadComplete={(file) => {
-              setValue('url', file.url);
-              setIsPdfUploading(false);
-            }}
-            folder={`monographs/pdfs`}
-            accept={['application/pdf']}
-            single={true}
-            label="Upload PDF File"
-          />
+            <FileUploader
+              onUploadStart={() => setIsPdfUploading(true)}
+              onUploadComplete={(file) => {
+                setValue('url', file.url);
+                setIsPdfUploading(false);
+              }}
+              folder={`monographs/pdfs`}
+              accept={['application/pdf']}
+              single={true}
+              label="Upload PDF File"
+            />
 
-          <Box mb="M">
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb="XS"
-            >
-              <Typography variant="body" size="medium">
-                Tags
-              </Typography>
+            <Div mb="M">
+              <Div display="grid" gap="M">
+                <Typography variant="body" size="medium" color="text">
+                  Tags
+                </Typography>
+                <Button
+                  size="medium"
+                  variant="secondary"
+                  onClick={handleOpenCreateTagDialog}
+                >
+                  Adicionar Tag
+                </Button>
+              </Div>
+
+              <Div mt="M" gap="S" display="flex" flexWrap="wrap">
+                {currentTags.map((tag: string, index: number) => (
+                  <Div
+                    key={index}
+                    p="XS"
+                    bg="primary"
+                    color="white"
+                    borderRadius="S"
+                    fontSize="S"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    {tag}
+                    <Button
+                      size="medium"
+                      ml="XS"
+                      variant="neutral"
+                      color="white"
+                      onClick={() => removeTag(index)}
+                      type="button"
+                    >
+                      ×
+                    </Button>
+                  </Div>
+                ))}
+              </Div>
+
+              {currentTags.length === 0 && (
+                <Typography variant="body" size="medium" color="text" my="XL">
+                  Nenhuma tag adicionada. Adicione tags para categorizar sua
+                  monografia.
+                </Typography>
+              )}
+            </Div>
+
+            {errorMsg && (
+              <Div color="error" mb="M" textAlign="center">
+                {errorMsg}
+              </Div>
+            )}
+
+            <Box display="flex" gap="M">
               <Button
                 size="medium"
-                variant="neutral"
-                onClick={handleOpenCreateTagDialog}
+                variant="secondary"
+                onClick={() => router.push('/resources')}
+                disabled={isSubmitting || loading}
+                type="button"
               >
-                <Typography variant="body" size="medium">
-                  Adicionar Tag
-                </Typography>
+                Cancelar
               </Button>
+              <SubmitButton loading={isSubmitting || loading || isPdfUploading}>
+                {isSubmitting || loading
+                  ? 'Publicando monografia...'
+                  : isPdfUploading
+                    ? 'Fazendo upload do PDF...'
+                    : 'Publicar Monografia'}
+              </SubmitButton>
             </Box>
-
-            <Box mt="M" gap="S" display="flex" flexWrap="wrap">
-              {currentTags.map((tag: string, index: number) => (
-                <Box
-                  key={index}
-                  p="XS"
-                  bg="primary"
-                  color="white"
-                  borderRadius="S"
-                  fontSize="S"
-                  display="flex"
-                  alignItems="center"
-                >
-                  {tag}
-                  <Button
-                    size="medium"
-                    ml="XS"
-                    variant="neutral"
-                    color="white"
-                    onClick={() => removeTag(index)}
-                    type="button"
-                  >
-                    ×
-                  </Button>
-                </Box>
-              ))}
-            </Box>
-
-            {currentTags.length === 0 && (
-              <Box mt="M" color="textSecondary">
-                Nenhuma tag adicionada. Adicione tags para categorizar sua
-                monografia.
-              </Box>
-            )}
-          </Box>
-
-          {errorMsg && (
-            <Div color="error" mb="M" textAlign="center">
-              {errorMsg}
-            </Div>
-          )}
-
-          <Box display="flex" gap="M">
-            <Button
-              size="medium"
-              variant="secondary"
-              onClick={() => router.push('/resources')}
-              disabled={isSubmitting || loading}
-              type="button"
-            >
-              Cancelar
-            </Button>
-            <SubmitButton loading={isSubmitting || loading || isPdfUploading}>
-              {isSubmitting || loading
-                ? 'Publicando monografia...'
-                : isPdfUploading
-                  ? 'Fazendo upload do PDF...'
-                  : 'Publicar Monografia'}
-            </SubmitButton>
-          </Box>
-        </Form>
-      </Div>
-    </Box>
+          </Form>
+        </Div>
+      </Box>
+    </Layout>
   );
 };
 

@@ -69,10 +69,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const isTeacher = teacher?.firebaseId === decodedClaims.uid;
     const isEnrolled = course.enrollments.length > 0;
 
-    console.log('User:', user);
-    console.log('Is Teacher:', isTeacher);
-    console.log('Is Enrolled:', isEnrolled);
-
     // if (!isTeacher || !isEnrolled) {
     //   return {
     //     redirect: {

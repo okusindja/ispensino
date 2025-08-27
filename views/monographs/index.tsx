@@ -104,7 +104,6 @@ const MonographListView = ({
                   introduction={monograph.author}
                   description={monograph.tags.join(', ')}
                   to={`/content/monographs/${monograph.id}`}
-                  thumbnail={'https://picsum.photos/200/300'}
                 />
               ))}
             </Box>

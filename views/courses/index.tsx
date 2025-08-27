@@ -23,7 +23,7 @@ const Courses: FC<CoursesViewProps> = ({ courses }) => {
             key={course.id}
             to={`/content/courses/${course.slug}`}
             title={course.title}
-            thumbnail={course.thumbnail || 'https://picsum.photos/200/300'}
+            thumbnail={course.thumbnail || '/icons/icon-512x512.png'}
             introduction={course.price ? `${course.price} AOA` : 'Gratuito'}
             description={
               course.lessons.length > 0
