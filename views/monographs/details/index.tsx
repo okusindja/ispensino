@@ -1,4 +1,3 @@
-// src/features/monograph/views/MonographDetailView.tsx (updated)
 import { useRouter } from 'next/router';
 import { Monograph } from '@prisma/client';
 
@@ -40,10 +39,10 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
             <Div mb="L">
               <Div display="flex" justifyContent="space-between">
                 <Typography
-                  variant="body"
-                  size="small"
-                  color="textSecondary"
                   mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
                 >
                   Autor
                 </Typography>
@@ -54,10 +53,10 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
 
               <Box>
                 <Typography
-                  variant="body"
-                  size="small"
-                  color="textSecondary"
                   mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
                 >
                   Orientador
                 </Typography>
@@ -68,10 +67,10 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
 
               <Box>
                 <Typography
-                  variant="body"
-                  size="small"
-                  color="textSecondary"
                   mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
                 >
                   Curso
                 </Typography>
@@ -82,10 +81,10 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
 
               <Box>
                 <Typography
-                  variant="body"
-                  size="small"
-                  color="textSecondary"
                   mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
                 >
                   Publicado em
                 </Typography>
@@ -98,10 +97,10 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
             {monograph.tags.length > 0 && (
               <>
                 <Typography
-                  variant="body"
-                  size="small"
-                  color="textSecondary"
                   mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
                 >
                   Tags
                 </Typography>
@@ -124,8 +123,8 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
             )}
 
             <Link
-              href={monograph.url}
               target="_blank"
+              href={monograph.url}
               rel="noopener noreferrer"
             >
               Acessar Documento
@@ -133,10 +132,10 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
 
             <Box mt="L" pt="L" borderTop="1px solid" borderColor="border">
               <Typography
-                variant="body"
-                size="small"
-                color="textSecondary"
                 mb="XS"
+                size="small"
+                variant="body"
+                color="textSecondary"
               >
                 Criado em
               </Typography>
@@ -145,10 +144,10 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
               </Typography>
 
               <Typography
-                variant="body"
-                size="small"
-                color="textSecondary"
                 mb="XS"
+                size="small"
+                variant="body"
+                color="textSecondary"
               >
                 Última atualização
               </Typography>

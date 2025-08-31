@@ -39,6 +39,8 @@ model User {
   tags            Tag[]            @relation("UserTags")
   qualifications  String[]
   specialization  String?
+
+  ScientificArticleAuthor ScientificArticleAuthor[]
 }
 
 enum Role {
@@ -74,6 +76,8 @@ model Tag {
   resources Resource[] @relation("ResourceTags")
 
   Book Book[] @relation("ResourceTags")
+
+  ScientificArticle ScientificArticle[] @relation("ArticleTags")
 }
 
 enum TagType {
@@ -171,6 +175,8 @@ model Category {
   description String
   resources   Resource[]
   courses     Course[]
+
+  ScientificArticle ScientificArticle[]
 }
 
 model Course {
@@ -218,6 +224,50 @@ model Monograph {
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   tags         String[]
+}
+
+model ScientificArticle {
+  id           String       @id @default(uuid())
+  title        String
+  abstract     String
+  keywords     String[] // multiple keywords
+  doi          String?      @unique
+  url          String // main article PDF
+  journal      String?
+  resourceType ResourceType @default(SCIENTIFIC_ARTICLE)
+  volume       String?
+  issue        String?
+  pages        String?
+  publishedAt  DateTime
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  license      LicenseType  @default(CC_BY)
+
+  // Relations
+  authors    ScientificArticleAuthor[]
+  references Reference[]
+  categories Category[]
+  tags       Tag[]                     @relation("ArticleTags")
+}
+
+model ScientificArticleAuthor {
+  id          String            @id @default(uuid())
+  article     ScientificArticle @relation(fields: [articleId], references: [id])
+  articleId   String
+  user        User?             @relation(fields: [userId], references: [id]) // if author is platform user
+  userId      String?
+  name        String // fallback in case author is external
+  affiliation String?
+  email       String?
+}
+
+model Reference {
+  id        String            @id @default(uuid())
+  article   ScientificArticle @relation(fields: [articleId], references: [id])
+  articleId String
+  citation  String // raw reference text (APA/MLA/ISO)
+  doi       String?
+  url       String?
 }
 
 model Book {
