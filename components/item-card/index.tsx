@@ -23,7 +23,7 @@ const ItemCard: FC<ItemCardProps> = ({
       overflow="hidden"
       backgroundColor="surface"
       boxShadow="5px 5px 10px rgba(0, 0, 0, 0.03)"
-      gridColumn={['span 2', 'span 2', 'span 6', 'span 6']}
+      gridColumn={['span 2', 'span 2', 'span 4', 'span 4']}
     >
       <Link href={to} title={title}>
         <Div
@@ -31,7 +31,7 @@ const ItemCard: FC<ItemCardProps> = ({
           borderRadius="S"
           overflow="hidden"
           position="relative"
-          height="7rem"
+          height={['7rem', '7rem', '10rem', '10rem']}
         >
           <Image
             fill
