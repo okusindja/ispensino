@@ -1,4 +1,3 @@
-// pages/api/monographs/index.ts
 import { AcademicalCourses, ResourceType } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 

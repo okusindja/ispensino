@@ -37,93 +37,70 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
               {monograph.title}
             </Typography>
 
-            <Div mb="XL" display="grid" gridTemplateColumns="repeat(2, 1fr)">
-              <Typography
-                p="M"
-                size="small"
-                variant="body"
-                borderColor="text"
-                border="1px solid"
-                color="textSecondary"
-              >
-                Autor
-              </Typography>
-              <Typography
-                p="M"
-                size="medium"
-                variant="body"
-                borderColor="text"
-                border="1px solid"
-              >
-                {monograph.author}
-              </Typography>
-              <Typography
-                p="M"
-                size="small"
-                variant="body"
-                border="1px solid"
-                borderColor="text"
-                color="textSecondary"
-              >
-                Orientador
-              </Typography>
-              <Typography
-                p="M"
-                variant="body"
-                size="medium"
-                border="1px solid"
-                borderColor="text"
-              >
-                {monograph.advisor}
-              </Typography>
+            <Div mb="L">
+              <Div display="flex" justifyContent="space-between">
+                <Typography
+                  mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
+                >
+                  Autor
+                </Typography>
+                <Typography variant="body" size="medium">
+                  {monograph.author}
+                </Typography>
+              </Div>
 
-              <Typography
-                p="M"
-                size="small"
-                variant="body"
-                border="1px solid"
-                borderColor="text"
-                color="textSecondary"
-              >
-                Curso
-              </Typography>
-              <Typography
-                p="M"
-                size="medium"
-                variant="body"
-                border="1px solid"
-                borderColor="text"
-              >
-                {formatCourseName(monograph.course)}
-              </Typography>
+              <Box>
+                <Typography
+                  mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
+                >
+                  Orientador
+                </Typography>
+                <Typography variant="body" size="medium">
+                  {monograph.advisor}
+                </Typography>
+              </Box>
 
-              <Typography
-                p="M"
-                size="small"
-                variant="body"
-                border="1px solid"
-                borderColor="text"
-                color="textSecondary"
-              >
-                Publicado em
-              </Typography>
-              <Typography
-                p="M"
-                size="medium"
-                variant="body"
-                border="1px solid"
-                borderColor="text"
-              >
-                {formatDate(monograph.publishedAt)}
-              </Typography>
+              <Box>
+                <Typography
+                  mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
+                >
+                  Curso
+                </Typography>
+                <Typography variant="body" size="medium">
+                  {formatCourseName(monograph.course)}
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography
+                  mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
+                >
+                  Publicado em
+                </Typography>
+                <Typography variant="body" size="medium">
+                  {formatDate(monograph.publishedAt)}
+                </Typography>
+              </Box>
             </Div>
 
             {monograph.tags.length > 0 && (
               <>
                 <Typography
-                  my="L"
-                  size="large"
-                  variant="fancy"
+                  mb="XS"
+                  size="small"
+                  variant="body"
                   color="textSecondary"
                 >
                   Tags
@@ -146,52 +123,39 @@ const MonographDetailView = ({ monograph }: MonographDetailViewProps) => {
               </>
             )}
 
-            <Div my="2XL">
-              <Link
-                target="_blank"
-                href={monograph.url}
-                rel="noopener noreferrer"
-              >
-                <Div
-                  p="L"
-                  gap="2XL"
-                  display="flex"
-                  borderRadius="S"
-                  alignItems="center"
-                  border="1px dashed"
-                >
-                  <PDFSVG maxWidth="6rem" maxHeight="6rem" width="100%" />
-                  Acessar Documento
-                </Div>
-              </Link>
-            </Div>
-
-            <Div
-              mt="L"
-              pt="L"
-              gap="XL"
-              display="grid"
-              borderTop="1px solid"
-              borderColor="border"
+            <Link
+              target="_blank"
+              href={monograph.url}
+              rel="noopener noreferrer"
             >
-              <Div display="flex" justifyContent="space-between">
-                <Typography size="small" variant="body" color="textSecondary">
-                  Criado em
-                </Typography>
-                <Typography variant="body" size="medium" mb="M">
-                  {formatDate(monograph.createdAt)}
-                </Typography>
-              </Div>
+              Acessar Documento
+            </Link>
 
-              <Div display="flex" justifyContent="space-between">
-                <Typography size="small" variant="body" color="textSecondary">
-                  Última atualização
-                </Typography>
-                <Typography variant="body" size="medium">
-                  {formatDate(monograph.updatedAt)}
-                </Typography>
-              </Div>
-            </Div>
+            <Box mt="L" pt="L" borderTop="1px solid" borderColor="border">
+              <Typography
+                mb="XS"
+                size="small"
+                variant="body"
+                color="textSecondary"
+              >
+                Criado em
+              </Typography>
+              <Typography variant="body" size="medium" mb="M">
+                {formatDate(monograph.createdAt)}
+              </Typography>
+
+              <Typography
+                mb="XS"
+                size="small"
+                variant="body"
+                color="textSecondary"
+              >
+                Última atualização
+              </Typography>
+              <Typography variant="body" size="medium">
+                {formatDate(monograph.updatedAt)}
+              </Typography>
+            </Box>
           </Div>
 
           <Div borderTop="1px solid" borderColor="border" pt="XL">
