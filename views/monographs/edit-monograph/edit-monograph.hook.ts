@@ -1,4 +1,3 @@
-// src/features/monograph/hooks/use-update-monograph.hooks.ts
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
