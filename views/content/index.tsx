@@ -13,13 +13,16 @@ import { Typography } from '@/elements/typography';
 
 import ContentItem from './components/content-item';
 import { useAuthenticatedSWR } from '@/lib/swr';
-import { Course, Monograph } from '@prisma/client';
+import { Course, Monograph, ScientificArticle } from '@prisma/client';
 
 const Content: FC = () => {
   const { data: courses, isLoading: coursesLoading } =
     useAuthenticatedSWR<Course[]>('/api/courses');
   const { data: monographs, isLoading: monographsLoading } =
     useAuthenticatedSWR<Monograph[]>('/api/monographs');
+  const { data: articles, isLoading: articlesLoading } = useAuthenticatedSWR<
+    ScientificArticle[]
+  >('/api/scientific-articles');
 
   return (
     <Layout>
@@ -81,22 +84,34 @@ const Content: FC = () => {
               />
             )
           )}
-          <ContentItem
-            Icon={TestSVG}
-            to="content/courses"
-            description="5 Artigos"
-            title="Artigos científicos"
-            footerLeft={
-              <Typography variant="fancy" size="small" color="text">
-                Content Author
-              </Typography>
-            }
-            footerRight={
-              <Typography variant="fancy" size="small" color="text">
-                5 Artigos
-              </Typography>
-            }
-          />
+          {articlesLoading ? (
+            <SpinnerSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
+          ) : (
+            articles && (
+              <ContentItem
+                title="Artigos científicos"
+                to="content/scientific-articles"
+                Icon={TestSVG}
+                description={
+                  articles?.length === 1
+                    ? articles?.length + ' Artigo Científico'
+                    : articles?.length + ' Artigos Científicos'
+                }
+                footerLeft={
+                  <Typography variant="fancy" size="small" color="text">
+                    Content Author
+                  </Typography>
+                }
+                footerRight={
+                  <Typography variant="fancy" size="small" color="text">
+                    {articles?.length === 1
+                      ? articles?.length + ' Artigo Científico'
+                      : articles?.length + ' Artigos Científicos'}
+                  </Typography>
+                }
+              />
+            )
+          )}
         </Div>
       </Box>
     </Layout>

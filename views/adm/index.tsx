@@ -16,6 +16,14 @@ const AdminDashboard = () => {
           <button onClick={() => router.push('/adm/monographs/create')}>
             Criar Monografia
           </button>
+          <button onClick={() => router.push('/adm/scientific-articles')}>
+            Artigos Científicos
+          </button>
+          <button
+            onClick={() => router.push('/adm/scientific-articles/create')}
+          >
+            Criar Artigo Científico
+          </button>
         </Div>
       </Box>
     </Layout>

@@ -11,3 +11,7 @@ export { default as MonographListView } from './monographs';
 export { default as MonographCreateView } from './monographs/create-monograph';
 export { default as MonographEditView } from './monographs/edit-monograph';
 export { default as AdminDashboard } from './adm';
+export { default as ScientificArticlesView } from './scientific-articles';
+export { default as ScientificArticleCreateView } from './scientific-articles/create-article';
+export { default as ScientificArticleEditView } from './scientific-articles/edit-article';
+export { default as DetailedScientificArticleView } from './scientific-articles/details';
