@@ -91,7 +91,10 @@ const LoginView = () => {
             </Div>
           )}
 
-          <SubmitButton loading={isSubmitting || loading}>
+          <SubmitButton
+            loading={isSubmitting || loading}
+            isValid={!isSubmitting && !loading}
+          >
             {isSubmitting || loading ? 'A carregar...' : 'Iniciar Sessão'}
           </SubmitButton>
         </Form>
