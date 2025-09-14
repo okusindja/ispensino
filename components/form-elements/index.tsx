@@ -235,11 +235,23 @@ export const RadioGroup = <T extends FieldValues>({
 
 type SubmitButtonProps = {
   loading: boolean;
+  isValid?: boolean;
   children: React.ReactNode;
 };
 
-export const SubmitButton = ({ loading, children }: SubmitButtonProps) => (
-  <Button variant="primary" size="medium" type="submit" disabled={loading}>
+export const SubmitButton = ({
+  loading,
+  children,
+  isValid,
+}: SubmitButtonProps) => (
+  <Button
+    size="medium"
+    type="submit"
+    variant="primary"
+    disabled={loading || !isValid}
+    nDisabled={{ opacity: 0.5 }}
+    cursor={!isValid ? 'not-allowed' : 'default'}
+  >
     {loading ? 'Carregando...' : children}
   </Button>
 );
