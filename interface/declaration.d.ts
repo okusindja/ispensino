@@ -1,4 +1,12 @@
-import { Category, Course, Enrollment, Lesson, User } from '@prisma/client';
+import {
+  Category,
+  Course,
+  Enrollment,
+  Lesson,
+  ScientificArticle,
+  ScientificArticleAuthor,
+  User,
+} from '@prisma/client';
 import { Server as NetServer } from 'net';
 import { NextPage } from 'next';
 import { NextApiResponse } from 'next';
@@ -79,12 +87,20 @@ export interface NextPageWithMonographsProps {
   monographs: Monograph[];
 }
 
+export interface NextPageWithScientificArticleProps {
+  scientificArticle: ScientificArticle & { authors: ScientificArticleAuthor[] };
+}
+
 export type NextPageWithMonographs = NextPage<
   NextPageWithMonographsProps & NextPageDefaultProps
 >;
 
 export type NextPageWithMonograph = NextPage<
   NextPageWithMonographProps & NextPageDefaultProps
+>;
+
+export type NextPageWithScientificArticle = NextPage<
+  NextPageWithScientificArticleProps & NextPageDefaultProps
 >;
 
 export type NextPageWithUser = NextPage<
