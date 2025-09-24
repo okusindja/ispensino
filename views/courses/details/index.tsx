@@ -17,6 +17,8 @@ const CourseDetails: FC<CourseDetailsProps> = ({ course, isEnrolled }) => {
     router.push(`/content/courses/${course.slug}/checkout`);
   };
 
+  console.log(course.id);
+
   return (
     <Layout hasGoBack>
       <Div backgroundColor="primary" width="100%" py="M" pt="L">
@@ -90,6 +92,14 @@ const CourseDetails: FC<CourseDetailsProps> = ({ course, isEnrolled }) => {
                 </Typography>
               }
             />
+            <Button
+              variant="neutral"
+              size="medium"
+              color="text"
+              onClick={() => router.push(`/voice/${course?.id}`)}
+            >
+              Turma de voz
+            </Button>
             {course.lessons.length === 0 && (
               <Typography variant="body" size="medium" color="text">
                 Nenhuma aula disponível

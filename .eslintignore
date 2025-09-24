@@ -1,4 +1,0 @@
-# config file
-next.config.js
-commitlint.config.js
-public/*.{js,jsx,ts,tsx,json}

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Layout } from '@/components';
 import { Div } from '@stylin.js/elements';
 import { FC } from 'react';
+import { PDFSVG } from '@/components/svg';
 
 interface ScientificArticleDetailViewProps {
   scientificArticle: ScientificArticle & { authors: ScientificArticleAuthor[] };
@@ -28,8 +29,22 @@ const ScientificArticleDetailView: FC<ScientificArticleDetailViewProps> = ({
               {scientificArticle.title}
             </Typography>
 
-            <Div mb="L">
-              <Div display="flex" justifyContent="space-between">
+            <Div
+              gap="L"
+              mb="XL"
+              width="100%"
+              display="flex"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <Div
+                pb="L"
+                width="100%"
+                display="flex"
+                borderColor="outline"
+                borderBottom="1px solid"
+                justifyContent="space-between"
+              >
                 <Typography
                   mb="XS"
                   size="small"
@@ -45,7 +60,14 @@ const ScientificArticleDetailView: FC<ScientificArticleDetailViewProps> = ({
                 </Typography>
               </Div>
 
-              <Box>
+              <Div
+                pb="L"
+                width="100%"
+                display="flex"
+                borderColor="outline"
+                borderBottom="1px solid"
+                justifyContent="space-between"
+              >
                 <Typography
                   mb="XS"
                   size="small"
@@ -57,9 +79,16 @@ const ScientificArticleDetailView: FC<ScientificArticleDetailViewProps> = ({
                 <Typography variant="body" size="medium">
                   {scientificArticle.journal}
                 </Typography>
-              </Box>
+              </Div>
 
-              <Box>
+              <Div
+                pb="L"
+                width="100%"
+                display="flex"
+                borderColor="outline"
+                borderBottom="1px solid"
+                justifyContent="space-between"
+              >
                 <Typography
                   mb="XS"
                   size="small"
@@ -71,18 +100,18 @@ const ScientificArticleDetailView: FC<ScientificArticleDetailViewProps> = ({
                 <Typography variant="body" size="medium">
                   {formatDate(scientificArticle.publishedAt)}
                 </Typography>
-              </Box>
+              </Div>
             </Div>
 
             {scientificArticle.keywords.length > 0 && (
               <>
                 <Typography
-                  mb="XS"
+                  mb="L"
                   size="small"
                   variant="body"
                   color="textSecondary"
                 >
-                  Keywords
+                  Tags
                 </Typography>
                 <Div display="flex" flexWrap="wrap" gap="M" mb="L">
                   {scientificArticle.keywords.map((keyword, index) => (
@@ -107,42 +136,69 @@ const ScientificArticleDetailView: FC<ScientificArticleDetailViewProps> = ({
               href={scientificArticle.url}
               rel="noopener noreferrer"
             >
-              Acessar Documento
+              <Div width="100%" py="3XL" textAlign="center">
+                <PDFSVG width="100%" maxWidth="6.25rem" maxHeight="6.25rem" />
+                <Typography variant="fancy" size="large" color="text">
+                  Acessar Documento
+                </Typography>
+              </Div>
             </Link>
 
-            <Box mt="L" pt="L" borderTop="1px solid" borderColor="border">
-              <Typography
-                mb="XS"
-                size="small"
-                variant="body"
-                color="textSecondary"
+            <Div
+              gap="L"
+              mb="XL"
+              width="100%"
+              display="flex"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <Div
+                pb="L"
+                width="100%"
+                display="flex"
+                borderColor="outline"
+                borderBottom="1px solid"
+                justifyContent="space-between"
               >
-                Criado em
-              </Typography>
-              <Typography variant="body" size="medium" mb="M">
-                {formatDate(scientificArticle.createdAt)}
-              </Typography>
+                <Typography
+                  mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
+                >
+                  Criado em
+                </Typography>
+                <Typography variant="body" size="medium" mb="M">
+                  {formatDate(scientificArticle.createdAt)}
+                </Typography>
+              </Div>
 
-              <Typography
-                mb="XS"
-                size="small"
-                variant="body"
-                color="textSecondary"
+              <Div
+                pb="L"
+                width="100%"
+                display="flex"
+                borderColor="outline"
+                borderBottom="1px solid"
+                justifyContent="space-between"
               >
-                Última atualização
-              </Typography>
-              <Typography variant="body" size="medium">
-                {formatDate(scientificArticle.updatedAt)}
-              </Typography>
-            </Box>
+                <Typography
+                  mb="XS"
+                  size="small"
+                  variant="body"
+                  color="textSecondary"
+                >
+                  Última atualização
+                </Typography>
+                <Typography variant="body" size="medium">
+                  {formatDate(scientificArticle.updatedAt)}
+                </Typography>
+              </Div>
+            </Div>
           </Div>
 
-          <Div borderTop="1px solid" borderColor="border" pt="XL">
+          <Div pt="XL">
             <Typography variant="body" size="medium" mb="XL">
               Artigos Relacionados
-            </Typography>
-            <Typography variant="body" size="small" color="textSecondary">
-              Funcionalidade de recomendações em desenvolvimento.
             </Typography>
           </Div>
         </Div>

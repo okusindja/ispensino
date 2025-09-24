@@ -15,8 +15,6 @@ const Spinner: FC<SVGProps> = ({ maxWidth, maxHeight, ...props }) => (
     fill="none"
     {...props}
     preserveAspectRatio="xMidYMid"
-    width="200"
-    height="200"
   >
     <g>
       <g transform="rotate(0 50 50)">

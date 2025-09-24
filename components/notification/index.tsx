@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useNotifications } from '@/contexts';
 import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
+import { formatRelativeDate } from '@/utils';
+import { BellSVG } from '../svg';
 
 const NotificationBell = () => {
   const { notifications, unreadCount, markAsRead } = useNotifications();
@@ -20,16 +22,21 @@ const NotificationBell = () => {
         aria-label="Notifications"
         position="relative"
       >
-        <BellIcon />
+        <BellSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
         <Div
           display="flex"
           alignItems="center"
-          top="0px"
-          right="0.5rem"
+          justifyContent="center"
+          top="-3px"
+          right="0"
+          backgroundColor="primary"
           position="absolute"
+          width="1rem"
+          height="1rem"
+          borderRadius="full"
           zIndex="2"
         >
-          <Typography variant="fancy" size="small" color="text" ml="S">
+          <Typography variant="fancy" size="small" color="darkText">
             {unreadCount > 0 ? `${unreadCount}` : '0'}
           </Typography>
         </Div>
@@ -37,21 +44,22 @@ const NotificationBell = () => {
 
       {isOpen && (
         <Box
-          position="absolute"
+          p="L"
           right="0"
           top="100%"
-          width="320px"
-          maxHeight="400px"
-          overflow="auto"
+          color="text"
           bg="surface"
+          width="320px"
+          boxShadow="lg"
+          overflow="auto"
+          borderRadius="M"
+          zIndex="dropdown"
+          maxHeight="400px"
+          position="absolute"
           border="1px solid"
           borderColor="outline"
-          borderRadius="M"
-          boxShadow="lg"
-          p="M"
-          zIndex="dropdown"
         >
-          <Typography variant="title" size="medium" mb="M">
+          <Typography variant="title" size="small" mb="M">
             Notifications
           </Typography>
 
@@ -63,24 +71,29 @@ const NotificationBell = () => {
             notifications.map((notification) => (
               <Box
                 key={notification.id}
-                p="S"
+                p="M"
                 mb="S"
-                bg={notification.isRead ? 'surface' : 'red'}
+                gap="M"
+                display="grid"
+                color={notification.isRead ? 'text' : 'darkText'}
+                bg={notification.isRead ? 'outline' : 'primary'}
+                border="1px solid"
+                borderColor={notification.isRead ? 'outline' : 'primary'}
                 borderRadius="S"
                 onClick={() =>
                   !notification.isRead && markAsRead(notification.id)
                 }
                 style={{ cursor: 'pointer' }}
               >
-                <Typography
-                  variant="body"
-                  size="medium"
-                  fontWeight={notification.isRead ? 'normal' : 'bold'}
-                >
+                <Typography variant="body" size="medium">
                   {notification.message}
                 </Typography>
-                <Typography variant="body" size="medium" color="text_secondary">
-                  {new Date(notification.createdAt).toLocaleTimeString()}
+                <Typography
+                  variant="body"
+                  size="extraSmall"
+                  color="text_secondary"
+                >
+                  {formatRelativeDate(notification.createdAt)}
                 </Typography>
               </Box>
             ))
@@ -90,11 +103,5 @@ const NotificationBell = () => {
     </Box>
   );
 };
-
-const BellIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
-  </svg>
-);
 
 export default NotificationBell;

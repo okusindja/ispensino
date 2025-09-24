@@ -24,6 +24,23 @@ const Content: FC = () => {
     ScientificArticle[]
   >('/api/scientific-articles');
 
+  if (coursesLoading || monographsLoading || articlesLoading) {
+    return (
+      <Layout>
+        <Div
+          height="80vh"
+          width="100%"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          color="text"
+        >
+          <SpinnerSVG maxWidth="6rem" maxHeight="6rem" width="100%" />
+        </Div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <Box variant="container">
@@ -56,61 +73,53 @@ const Content: FC = () => {
               />
             )
           )}
-          {monographsLoading ? (
-            <SpinnerSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
-          ) : (
-            monographs && (
-              <ContentItem
-                title="Monografias"
-                to="content/monographs"
-                Icon={GraduateHatSVG}
-                description={
-                  monographs?.length === 1
+          {monographs && (
+            <ContentItem
+              title="Monografias"
+              to="content/monographs"
+              Icon={GraduateHatSVG}
+              description={
+                monographs?.length === 1
+                  ? monographs?.length + ' Monografia'
+                  : monographs?.length + ' Monografias'
+              }
+              footerLeft={
+                <Typography variant="fancy" size="small" color="text">
+                  Content Author
+                </Typography>
+              }
+              footerRight={
+                <Typography variant="fancy" size="small" color="text">
+                  {monographs?.length === 1
                     ? monographs?.length + ' Monografia'
-                    : monographs?.length + ' Monografias'
-                }
-                footerLeft={
-                  <Typography variant="fancy" size="small" color="text">
-                    Content Author
-                  </Typography>
-                }
-                footerRight={
-                  <Typography variant="fancy" size="small" color="text">
-                    {monographs?.length === 1
-                      ? monographs?.length + ' Monografia'
-                      : monographs?.length + ' Monografias'}
-                  </Typography>
-                }
-              />
-            )
+                    : monographs?.length + ' Monografias'}
+                </Typography>
+              }
+            />
           )}
-          {articlesLoading ? (
-            <SpinnerSVG maxWidth="2rem" maxHeight="2rem" width="100%" />
-          ) : (
-            articles && (
-              <ContentItem
-                title="Artigos científicos"
-                to="content/scientific-articles"
-                Icon={TestSVG}
-                description={
-                  articles?.length === 1
+          {articles && (
+            <ContentItem
+              title="Artigos científicos"
+              to="content/scientific-articles"
+              Icon={TestSVG}
+              description={
+                articles?.length === 1
+                  ? articles?.length + ' Artigo Científico'
+                  : articles?.length + ' Artigos Científicos'
+              }
+              footerLeft={
+                <Typography variant="fancy" size="small" color="text">
+                  Content Author
+                </Typography>
+              }
+              footerRight={
+                <Typography variant="fancy" size="small" color="text">
+                  {articles?.length === 1
                     ? articles?.length + ' Artigo Científico'
-                    : articles?.length + ' Artigos Científicos'
-                }
-                footerLeft={
-                  <Typography variant="fancy" size="small" color="text">
-                    Content Author
-                  </Typography>
-                }
-                footerRight={
-                  <Typography variant="fancy" size="small" color="text">
-                    {articles?.length === 1
-                      ? articles?.length + ' Artigo Científico'
-                      : articles?.length + ' Artigos Científicos'}
-                  </Typography>
-                }
-              />
-            )
+                    : articles?.length + ' Artigos Científicos'}
+                </Typography>
+              }
+            />
           )}
         </Div>
       </Box>

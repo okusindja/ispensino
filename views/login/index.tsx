@@ -48,40 +48,40 @@ const LoginView = () => {
         justifyContent="center"
       >
         <Typography
-          variant="headline"
+          mb="M"
           width="100%"
-          lineHeight="100%"
           color="text"
           size="small"
-          mb="M"
+          lineHeight="100%"
+          variant="headline"
         >
           Seja bem-vindo de volta!
         </Typography>
         <Typography
-          variant="body"
+          mb="2XL"
           width="100%"
-          lineHeight="100%"
           color="text"
           size="medium"
-          mb="2XL"
+          variant="body"
+          lineHeight="100%"
         >
           Faça login com o seu email e senha.
         </Typography>
         <Form onSubmit={handleSubmit(handleLogin)} width="100%">
           <FormField<LoginFormData>
             name="email"
-            label="Email"
             type="email"
-            placeholder="seu@email.com"
+            label="Email"
             control={control}
+            placeholder="seu@email.com"
             error={errors.email?.message}
           />
           <FormField<LoginFormData>
-            name="password"
             label="Senha"
+            name="password"
             type="password"
-            placeholder="••••••"
             control={control}
+            placeholder="••••••"
             error={errors.password?.message}
           />
 

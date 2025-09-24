@@ -13,22 +13,22 @@ const Library = () => {
     <Layout>
       <Box variant="container">
         <Div width="100%" gridColumn="1/-1">
-          <Typography variant="headline" size="small">
+          <Typography variant="headline" size="small" color="text">
             Lib
           </Typography>
           <TextField
             Prefix={<SearchSVG maxWidth="1rem" maxHeight="1rem" width="100%" />}
             placeholder="Pesquisar livros"
           />
-          <Typography variant="title" size="small" my="L">
+          <Typography variant="title" size="small" my="L" color="text">
             Recent releases
           </Typography>
           <BigCoverBooksGroup />
-          <Typography variant="title" size="small" my="L">
+          <Typography variant="title" size="small" my="L" color="text">
             Recent releases
           </Typography>
           <BigCoverBooksGroup />
-          <Typography variant="title" size="small" my="L">
+          <Typography variant="title" size="small" my="L" color="text">
             Recent releases
           </Typography>
           <RankedBooks />

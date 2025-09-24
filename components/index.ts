@@ -8,3 +8,4 @@ export { TextField } from './text-field';
 export { default as ThemeManager } from './theme-manager';
 export { default as ThemeSwitcher } from './theme-switcher';
 export * from './dialog-messages';
+export { default as OptionItem } from './option-item';

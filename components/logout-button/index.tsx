@@ -2,6 +2,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
 import { Button } from '@/elements';
+import { LogoutSVG } from '../svg';
 
 const LogoutButton = () => {
   const router = useRouter();
@@ -26,8 +27,8 @@ const LogoutButton = () => {
   };
 
   return (
-    <Button variant="secondary" size="medium" onClick={handleLogout}>
-      Logout
+    <Button variant="secondary" size="medium" isIcon onClick={handleLogout}>
+      <LogoutSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
     </Button>
   );
 };

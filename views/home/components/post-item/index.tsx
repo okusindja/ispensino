@@ -17,14 +17,16 @@ import { Button } from '@/elements';
 import { Typography } from '@/elements/typography';
 import { PostProps } from '@/interface/types';
 import { formatRelativeDate } from '@/utils';
+import { useRouter } from 'next/router';
 
 interface PostItemProps {
   post: PostProps;
-  onLike: (postId: string) => void;
-  onComment: (postId: string, content: string) => Promise<void>;
+  onLike?: (postId: string) => void;
+  onComment?: (postId: string, content: string) => Promise<void>;
 }
 
 const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
+  const router = useRouter();
   const { colors } = useTheme() as DesignSystemTheme;
   const { user: currentUser } = useAuth();
   const [commentContent, setCommentContent] = useState('');
@@ -42,7 +44,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
     if (!commentContent.trim()) return;
 
     setIsCommenting(true);
-    await onComment(post.id, commentContent);
+    await onComment?.(post.id, commentContent);
     setCommentContent('');
     setTimeout(() => {
       commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -54,7 +56,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
     if (isLiking) return;
     setIsLiking(true);
     try {
-      await onLike(post.id);
+      await onLike?.(post.id);
     } finally {
       setIsLiking(false);
     }
@@ -142,7 +144,11 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
             }
           />
         </Div>
-        <Div ml="M" flex="1">
+        <Div
+          ml="M"
+          flex="1"
+          onClick={() => router.push(`/profile/social/${post.author.id}`)}
+        >
           <Typography
             variant="fancy"
             size="medium"

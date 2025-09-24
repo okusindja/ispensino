@@ -3,6 +3,7 @@ import {
   Course,
   Enrollment,
   Lesson,
+  Post,
   ScientificArticle,
   ScientificArticleAuthor,
   User,
@@ -14,6 +15,7 @@ import { Server as SocketIOServer } from 'socket.io';
 
 import { HomePageProps } from '@/views/home/home.types';
 import { LessonPageProps } from '@/views/lessons/details/lesson-details.types';
+import { PostProps } from './types';
 
 export interface NextPageDefaultProps {
   now: number;
@@ -55,6 +57,12 @@ export interface NextPageWithUserProps {
   loggedUser: UserProps;
   user: SessionUserProps;
 }
+
+export interface NextPageWithUserAndPostsProps {
+  loggedUser: UserProps & { following: number; followers: number };
+  user: SessionUserProps;
+}
+
 export interface NextPageWithCourseAndTeacherProps {
   course: Course & {
     lessons: Lesson[];
@@ -105,6 +113,10 @@ export type NextPageWithScientificArticle = NextPage<
 
 export type NextPageWithUser = NextPage<
   NextPageWithUserProps & NextPageDefaultProps
+>;
+
+export type NextPageWithUserAndPosts = NextPage<
+  NextPageWithUserAndPostsProps & NextPageDefaultProps
 >;
 
 export type NextPageWithCourse = NextPage<

@@ -10,8 +10,12 @@ import {
   SocketProvider,
 } from '@/contexts';
 import { ToastProvider } from '@/contexts/toast';
+import { useEffect } from 'react';
 
 const App = ({ Component, pageProps }: AppProps) => {
+  useEffect(() => {
+    fetch('/api/socket');
+  }, []);
   return (
     <>
       <Head>

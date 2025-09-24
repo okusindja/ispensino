@@ -43,12 +43,24 @@ const Home: FC = () => {
               />
             ))}
             {(isLoadingInitialData || isLoadingMore) && !isReachingEnd && (
-              <Div display="flex" justifyContent="center" py="XL">
-                <SpinnerSVG maxHeight="2rem" maxWidth="2rem" width="100%" />
+              <Div
+                display="flex"
+                justifyContent="center"
+                mt="4XL"
+                py="XL"
+                color="text"
+              >
+                <SpinnerSVG maxHeight="4rem" maxWidth="4rem" width="100%" />
               </Div>
             )}
             {isReachingEnd && posts.length > 0 && (
-              <Typography variant="body" size="small" textAlign="center" py="L">
+              <Typography
+                variant="body"
+                size="small"
+                textAlign="center"
+                py="L"
+                color="text"
+              >
                 No more posts to load
               </Typography>
             )}
