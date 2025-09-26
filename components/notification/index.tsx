@@ -7,8 +7,13 @@ import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
 import { formatRelativeDate } from '@/utils';
 import { BellSVG } from '../svg';
+import { useRouter } from 'next/router';
 
 const NotificationBell = () => {
+  const router = useRouter();
+  const path = router.pathname;
+  const isCoursesPage =
+    path.includes('/content/courses/') || path.includes('/teacher/courses/');
   const { notifications, unreadCount, markAsRead } = useNotifications();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,6 +26,7 @@ const NotificationBell = () => {
         isIcon
         aria-label="Notifications"
         position="relative"
+        color={!isCoursesPage ? 'text' : 'textInverted'}
       >
         <BellSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
         <Div
@@ -36,7 +42,11 @@ const NotificationBell = () => {
           borderRadius="full"
           zIndex="2"
         >
-          <Typography variant="fancy" size="small" color="darkText">
+          <Typography
+            variant="fancy"
+            size="small"
+            color={!isCoursesPage ? 'darkText' : 'textInverted'}
+          >
             {unreadCount > 0 ? `${unreadCount}` : '0'}
           </Typography>
         </Div>

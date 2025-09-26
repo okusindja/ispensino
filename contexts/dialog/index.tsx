@@ -87,6 +87,7 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
                 position="fixed"
                 top="50%"
                 left="50%"
+                overflow="hidden"
                 transform="translate(-50%, -50%)"
                 backgroundColor="background"
                 width={
@@ -103,8 +104,6 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
                 borderRadius="L"
                 boxShadow="0px 4px 16px rgba(0,0,0,0.1)"
                 zIndex="1001"
-                p="XL"
-                overflow="auto"
                 key="content"
                 style={{
                   opacity: isOpen ? 1 : 0,
@@ -117,7 +116,13 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
               >
                 {dialogOptions.title && (
                   <Dialog.Title asChild>
-                    <Typography variant="headline" size="medium" mb="M">
+                    <Typography
+                      variant="fancy"
+                      size="large"
+                      mb="M"
+                      p="XL"
+                      pb="0"
+                    >
                       {dialogOptions.title}
                     </Typography>
                   </Dialog.Title>
@@ -126,9 +131,10 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
                 {dialogOptions.description && (
                   <Dialog.Description asChild>
                     <Typography
-                      variant="body"
-                      size="medium"
                       mb="L"
+                      px="XL"
+                      variant="body"
+                      size="small"
                       color="text"
                     >
                       {dialogOptions.description}

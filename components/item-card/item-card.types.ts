@@ -1,7 +1,7 @@
 export interface ItemCardProps {
   title: string;
   to: string;
-  introduction: string | null;
+  introduction?: string | null;
   thumbnail?: string;
-  description: string | null;
+  description?: string | null;
 }

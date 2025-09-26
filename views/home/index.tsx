@@ -25,7 +25,13 @@ const Home: FC = () => {
   return (
     <Layout>
       <Box variant="container">
-        <Div width="100%" position="relative" height="100%" gridColumn="1/-1">
+        <Div
+          width="100%"
+          position="relative"
+          height="100%"
+          gridColumn="1/-1"
+          mt="XL"
+        >
           <TextField
             py="M"
             Prefix={

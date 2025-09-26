@@ -21,8 +21,9 @@ const renderIcon = (routeKey: RoutesEnum) => {
 const Footer = () => {
   return (
     <StylinFooter
-      pb="XL"
+      pb={['XL', 'XL', 'L', 'L']}
       py="2XS"
+      pt={['2XS', '2XS', 'M', 'L']}
       mt="auto"
       bottom="0"
       width="100%"

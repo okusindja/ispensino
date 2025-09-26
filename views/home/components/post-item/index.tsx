@@ -122,13 +122,14 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         backgroundColor="surface"
       >
         <Div
-          position="relative"
+          bg="white"
           width="3rem"
           height="3rem"
           minWidth="3rem"
-          bg="white"
-          borderRadius="full"
+          cursor="pointer"
           overflow="hidden"
+          borderRadius="full"
+          position="relative"
           border={`2px solid ${colors.primary}`}
         >
           <Image
@@ -146,7 +147,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         </Div>
         <Div
           ml="M"
-          flex="1"
+          cursor="pointer"
           onClick={() => router.push(`/profile/social/${post.author.id}`)}
         >
           <Typography
@@ -163,9 +164,11 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
           </Typography>
         </Div>
         <Button
-          variant="neutral"
-          size="small"
           isIcon
+          ml="auto"
+          size="small"
+          color="text"
+          variant="neutral"
           onClick={() => console.log('Post options')}
         >
           <OptionsHorizontalSVG
@@ -228,7 +231,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
               maxWidth="1.65rem"
               maxHeight="1.65rem"
               width="100%"
-              strokeColor="white"
+              strokeColor={colors.text}
               fill="none"
             />
           )}
@@ -316,8 +319,8 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
           {/* Comment Input */}
           <Form
             p="M"
-            display="flex"
             gap="M"
+            display="flex"
             alignItems="center"
             onSubmit={handleCommentSubmit}
             borderTop={`1px solid ${colors.outline}`}
@@ -343,22 +346,22 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
               />
             </Div>
             <Input
-              type="text"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              placeholder="Write a comment..."
-              flex="1"
-              py="L"
               px="M"
+              py="L"
+              flex="1"
+              type="text"
               borderRadius="M"
+              value={commentContent}
+              placeholder="Write a comment..."
               border={`1px solid ${colors.outline}`}
+              onChange={(e) => setCommentContent(e.target.value)}
             />
             <Button
-              type="submit"
-              variant="neutral"
-              size="small"
               isIcon
+              size="small"
+              type="submit"
               display="flex"
+              variant="neutral"
               alignItems="center"
               justifyContent="center"
               disabled={isCommenting || !commentContent.trim()}

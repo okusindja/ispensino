@@ -33,6 +33,7 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
         zIndex="10"
         width="100%"
         position="fixed"
+        py={['0', '0', 'S', 'S']}
         boxShadow="1px 5px 10px rgba(0, 0, 0, 0.06)"
         backgroundColor={!isCoursesPage ? 'surface' : 'primary'}
       >
