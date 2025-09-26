@@ -30,17 +30,17 @@ const NotificationBell = () => {
       >
         <BellSVG maxHeight="1.5rem" maxWidth="1.5rem" width="100%" />
         <Div
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          top="-3px"
           right="0"
-          backgroundColor="primary"
-          position="absolute"
+          top="-3px"
+          zIndex="2"
           width="1rem"
           height="1rem"
+          display="flex"
+          position="absolute"
           borderRadius="full"
-          zIndex="2"
+          alignItems="center"
+          justifyContent="center"
+          backgroundColor="primary"
         >
           <Typography
             variant="fancy"

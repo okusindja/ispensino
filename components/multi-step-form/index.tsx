@@ -1,5 +1,4 @@
 import { Children } from 'react';
-
 import { Box } from '@/elements';
 import { Typography } from '@/elements/typography';
 
@@ -12,10 +11,11 @@ export const MultiStep = ({
   nextButton,
 }: MultiStepProps) => {
   const steps = Children.toArray(children);
+  const current = steps[activeStep] ?? null;
 
   return (
     <Box>
-      <Box>{steps[activeStep]}</Box>
+      <Box>{current}</Box>
       <Box display="flex" justifyContent="space-between" mt="2rem">
         {prevButton}
         {nextButton}

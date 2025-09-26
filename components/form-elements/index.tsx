@@ -1,4 +1,3 @@
-// src/components/form-elements/index.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Div, Input, Label } from '@stylin.js/elements';
@@ -24,32 +23,32 @@ type FormFieldProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   control: Control<T>;
-  error?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export const FormField = <T extends FieldValues>({
   name,
   label,
   control,
-  error,
+  type = 'text',
   ...props
 }: FormFieldProps<T>) => (
   <Div mb="1.5rem">
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
+      shouldUnregister={false}
+      render={({ field, fieldState }) => (
         <TextField
+          id={String(name)}
           width="100%"
           label={label}
-          id={String(name)}
+          type={type}
           borderRadius="0.5rem"
-          type={props.type || 'text'}
-          status={error ? 'error' : 'none'}
-          supportingText={error ? error : ''}
-          borderColor={error ? 'error' : 'border'}
-          {...field}
+          status={fieldState.error ? 'error' : 'none'}
+          supportingText={fieldState.error?.message ?? ''}
+          borderColor={fieldState.error ? 'error' : 'border'}
           {...props}
+          {...field}
         />
       )}
     />
@@ -286,8 +285,8 @@ export const useZodForm = <T extends FieldValues>(
     reset,
   } = useForm<T>({
     resolver: zodResolver(schema as any),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
     defaultValues: defaultValues || ({} as any),
   });
 

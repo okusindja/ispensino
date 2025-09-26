@@ -18,7 +18,7 @@ const LoginView = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useZodForm<LoginFormData>(LoginSchema);
 
   return (
@@ -74,7 +74,6 @@ const LoginView = () => {
             label="Email"
             control={control}
             placeholder="seu@email.com"
-            error={errors.email?.message}
           />
           <FormField<LoginFormData>
             label="Senha"
@@ -82,7 +81,6 @@ const LoginView = () => {
             type="password"
             control={control}
             placeholder="••••••"
-            error={errors.password?.message}
           />
 
           {errorMsg && (

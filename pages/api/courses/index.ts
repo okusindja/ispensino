@@ -32,22 +32,6 @@ export default async function handler(
           return res.status(404).json({ error: 'Course not found' });
         }
 
-        if (!course.isPublished && course.teacherId !== user.id) {
-          return res.status(403).json({ error: 'Forbidden' });
-        }
-
-        // const lessonStatus = await prisma.userAssessment.findMany({
-        //         where: { userId: user.id, assessment: { lesson: {
-        //           id: { in: lessons.map(lesson => lesson.id) }
-        //         } } },
-        //         select: { assessment: true, isPassed: true },
-        //       });
-
-        //       return res.status(200).json(lessons.map(lesson =>({
-        //         ...lesson,
-        //         isPassed: lessonStatus.find(status => status.assessment.lessonId === lesson.id)?.isPassed || false,
-        //       })));
-
         return res.status(200).json(course);
       }
 
@@ -56,7 +40,8 @@ export default async function handler(
 
     if (req.method === 'GET') {
       const courses = await prisma.course.findMany({
-        where: { OR: [{ isPublished: true }, { teacherId: user.id }] },
+        // where: { OR: [{ isPublished: true }, { teacherId: user.id }] },
+        // where: { isPublished: true },
         include: { teacher: true, categories: true },
         orderBy: { createdAt: 'desc' },
       });

@@ -20,19 +20,22 @@ const SignupView = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting, isValid },
     trigger,
   } = useZodForm<SignupFormData>(SignupSchema);
+
+  const stepsCount = 2;
 
   const nextStep = async () => {
     const fields =
       activeStep === 0
         ? (['name', 'phone', 'address'] as const)
         : (['email', 'password', 'confirmPassword'] as const);
+
     const isValidStep = await trigger(Array.from(fields));
 
     if (isValidStep) {
-      setActiveStep((prev) => Math.min(prev + 1, 1));
+      setActiveStep((prev) => Math.min(prev + 1, stepsCount - 1));
     }
   };
 
@@ -82,23 +85,26 @@ const SignupView = () => {
               )
             }
             nextButton={
-              activeStep < 1 ? (
+              activeStep < stepsCount - 1 ? (
                 <Button variant="primary" size="medium" onClick={nextStep}>
                   Próximo
                 </Button>
               ) : (
-                <SubmitButton loading={isSubmitting || loading}>
+                <SubmitButton
+                  loading={isSubmitting || loading}
+                  isValid={isValid}
+                >
                   {isSubmitting || loading ? 'Criando conta...' : 'Criar Conta'}
                 </SubmitButton>
               )
             }
           >
             <Step title="Informações Pessoais">
-              <StepOne control={control} errors={errors} />
+              <StepOne control={control} />
             </Step>
 
             <Step title="Informações de Contacto">
-              <StepTwo control={control} errors={errors} />
+              <StepTwo control={control} />
             </Step>
           </MultiStep>
 

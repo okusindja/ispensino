@@ -41,3 +41,5 @@ export { default as FollowSVG } from './follow';
 export { default as UnfollowSVG } from './unfollow';
 export { default as FollowingSVG } from './following';
 export { default as BellSVG } from './bell';
+export { default as VolumeUpSVG } from './volume-up';
+export { default as VolumeOffSVG } from './volume-off';

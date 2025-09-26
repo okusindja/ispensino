@@ -1,44 +1,51 @@
-// pages/index.tsx
+import { Layout } from '@/components';
+import { SpinnerSVG, VolumeOffSVG, VolumeUpSVG } from '@/components/svg';
+import { fetcherWithCredentials } from '@/constants/fetchers';
+import { Box, Button } from '@/elements';
+import { Typography } from '@/elements/typography';
+import { User } from '@prisma/client';
+import { Div, Li, Ul } from '@stylin.js/elements';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import useSWR from 'swr';
 
-type User = { id: string; name: string; muted: boolean };
+type SocketUser = { id: string; name: string; muted: boolean };
 
 let socket: Socket | null = null;
 
-export default function Home() {
-  const [users, setUsers] = useState<User[]>([]);
+export const VoiceRoom = () => {
+  const [users, setUsers] = useState<SocketUser[]>([]);
   const [muted, setMuted] = useState(false);
 
   const localStreamRef = useRef<MediaStream | null>(null);
   const peersRef = useRef<Record<string, RTCPeerConnection>>({});
 
+  const { data: userData, isLoading: userIsLoading } = useSWR<User>(
+    '/api/users/me',
+    fetcherWithCredentials
+  );
+
   useEffect(() => {
-    // 1. Init socket
     socket = io({ path: '/api/socket.io' });
 
     socket.on('connect', async () => {
       console.log('🔗 Connected:', socket?.id);
 
-      // 2. Join room
       socket?.emit('join-room', {
         roomId: 'test-room',
-        name: `User-${socket.id}`,
+        name: userData?.name,
       });
 
-      // 3. Setup local mic
       localStreamRef.current = await navigator.mediaDevices?.getUserMedia({
         audio: true,
       });
     });
 
-    // 4. Receive room users
-    socket.on('room-users', (users: User[]) => {
+    socket.on('room-users', (users: SocketUser[]) => {
       console.log('👥 Room users:', users);
       setUsers(users);
     });
 
-    // 5. Handle WebRTC signaling
     socket.on('signal', async ({ senderId, data }) => {
       let peer = peersRef.current[senderId];
       if (!peer) {
@@ -91,16 +98,13 @@ export default function Home() {
     initMic();
   }, []);
 
-  // Create peer connection
   function createPeer(targetId: string, initiator: boolean) {
     const peer = new RTCPeerConnection();
 
-    // Add local audio
     localStreamRef.current?.getTracks().forEach((track) => {
       peer.addTrack(track, localStreamRef.current!);
     });
 
-    // Handle remote audio
     peer.ontrack = (event) => {
       const audio = document.createElement('audio');
       audio.srcObject = event.streams[0];
@@ -108,7 +112,6 @@ export default function Home() {
       document.body.appendChild(audio);
     };
 
-    // ICE
     peer.onicecandidate = (event) => {
       if (event.candidate) {
         socket?.emit('signal', {
@@ -118,7 +121,6 @@ export default function Home() {
       }
     };
 
-    // If initiator, make offer
     if (initiator) {
       peer
         .createOffer()
@@ -134,7 +136,6 @@ export default function Home() {
     return peer;
   }
 
-  // Toggle mute
   function toggleMute() {
     if (!localStreamRef.current) return;
     const track = localStreamRef.current.getAudioTracks()[0];
@@ -144,17 +145,95 @@ export default function Home() {
     socket?.emit('toggle-mute', { roomId: 'test-room', muted: newMuted });
   }
 
+  console.log('mic status', muted);
+
+  if (userIsLoading) {
+    <Layout>
+      <Div
+        mt="5rem"
+        width="100%"
+        color="text"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <SpinnerSVG width="100%" maxWidth="4rem" maxHeight="4rem" />
+      </Div>
+    </Layout>;
+  }
+
   return (
-    <main>
-      <h1>🎙️ Voice Channel</h1>
-      <button onClick={toggleMute}>{muted ? 'Unmute' : 'Mute'}</button>
-      <ul>
-        {users.map((u) => (
-          <li key={u.id}>
-            {u.name} {u.muted ? '🔇' : '🔊'}
-          </li>
-        ))}
-      </ul>
-    </main>
+    <Layout hasGoBack>
+      <Box variant="container">
+        <Div color="text" gridColumn="1/-1" width="100%">
+          <Typography variant="large" size="medium" color="text" mt="L" mb="XL">
+            Sala de voz
+          </Typography>
+          <Ul>
+            {users.map((u) => (
+              <Li
+                py="M"
+                key={u.id}
+                display="flex"
+                alignItems="center"
+                borderColor="outline"
+                borderBottom="1px solid"
+                justifyContent="space-between"
+              >
+                <Typography variant="fancy" size="medium">
+                  {u.name || 'testing user'}
+                </Typography>
+                <Typography variant="body" size="medium">
+                  {userData?.name === u.name &&
+                    (u.muted ? (
+                      <Button
+                        onClick={toggleMute}
+                        isIcon
+                        variant="neutral"
+                        size="medium"
+                      >
+                        🔇
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={toggleMute}
+                        isIcon
+                        variant="neutral"
+                        size="medium"
+                      >
+                        🔊
+                      </Button>
+                    ))}
+                  {userData?.name !== u.name &&
+                    (u.muted ? (
+                      <Button
+                        disabled
+                        cursor="not-allowed"
+                        isIcon
+                        variant="neutral"
+                        size="medium"
+                      >
+                        🔇
+                      </Button>
+                    ) : (
+                      <Button
+                        disabled
+                        isIcon
+                        cursor="not-allowed"
+                        variant="neutral"
+                        size="medium"
+                      >
+                        🔊
+                      </Button>
+                    ))}
+                </Typography>
+              </Li>
+            ))}
+          </Ul>
+        </Div>
+      </Box>
+    </Layout>
   );
-}
+};
+
+export default VoiceRoom;
