@@ -20,7 +20,6 @@ const firebaseErrorMessages: Record<string, string> = {
 const useSignup = (): UseSignup => {
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
-  const router = useRouter();
 
   const handleSignup = async (data: SignupFormData) => {
     setErrorMsg(null);
@@ -47,8 +46,6 @@ const useSignup = (): UseSignup => {
         const result = await res.json();
         throw new Error(result.error || 'Signup failed');
       }
-
-      router.push('/');
     } catch (error) {
       let message = 'Ocorreu um erro durante o cadastro';
       if (typeof error === 'object' && error !== null) {

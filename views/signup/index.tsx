@@ -11,11 +11,16 @@ import { SignupFormData, SignupSchema } from '@/zod/auth/signup';
 import { SubmitButton, useZodForm } from '../../components/form-elements';
 import useSignup from './hooks/useLogin';
 import { StepOne, StepTwo } from './steps';
+import useLogin from '../login/hooks/useLogin';
 
 const SignupView = () => {
-  const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
   const { errorMsg, handleSignup, loading } = useSignup();
+  const {
+    errorMsg: loginErrorMsg,
+    handleLogin,
+    loading: isLoginLoading,
+  } = useLogin();
 
   const {
     control,
@@ -45,7 +50,7 @@ const SignupView = () => {
 
   const onSubmit = async (data: SignupFormData) => {
     await handleSignup(data);
-    router.push('/');
+    await handleLogin({ email: data.email, password: data.password });
   };
 
   return (
@@ -91,10 +96,12 @@ const SignupView = () => {
                 </Button>
               ) : (
                 <SubmitButton
-                  loading={isSubmitting || loading}
+                  loading={isSubmitting || loading || isLoginLoading}
                   isValid={isValid}
                 >
-                  {isSubmitting || loading ? 'Criando conta...' : 'Criar Conta'}
+                  {isSubmitting || loading || isLoginLoading
+                    ? 'Criando conta...'
+                    : 'Criar Conta'}
                 </SubmitButton>
               )
             }
@@ -108,11 +115,12 @@ const SignupView = () => {
             </Step>
           </MultiStep>
 
-          {errorMsg && (
-            <Div color="error" mt="1rem" textAlign="center">
-              {errorMsg}
-            </Div>
-          )}
+          {errorMsg ||
+            (loginErrorMsg && (
+              <Div color="error" mt="1rem" textAlign="center">
+                {errorMsg || loginErrorMsg}
+              </Div>
+            ))}
         </Form>
       </Div>
     </Box>

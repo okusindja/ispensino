@@ -21,6 +21,7 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
     fetcherWithCredentials
   );
   const isTeacher = data?.role === 'TEACHER';
+  const isAdmin = data?.role === 'ADMIN';
 
   if (!data && !isLoading) return <>Erro</>;
 
@@ -76,20 +77,18 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
                       maxHeight="1.5rem"
                     />
                   </Button>
-                  <Button
-                    isIcon
-                    color={!isCoursesPage ? 'text' : 'textInverted'}
-                    size="medium"
-                    variant="neutral"
-                    onClick={() => router.push('/adm')}
-                  >
-                    <UserSVG
-                      width="100%"
-                      maxWidth="1.5rem"
-                      maxHeight="1.5rem"
-                    />
-                  </Button>
                 </>
+              )}
+              {isAdmin && (
+                <Button
+                  isIcon
+                  color={!isCoursesPage ? 'text' : 'textInverted'}
+                  size="medium"
+                  variant="neutral"
+                  onClick={() => router.push('/adm')}
+                >
+                  <UserSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+                </Button>
               )}
               <Notification />
             </Div>
