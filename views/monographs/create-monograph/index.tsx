@@ -101,7 +101,6 @@ const CreateMonographView = () => {
               type="text"
               placeholder="Título da pesquisa ou estudo"
               control={control}
-              error={errors.title?.message}
             />
 
             <FormField<MonographFormData>
@@ -110,7 +109,6 @@ const CreateMonographView = () => {
               type="text"
               placeholder="Nome completo do autor"
               control={control}
-              error={errors.author?.message}
             />
 
             <FormField<MonographFormData>
@@ -119,14 +117,12 @@ const CreateMonographView = () => {
               type="text"
               placeholder="Nome completo do orientador"
               control={control}
-              error={errors.advisor?.message}
             />
 
             <SelectField<MonographFormData>
               name="course"
               label="Curso Acadêmico"
               control={control}
-              error={errors.course?.message}
               options={Object.values(AcademicalCourses).map((course) => ({
                 value: course,
                 label: course
@@ -141,7 +137,6 @@ const CreateMonographView = () => {
               label="Data de Publicação"
               type="date"
               control={control}
-              error={errors.publishedAt?.message}
             />
 
             <FileUploader

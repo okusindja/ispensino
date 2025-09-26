@@ -27,7 +27,6 @@ const AuthorForm: FC<AuthorFormProps> = ({ onSubmit, onCancel }) => {
         type="text"
         placeholder="Nome completo do autor"
         control={control}
-        error={errors.name?.message}
       />
       <FormField<ScientificArticleAuthorFormData>
         name="affiliation"
@@ -35,7 +34,6 @@ const AuthorForm: FC<AuthorFormProps> = ({ onSubmit, onCancel }) => {
         type="text"
         placeholder="Instituição/Universidade"
         control={control}
-        error={errors.affiliation?.message}
       />
       <FormField<ScientificArticleAuthorFormData>
         name="email"
@@ -43,7 +41,6 @@ const AuthorForm: FC<AuthorFormProps> = ({ onSubmit, onCancel }) => {
         type="email"
         placeholder="email@exemplo.com"
         control={control}
-        error={errors.email?.message}
       />
       <Box display="flex" gap="M" mt="L">
         <Button

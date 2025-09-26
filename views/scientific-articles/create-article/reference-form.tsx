@@ -47,7 +47,6 @@ const ReferenceForm: FC<ReferenceFormProps> = ({ onSubmit, onCancel }) => {
         type="textarea"
         placeholder="Ex: Autor, A. (2023). Título do artigo. Nome da Revista, 12(3), 123-145."
         control={control}
-        error={errors.citation?.message}
       />
 
       <FormField
@@ -56,7 +55,6 @@ const ReferenceForm: FC<ReferenceFormProps> = ({ onSubmit, onCancel }) => {
         type="text"
         placeholder="10.1234/abc.2023.01.001"
         control={control}
-        error={errors.doi?.message}
       />
 
       <FormField
@@ -65,7 +63,6 @@ const ReferenceForm: FC<ReferenceFormProps> = ({ onSubmit, onCancel }) => {
         type="url"
         placeholder="https://example.com/article"
         control={control}
-        error={errors.url?.message}
       />
 
       <Box display="flex" gap="M" mt="L">

@@ -45,7 +45,6 @@ const CreateCategoryForm: FC<CreateCategoryProps> = ({
         type="text"
         control={control}
         label="Nome da Categoria"
-        error={errors.name?.message}
         placeholder="Ex: Desenvolvimento Web"
       />
 
@@ -54,7 +53,6 @@ const CreateCategoryForm: FC<CreateCategoryProps> = ({
         label="Descrição da Categoria"
         control={control}
         name="description"
-        error={errors.description?.message}
         placeholder="Ex: Cursos relacionados ao desenvolvimento web"
       />
 

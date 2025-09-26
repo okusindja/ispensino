@@ -186,7 +186,6 @@ const CreateScientificArticleView = () => {
               type="text"
               placeholder="Título da pesquisa ou estudo"
               control={control}
-              error={errors.title?.message}
             />
 
             <FormField<ScientificArticleFormData>
@@ -195,7 +194,6 @@ const CreateScientificArticleView = () => {
               type="textarea"
               placeholder="Resumo do artigo"
               control={control}
-              error={errors.abstract?.message}
             />
 
             <Div mb="M">
@@ -210,7 +208,6 @@ const CreateScientificArticleView = () => {
                     type="text"
                     placeholder="Palavra-chave"
                     control={control}
-                    error={errors.keywords?.[index]?.message}
                   />
                   <Button
                     type="button"
@@ -239,7 +236,6 @@ const CreateScientificArticleView = () => {
               type="text"
               placeholder="Digital Object Identifier"
               control={control}
-              error={errors.doi?.message}
             />
 
             <FormField<ScientificArticleFormData>
@@ -248,7 +244,6 @@ const CreateScientificArticleView = () => {
               type="text"
               placeholder="Nome da revista onde foi publicado"
               control={control}
-              error={errors.journal?.message}
             />
 
             <Div display="grid" gridTemplateColumns="1fr 1fr" gap="M">
@@ -258,7 +253,6 @@ const CreateScientificArticleView = () => {
                 type="text"
                 placeholder="Volume"
                 control={control}
-                error={errors.volume?.message}
               />
 
               <FormField<ScientificArticleFormData>
@@ -267,7 +261,6 @@ const CreateScientificArticleView = () => {
                 type="text"
                 placeholder="Número da edição"
                 control={control}
-                error={errors.issue?.message}
               />
             </Div>
 
@@ -277,7 +270,6 @@ const CreateScientificArticleView = () => {
               type="text"
               placeholder="Ex: 123-145"
               control={control}
-              error={errors.pages?.message}
             />
 
             <FormField<ScientificArticleFormData>
@@ -285,14 +277,12 @@ const CreateScientificArticleView = () => {
               label="Data de Publicação"
               type="date"
               control={control}
-              error={errors.publishedAt?.message}
             />
 
             <SelectField<ScientificArticleFormData>
               name="license"
               label="Licença"
               control={control}
-              error={errors.license?.message}
               options={Object.values(LicenseType).map((license) => ({
                 value: license,
                 label: license
@@ -332,7 +322,6 @@ const CreateScientificArticleView = () => {
                     type="text"
                     placeholder="Nome completo do autor"
                     control={control}
-                    error={errors.authors?.[index]?.name?.message}
                   />
                   <FormField<ScientificArticleFormData>
                     name={`authors.${index}.affiliation`}
@@ -340,7 +329,6 @@ const CreateScientificArticleView = () => {
                     type="text"
                     placeholder="Instituição/Universidade"
                     control={control}
-                    error={errors.authors?.[index]?.affiliation?.message}
                   />
                   <FormField<ScientificArticleFormData>
                     name={`authors.${index}.email`}
@@ -348,7 +336,6 @@ const CreateScientificArticleView = () => {
                     type="email"
                     placeholder="email@exemplo.com"
                     control={control}
-                    error={errors.authors?.[index]?.email?.message}
                   />
                   <Button
                     type="button"

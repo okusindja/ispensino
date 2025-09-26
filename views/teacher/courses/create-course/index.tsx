@@ -96,7 +96,6 @@ const CreateCourseView = () => {
             type="text"
             placeholder="Introdução ao React Avançado"
             control={control}
-            error={errors.title?.message}
           />
 
           <FormField<CourseFormData>
@@ -105,7 +104,6 @@ const CreateCourseView = () => {
             type="textarea"
             placeholder="Detalhes sobre o curso..."
             control={control}
-            error={errors.description?.message}
           />
 
           <FormField<CourseFormData>
@@ -114,7 +112,6 @@ const CreateCourseView = () => {
             type="number"
             placeholder="29.99"
             control={control}
-            error={errors.price?.message}
             step="0.01"
             min="0"
           />

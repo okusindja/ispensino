@@ -48,7 +48,6 @@ const CreateCategoryForm: FC<CreateCategoryFormProps> = ({
         type="text"
         placeholder="Nome da categoria"
         control={control}
-        error={errors.name?.message}
       />
       <FormField
         name="description"
@@ -56,7 +55,6 @@ const CreateCategoryForm: FC<CreateCategoryFormProps> = ({
         type="textarea"
         placeholder="Descrição da categoria"
         control={control}
-        error={errors.description?.message}
       />
       {errorMsg && (
         <Box color="error" mb="M" textAlign="center">

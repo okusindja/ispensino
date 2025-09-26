@@ -51,7 +51,6 @@ const CreateTagForm: FC<CreateTagFormProps> = ({
         type="text"
         control={control}
         label="Nome da Tag"
-        error={errors.name?.message}
         placeholder="Ex: Inteligência Artificial"
       />
 

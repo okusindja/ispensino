@@ -108,7 +108,6 @@ const EditMonographView = ({ monograph }: EditMonographViewProps) => {
             type="text"
             placeholder="Título da pesquisa ou estudo"
             control={control}
-            error={errors.title?.message}
           />
 
           <FormField<MonographFormData>
@@ -117,7 +116,6 @@ const EditMonographView = ({ monograph }: EditMonographViewProps) => {
             type="text"
             placeholder="Nome completo do autor"
             control={control}
-            error={errors.author?.message}
           />
 
           <FormField<MonographFormData>
@@ -126,14 +124,12 @@ const EditMonographView = ({ monograph }: EditMonographViewProps) => {
             type="text"
             placeholder="Nome completo do orientador"
             control={control}
-            error={errors.advisor?.message}
           />
 
           <SelectField<MonographFormData>
             name="course"
             label="Curso Acadêmico"
             control={control}
-            error={errors.course?.message}
             options={Object.values(AcademicalCourses).map((course) => ({
               value: course,
               label: course
@@ -148,7 +144,6 @@ const EditMonographView = ({ monograph }: EditMonographViewProps) => {
             label="Data de Publicação"
             type="date"
             control={control}
-            error={errors.publishedAt?.message}
           />
 
           <FormField<MonographFormData>
@@ -157,7 +152,6 @@ const EditMonographView = ({ monograph }: EditMonographViewProps) => {
             type="url"
             placeholder="https://exemplo.com/monografia.pdf"
             control={control}
-            error={errors.url?.message}
           />
 
           <Box mb="M">
