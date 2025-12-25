@@ -9,6 +9,7 @@ export const Typography: FC<PropsWithChildren<TypographyProps>> = ({
   variant,
   size,
   lines,
+  color = 'text',
   ...props
 }) => {
   const TypographyElement = stylin<
@@ -25,6 +26,7 @@ export const Typography: FC<PropsWithChildren<TypographyProps>> = ({
       variant={variant}
       {...getSizeStyle(variant, size)}
       overflow="hidden"
+      color={color}
       WebkitLineClamp={lines}
       display="-webkit-box"
       textOverflow="ellipsis"

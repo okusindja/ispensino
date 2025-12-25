@@ -15,10 +15,13 @@ import {
   UserSVG,
 } from '@/components/svg';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 
 const Profile = () => {
   const { user } = useAuth();
   const router = useRouter();
+
   return (
     <Layout>
       <Box
@@ -59,8 +62,11 @@ const Profile = () => {
               <Image
                 layout="fill"
                 objectFit="cover"
-                alt={user?.name || 'User Profile'}
-                src={user?.photoURL || '/ronaldo.png'}
+                alt={user?.name + ' Profile' || 'User Profile'}
+                src={
+                  user?.photoURL ||
+                  'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                }
               />
             </Div>
           </Div>

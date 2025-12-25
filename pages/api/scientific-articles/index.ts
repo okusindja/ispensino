@@ -31,7 +31,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const user = await authenticateUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-  const { id, journal, search, category } = req.query;
+  const { id, journal, search, category, year } = req.query;
 
   // Get single article
   if (id && typeof id === 'string') {
@@ -80,6 +80,17 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         },
       },
     ];
+  }
+
+  if (year && typeof year === 'string') {
+    const parsedYear = Number(year);
+
+    if (!isNaN(parsedYear)) {
+      whereClause.publishedAt = {
+        gte: new Date(`${parsedYear}-01-01`),
+        lte: new Date(`${parsedYear}-12-31`),
+      };
+    }
   }
 
   const articles = await prisma.scientificArticle.findMany({

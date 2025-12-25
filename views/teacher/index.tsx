@@ -29,17 +29,17 @@ const TeacherHome: FC<{ user: User }> = ({ user }) => {
         />
         <ItemCard
           title="Alunos"
-          to="/teacher/courses/create"
+          to="/teacher/students"
           thumbnail="/icons/icon-512x512.png"
         />
         <ItemCard
           title="Estatísticas"
-          to="/teacher/courses/create"
+          to="/teacher/analytics"
           thumbnail="/icons/icon-512x512.png"
         />
         <ItemCard
           title="Financeiro"
-          to="/teacher/courses/create"
+          to="/teacher/financial"
           thumbnail="/icons/icon-512x512.png"
         />
       </Box>

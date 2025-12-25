@@ -41,6 +41,10 @@ model User {
   specialization  String?
 
   ScientificArticleAuthor ScientificArticleAuthor[]
+  LessonActivity          LessonActivity[]
+  UserBadge               UserBadge[]
+  UserMetric              UserMetric[]
+  AutoCourseJob           AutoCourseJob[]
 }
 
 enum Role {
@@ -180,24 +184,25 @@ model Category {
 }
 
 model Course {
-  id          String       @id @default(uuid())
-  title       String
-  description String
-  price       Float?       @default(0.0)
-  isFree      Boolean      @default(true)
-  isPublished Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  thumbnail   String?
-  slug        String       @unique
-  startDate   DateTime?
-  level       CourseLevel  @default(BEGINNER)
-  teacher     User         @relation("TeacherCourses", fields: [teacherId], references: [id])
-  teacherId   String
-  lessons     Lesson[]
-  enrollments Enrollment[]
-  categories  Category[]
-  posts       Post[]
+  id             String           @id @default(uuid())
+  title          String
+  description    String
+  price          Float?           @default(0.0)
+  isFree         Boolean          @default(true)
+  isPublished    Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  thumbnail      String?
+  slug           String           @unique
+  startDate      DateTime?
+  level          CourseLevel      @default(BEGINNER)
+  teacher        User             @relation("TeacherCourses", fields: [teacherId], references: [id])
+  teacherId      String
+  lessons        Lesson[]
+  enrollments    Enrollment[]
+  categories     Category[]
+  posts          Post[]
+  LessonActivity LessonActivity[]
 }
 
 enum AcademicalCourses {
@@ -316,20 +321,22 @@ enum PaymentStatus {
 }
 
 model Lesson {
-  id            String            @id @default(uuid())
-  title         String
-  description   String
-  order         Int
-  videoUrl      String
-  estimatedTime Int?
-  course        Course            @relation(fields: [courseId], references: [id])
-  courseId      String
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  materials     LessonMaterial[]
-  assessment    LessonAssessment?
-  comments      Comment[]
-  isPreview     Boolean           @default(false)
+  id             String            @id @default(uuid())
+  title          String
+  description    String
+  order          Int
+  videoUrl       String
+  estimatedTime  Int?
+  course         Course            @relation(fields: [courseId], references: [id])
+  courseId       String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  materials      LessonMaterial[]
+  assessment     LessonAssessment?
+  comments       Comment[]
+  isPreview      Boolean           @default(false)
+  Transcript     Transcript?
+  LessonActivity LessonActivity[]
 }
 
 model LessonMaterial {
@@ -429,4 +436,69 @@ model Notification {
   isRead    Boolean          @default(false)
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
+}
+
+model Transcript {
+  id        String   @id @default(uuid())
+  lessonId  String   @unique
+  content   String   @db.Text
+  segments  Json? // array of {start, end, text}
+  createdAt DateTime @default(now())
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+}
+
+model LessonActivity {
+  id        String   @id @default(uuid())
+  courseId  String
+  lessonId  String
+  userId    String
+  event     String // e.g. "pause", "seek", "ask_question"
+  data      Json?
+  createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id])
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// Gamification
+model Badge {
+  id          String      @id @default(uuid())
+  code        String      @unique
+  title       String
+  description String?
+  icon        String?
+  criteria    Json? // machine-readable criteria
+  createdAt   DateTime    @default(now())
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  badgeId   String
+  awardedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+}
+
+model UserMetric {
+  id        String   @id @default(uuid())
+  userId    String
+  xp        Int      @default(0)
+  level     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model AutoCourseJob {
+  id        String   @id @default(uuid())
+  teacherId String
+  videoUrl  String
+  input     Json
+  status    String   @default("PENDING")
+  output    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  teacher   User     @relation(fields: [teacherId], references: [id])
 }

@@ -250,10 +250,10 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
       <Layout hasGoBack>
         <Div p="XL" bg="surface" borderRadius="M" textAlign="center">
           <Typography variant="headline" size="small" color="error" mb="M">
-            Failed to load assessment
+            Falha ao carregar avaliação
           </Typography>
           <Button variant="primary" size="medium" onClick={() => router.back()}>
-            Back to Lesson
+            Voltar à aula
           </Button>
         </Div>
       </Layout>
@@ -264,14 +264,13 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
     return (
       <Layout hasGoBack>
         <Div
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
+          color="text"
           height="50vh"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
-          <Typography variant="body" size="medium" color="text">
-            Loading assessment...
-          </Typography>
+          <SpinnerSVG maxWidth="4rem" maxHeight="4rem" width="100%" />
         </Div>
       </Layout>
     );
@@ -281,17 +280,17 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
     <Layout hasGoBack>
       <Div width="100%" maxWidth="800px" mx="auto" p={['M', 'L']}>
         <Div
+          mb="L"
+          p="XL"
           bg="surface"
           borderRadius="M"
-          p="XL"
-          mb="L"
           boxShadow="0 2px 8px rgba(0,0,0,0.1)"
         >
           <Div
             display="flex"
-            flexDirection={['column', 'row']}
             alignItems="center"
             justifyContent="space-between"
+            flexDirection={['column', 'row']}
           >
             <Div mb={['M', '0']}>
               <Typography variant="headline" size="small" color="text" mb="XS">
@@ -304,12 +303,12 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
 
             {timeRemaining !== null && (
               <Div
-                display="flex"
-                alignItems="center"
-                bg="accent"
                 px="M"
                 py="XS"
+                bg="accent"
+                display="flex"
                 borderRadius="S"
+                alignItems="center"
               >
                 <ArrowUpSVG width="100%" maxWidth="16px" maxHeight="16px" />
                 <Typography variant="body" size="small" color="white" ml="XS">
@@ -321,18 +320,18 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
 
           {score !== null && (
             <Div
-              mt="M"
               p="M"
+              mt="M"
               borderRadius="S"
               bg={isPassed ? 'successLight' : 'errorLight'}
             >
               <Typography
-                variant="headline"
-                size="extraSmall"
-                color="text"
                 mb="XS"
+                color="text"
+                size="extraSmall"
+                variant="headline"
               >
-                {isPassed ? '🎉 Congratulations! You passed!' : 'Try Again!'}
+                {isPassed ? '🎉 Parabéns! Você passou!' : 'Tente novamente!'}
               </Typography>
               <Typography variant="body" size="small" color="text">
                 Your score: <strong>{score.toFixed(1)}%</strong> (Passing score:{' '}
@@ -340,13 +339,13 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
               </Typography>
               {!isPassed && (
                 <Button
-                  onClick={handleSubmit}
-                  variant="primary"
                   mt="M"
-                  size="medium"
                   width="100%"
+                  size="medium"
+                  variant="primary"
+                  onClick={handleSubmit}
                 >
-                  Retry Assessment
+                  Tentar novamente
                 </Button>
               )}
             </Div>
@@ -355,31 +354,31 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
 
         {!hasSubmitted && (
           <Div
+            p="XL"
             bg="surface"
             borderRadius="M"
-            p="XL"
             boxShadow="0 2px 8px rgba(0,0,0,0.1)"
           >
             {assessment.questions.map((question, index) => (
               <Div
-                key={question.id}
                 mb="XL"
                 pb="XL"
-                borderBottom="1px solid"
+                key={question.id}
                 borderColor="border"
+                borderBottom="1px solid"
               >
                 <Div display="flex" alignItems="flex-start" mb="M">
                   <Div
+                    mr="M"
                     bg="primary"
-                    color="white"
                     width="28px"
+                    color="white"
                     height="28px"
-                    borderRadius="50%"
                     display="flex"
+                    flexShrink="0"
+                    borderRadius="50%"
                     alignItems="center"
                     justifyContent="center"
-                    mr="M"
-                    flexShrink="0"
                   >
                     <Typography variant="body" size="small">
                       {index + 1}
@@ -387,17 +386,17 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                   </Div>
                   <Div>
                     <Typography
-                      variant="headline"
-                      size="extraSmall"
-                      color="text"
                       mb="XS"
+                      color="text"
+                      size="extraSmall"
+                      variant="headline"
                     >
                       {question.text}
                     </Typography>
                     {question.explanation && (
                       <Typography
-                        variant="body"
                         size="small"
+                        variant="body"
                         color="textSecondary"
                       >
                         {question.explanation}
@@ -411,12 +410,12 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                   question.type === 'TRUE_FALSE' ? (
                     question.options.map((option) => (
                       <Div
-                        key={option.id}
-                        display="flex"
-                        alignItems="center"
-                        mb="S"
                         p="S"
+                        mb="S"
+                        display="flex"
+                        key={option.id}
                         borderRadius="S"
+                        alignItems="center"
                         bg={
                           responses[question.id]?.answer === option.id
                             ? 'primaryLight'
@@ -428,20 +427,20 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                         cursor="pointer"
                       >
                         <Div
+                          mr="S"
                           width="20px"
                           height="20px"
+                          display="flex"
+                          flexShrink="0"
                           borderRadius="50%"
                           border="2px solid"
+                          alignItems="center"
+                          justifyContent="center"
                           borderColor={
                             responses[question.id]?.answer === option.id
                               ? 'primary'
                               : 'border'
                           }
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          mr="S"
-                          flexShrink="0"
                         >
                           {responses[question.id]?.answer === option.id && (
                             <Div
@@ -460,12 +459,13 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                   ) : question.type === 'MULTIPLE_CHOICE' ? (
                     question.options.map((option) => (
                       <Div
-                        key={option.id}
-                        display="flex"
-                        alignItems="center"
-                        mb="S"
                         p="S"
+                        mb="S"
+                        display="flex"
+                        key={option.id}
                         borderRadius="S"
+                        cursor="pointer"
+                        alignItems="center"
                         bg={
                           Array.isArray(responses[question.id]?.answer) &&
                           responses[question.id].answer.includes(option.id)
@@ -475,23 +475,22 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                         onClick={() =>
                           handleAnswerSelect(question.id, option.id, true)
                         }
-                        cursor="pointer"
                       >
                         <Div
+                          mr="S"
                           width="20px"
                           height="20px"
+                          display="flex"
+                          flexShrink="0"
                           border="2px solid"
+                          alignItems="center"
+                          justifyContent="center"
                           borderColor={
                             Array.isArray(responses[question.id]?.answer) &&
                             responses[question.id].answer.includes(option.id)
                               ? 'primary'
                               : 'border'
                           }
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          mr="S"
-                          flexShrink="0"
                         >
                           {Array.isArray(responses[question.id]?.answer) &&
                             responses[question.id].answer.includes(
@@ -507,6 +506,12 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                     ))
                   ) : (
                     <Textarea
+                      p="M"
+                      width="100%"
+                      borderRadius="S"
+                      minHeight="100px"
+                      border="1px solid"
+                      borderColor="border"
                       value={
                         typeof responses[question.id]?.answer === 'string'
                           ? responses[question.id].answer
@@ -521,12 +526,6 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                           },
                         }));
                       }}
-                      width="100%"
-                      minHeight="100px"
-                      p="M"
-                      border="1px solid"
-                      borderColor="border"
-                      borderRadius="S"
                     />
                   )}
                 </Div>
@@ -534,19 +533,19 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
             ))}
 
             <Button
-              onClick={handleSubmit}
-              variant="primary"
+              py="M"
               width="100%"
               size="medium"
+              variant="primary"
+              onClick={handleSubmit}
               disabled={isSubmitting}
-              py="M"
             >
               {isSubmitting ? (
                 <Div
+                  color="text"
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  color="text"
                 >
                   <SpinnerSVG width="100%" maxWidth="2rem" maxHeight="2rem" />
                 </Div>

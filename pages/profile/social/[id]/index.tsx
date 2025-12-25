@@ -7,7 +7,7 @@ import { NextPageWithUserAndPosts } from '@/interface/declaration';
 import { adminAuth, prisma } from '@/lib';
 import { SocialProfileView } from '@/views';
 
-const SocialProfilePage: NextPageWithUserAndPosts = ({ user, loggedUser }) => {
+const SocialProfilePage: NextPageWithUserAndPosts = ({ user }) => {
   if (!user) {
     return (
       <Div>
@@ -17,7 +17,7 @@ const SocialProfilePage: NextPageWithUserAndPosts = ({ user, loggedUser }) => {
     );
   }
 
-  return <SocialProfileView user={loggedUser} />;
+  return <SocialProfileView />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

@@ -15,9 +15,21 @@ import { FC } from 'react';
 import { SocialProfileProps } from './social.types';
 import PostItem from '@/views/home/components/post-item';
 import { useInfinitePosts } from '@/views/home/hooks/use-infinite-posts';
+import useSWR from 'swr';
+import { fetcherWithCredentials } from '@/constants/fetchers';
+import { User } from '@prisma/client';
+import { useAuth } from '@/contexts';
+import { UserProps } from '@/interface/types';
 
-const SocialProfile: FC<SocialProfileProps> = ({ user }) => {
+const SocialProfile: FC = () => {
   const router = useRouter();
+  const { id } = router.query;
+  const loggedUser = useAuth();
+  const { data, error } = useSWR<
+    UserProps & { following: number; followers: number; bio: string }
+  >(`/api/users/${id}`, fetcherWithCredentials);
+  const user = data;
+  const isLoggedUSer = user?.id === loggedUser.user?.id;
   const {
     posts,
     isLoadingInitialData,
@@ -67,25 +79,30 @@ const SocialProfile: FC<SocialProfileProps> = ({ user }) => {
                 layout="fill"
                 objectFit="cover"
                 alt={user?.name || 'User Profile'}
-                src={user?.image || '/ronaldo.png'}
+                src={
+                  user?.image ||
+                  'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                }
               />
             </Div>
           </Div>
           <Div color="white" display="flex" alignItems="center" gap="L" p="M">
-            <Button
-              variant="primary"
-              display="flex"
-              alignItems="center"
-              gap="S"
-              size="small"
-              color="invertedText"
-              onClick={() => {}}
-            >
-              <FollowSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
-              <Typography variant="body" size="small">
-                Seguir
-              </Typography>
-            </Button>
+            {!isLoggedUSer && (
+              <Button
+                variant="primary"
+                display="flex"
+                alignItems="center"
+                gap="S"
+                size="small"
+                color="invertedText"
+                onClick={() => {}}
+              >
+                <FollowSVG maxWidth="1.2rem" maxHeight="1.2rem" width="100%" />
+                <Typography variant="body" size="small">
+                  Seguir
+                </Typography>
+              </Button>
+            )}
           </Div>
         </Div>
       </Box>

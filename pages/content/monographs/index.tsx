@@ -6,7 +6,7 @@ import nookies from 'nookies';
 import { NextPageWithMonographs } from '@/interface/declaration';
 import { adminAuth, prisma } from '@/lib';
 import { MonographListView } from '@/views';
-const MonographsPage: NextPageWithMonographs = ({ user, monographs }) => {
+const MonographsPage: NextPageWithMonographs = ({ user }) => {
   if (!user) {
     return (
       <Div>
@@ -16,14 +16,14 @@ const MonographsPage: NextPageWithMonographs = ({ user, monographs }) => {
     );
   }
 
-  return <MonographListView monographs={monographs} />;
+  return <MonographListView />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx);
   const sessionCookie = cookies.session || '';
   let user = null;
-  let monographs = [];
+  // let monographs = [];
   try {
     const decodedClaims = await adminAuth.verifySessionCookie(
       sessionCookie,
@@ -33,9 +33,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       uid: decodedClaims.uid,
       email: decodedClaims.email || null,
     };
-    monographs = await prisma.monograph.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+    // monographs = await prisma.monograph.findMany({
+    //   orderBy: { createdAt: 'desc' },
+    // });
   } catch (error) {
     console.error('Session cookie verification error:', error);
     return {
@@ -46,7 +46,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   return {
-    props: { user, monographs: JSON.parse(JSON.stringify(monographs)) },
+    props: {
+      user,
+      // monographs: JSON.parse(JSON.stringify(monographs))
+    },
   };
 };
 

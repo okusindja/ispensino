@@ -36,7 +36,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
   const commentsEndRef = useRef<HTMLDivElement>(null);
 
   const comments = post.comments || [];
-  // const likes = post.likes || [];
+  const likes = post.likes || [];
   // const attachments = post.attachments || [];
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
@@ -56,7 +56,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
     if (isLiking) return;
     setIsLiking(true);
     try {
-      await onLike?.(post.id);
+      onLike?.(post.id);
     } finally {
       setIsLiking(false);
     }
@@ -79,8 +79,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
     const parts = content.split(/(@\w+|#\w+)/g);
     return parts.map((part, i) => {
       if (part.startsWith('@')) {
-        // const username = part.substring(1);
-        // Check if this is a valid user mention (you might want to enhance this logic)
+        //const username = part.substring(1);
         return (
           <Typography
             key={i}
@@ -113,7 +112,6 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
 
   return (
     <Div my="M" borderRadius="M" overflow="hidden" backgroundColor="surface">
-      {/* Author Header */}
       <Div
         p="L"
         pb="S"
@@ -179,14 +177,12 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         </Button>
       </Div>
 
-      {/* Post Content */}
       <Div p="L" pb="S" backgroundColor="surface">
         <Typography variant="fancy" size="medium" color="text" lineHeight="1.5">
           {renderContentWithTags(post.content)}
         </Typography>
       </Div>
 
-      {/* Post Media */}
       {post.attachments?.length > 0 && (
         <Div
           position="relative"
@@ -206,7 +202,6 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         </Div>
       )}
 
-      {/* Actions Bar */}
       <Div p="M" gap="L" display="flex" alignItems="center">
         <Button
           isIcon
@@ -235,9 +230,9 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
               fill="none"
             />
           )}
-          {post.likes.length > 0 && (
+          {likes.length > 0 && (
             <Typography variant="fancy" size="small">
-              {post.likes.length}
+              {likes.length}
             </Typography>
           )}
         </Button>
@@ -261,7 +256,6 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         </Button>
       </Div>
 
-      {/* Comments Section */}
       {showComments && (
         <Div maxHeight="300px" overflowY="auto" backgroundColor="surface_light">
           <Div p="L">
@@ -316,7 +310,6 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
             <div ref={commentsEndRef} />
           </Div>
 
-          {/* Comment Input */}
           <Form
             p="M"
             gap="M"

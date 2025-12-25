@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { getAuth } from 'firebase/auth';
 
 // lib/fetchers.ts

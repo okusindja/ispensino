@@ -1,7 +1,6 @@
 import { Div, Input, Label } from '@stylin.js/elements';
 import { useTheme } from '@stylin.js/react';
 import {
-  ChangeEvent,
   FC,
   FocusEvent,
   PropsWithRef,
@@ -12,7 +11,6 @@ import {
 
 import { DesignSystemTheme } from '@/design-system/theme';
 import { Typography } from '@/elements/typography';
-
 import { TextFieldProps } from './text-field.types';
 
 export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
@@ -29,7 +27,6 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
 }) => {
   const { colors } = useTheme() as DesignSystemTheme;
   const [focus, setFocus] = useState(false);
-  const [value, setValue] = useState<string>();
   const id = useId();
 
   const statusColor = focus || status === 'none' ? 'transparent' : status;
@@ -42,22 +39,15 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
     if (hasStatus) return '1px solid ' + colors[status as 'error' | 'success'];
   };
 
-  const handleFocus = (e: FocusEvent<HTMLInputElement, Element>) => {
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
     if (!focus) startTransition(() => setFocus(true));
-
     onFocus?.(e);
   };
 
-  const handleBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     if (focus) startTransition(() => setFocus(false));
-
     onBlur?.(e);
   };
-
-  const changeValue = (input: string) => setValue(input);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-    changeValue(e.target.value);
 
   return (
     <Div
@@ -83,6 +73,7 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
           </Typography>
         )}
       </Div>
+
       <Div
         py="L"
         display="flex"
@@ -109,6 +100,7 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
             {Prefix}
           </Div>
         )}
+
         <Div
           flex="1"
           width="100%"
@@ -128,21 +120,16 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
             lineHeight="M"
             fontWeight="400"
             disabled={disabled}
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus={focus}
             onBlur={handleBlur}
             onFocus={handleFocus}
-            onChange={handleChange}
-            color={'text'}
+            color="text"
             backgroundColor="transparent"
             fontFamily="'Poppins', serif"
-            defaultValue={value || props.defaultValue}
-            nPlaceholder={{
-              color: 'textVariant',
-            }}
-            {...props}
+            nPlaceholder={{ color: 'textVariant' }}
+            {...props} // value + onChange come from parent
           />
         </Div>
+
         {Suffix && (
           <Div
             p="M"
@@ -160,4 +147,3 @@ export const TextField: FC<PropsWithRef<TextFieldProps>> = ({
 };
 
 TextField.displayName = 'TextField';
-export * from './text-field.types';

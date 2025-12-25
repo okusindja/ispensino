@@ -13,16 +13,18 @@ import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
 
 import { LessonPageProps } from './lesson-details.types';
+import { useAwardXp } from '@/hooks/use-award-xp';
 
 const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
   const router = useRouter();
   const { user } = useAuth();
+  // anywhere in a handler
+  const { awardXp } = useAwardXp();
+
   const [toggleComments, setToggleComments] = useState(false);
 
-  // Determine if current user is the course teacher
   const isTeacher = lesson.course.teacher.firebaseId === user?.uid;
 
-  // Sort lessons by order and find current position
   const { sortedLessons, currentLessonIndex } = useMemo(() => {
     const lessons = [...lesson.course.lessons].sort(
       (a, b) => a.order - b.order
@@ -34,10 +36,11 @@ const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
     };
   }, [lesson]);
 
-  // Get next lesson and determine if it's accessible
-  const nextLesson = useMemo(() => {
+  const nextLesson = useMemo(async () => {
     if (currentLessonIndex === -1) return null;
     return sortedLessons[currentLessonIndex + 1];
+    await awardXp({ xp: 15, reason: 'watched_50', courseId, lessonId });
+    mutate(); // revalidate metrics hook
   }, [sortedLessons, currentLessonIndex]);
 
   const isNextLessonAccessible =

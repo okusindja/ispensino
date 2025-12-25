@@ -31,7 +31,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const user = await authenticateUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-  const { id, course, search } = req.query;
+  const { id, course, search, year } = req.query;
 
   // Get single monograph
   if (id && typeof id === 'string') {
@@ -53,13 +53,27 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     whereClause.course = course as AcademicalCourses;
   }
 
+  if (year && typeof year === 'string') {
+    const yearNumber = Number(year);
+
+    if (!isNaN(yearNumber)) {
+      const startDate = new Date(`${yearNumber}-01-01T00:00:00.000Z`);
+      const endDate = new Date(`${yearNumber + 1}-01-01T00:00:00.000Z`);
+
+      whereClause.publishedAt = {
+        gte: startDate,
+        lt: endDate,
+      };
+    }
+  }
+
   if (search && typeof search === 'string') {
     const searchTerm = search.toLowerCase();
     whereClause.OR = [
       { title: { contains: searchTerm, mode: 'insensitive' } },
       { author: { contains: searchTerm, mode: 'insensitive' } },
       { advisor: { contains: searchTerm, mode: 'insensitive' } },
-      { tags: { hasSome: [searchTerm] } }, // Search within tags array
+      { tags: { hasSome: [searchTerm] } },
     ];
   }
 

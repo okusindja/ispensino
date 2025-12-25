@@ -59,8 +59,9 @@ export interface NextPageWithUserProps {
 }
 
 export interface NextPageWithUserAndPostsProps {
-  loggedUser: UserProps & { following: number; followers: number };
-  user: SessionUserProps;
+  loggedUser?: UserProps & { following: number; followers: number };
+  user?: SessionUserProps;
+  profileUser?: UserProps & { following: number; followers: number };
 }
 
 export interface NextPageWithCourseAndTeacherProps {
@@ -91,17 +92,16 @@ export interface NextPageWithMonographProps {
   monograph: Monograph | null;
 }
 
-export interface NextPageWithMonographsProps {
-  monographs: Monograph[];
-}
+// export interface NextPageWithMonographsProps {
+//   monographs: Monograph[];
+// }
 
 export interface NextPageWithScientificArticleProps {
   scientificArticle: ScientificArticle & { authors: ScientificArticleAuthor[] };
 }
 
-export type NextPageWithMonographs = NextPage<
-  NextPageWithMonographsProps & NextPageDefaultProps
->;
+export type NextPageWithMonographs = NextPage<// NextPageWithMonographsProps &
+NextPageDefaultProps>;
 
 export type NextPageWithMonograph = NextPage<
   NextPageWithMonographProps & NextPageDefaultProps

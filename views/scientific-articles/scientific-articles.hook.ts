@@ -1,53 +1,62 @@
-// src/features/scientific-article/hooks/use-scientific-articles.hook.ts
-import { fetcherWithCredentials } from '@/constants/fetchers';
-import { ScientificArticle, ScientificArticleAuthor } from '@prisma/client';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import { ScientificArticle, ScientificArticleAuthor } from '@prisma/client';
+import { fetcherWithCredentials } from '@/constants/fetchers';
 
-const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    if (!res.ok) {
-      throw new Error('Failed to fetch articles');
-    }
-    return res.json();
-  });
+type ScientificArticleWithRelations = ScientificArticle & {
+  authors: ScientificArticleAuthor[];
+};
 
 export const useScientificArticles = (
-  searchTerm: string = '',
-  journalFilter: string = ''
+  search: string = '',
+  category: string = '',
+  year: string = ''
 ) => {
-  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
-  const [debouncedJournal, setDebouncedJournal] = useState(journalFilter);
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const [debouncedCategory, setDebouncedCategory] = useState(category);
+  const [debouncedYear, setDebouncedYear] = useState(year);
 
-  // Debounce search and filter inputs
+  // 🔁 Debounce para evitar múltiplas chamadas à API
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(searchTerm);
-      setDebouncedJournal(journalFilter);
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+      setDebouncedCategory(category);
+      setDebouncedYear(year);
     }, 300);
 
-    return () => clearTimeout(timer);
-  }, [searchTerm, journalFilter]);
+    return () => clearTimeout(timeout);
+  }, [search, category, year]);
 
-  const { data, error, isLoading } = useSWR<
-    Array<ScientificArticle & { authors: ScientificArticleAuthor[] }>
-  >(
-    `/api/scientific-articles?${debouncedSearch ? `search=${encodeURIComponent(debouncedSearch)}` : ''}${debouncedJournal ? `&journal=${encodeURIComponent(debouncedJournal)}` : ''}`,
+  // 🔗 Construção segura da query string
+  const params = new URLSearchParams();
+
+  if (debouncedSearch) {
+    params.append('search', debouncedSearch);
+  }
+
+  if (debouncedCategory) {
+    params.append('category', debouncedCategory);
+  }
+
+  if (debouncedYear) {
+    params.append('year', debouncedYear);
+  }
+
+  const { data, error, isLoading } = useSWR<ScientificArticleWithRelations[]>(
+    `/api/scientific-articles?${params.toString()}`,
     fetcherWithCredentials,
     {
       revalidateOnFocus: false,
+      shouldRetryOnError: false,
       onError: (err) => {
-        console.error('Error fetching articles:', err);
+        console.error('Erro ao carregar artigos científicos:', err);
       },
     }
   );
 
-  // Ensure articles is always an array
-  const articles = Array.isArray(data) ? data : [];
-
   return {
-    articles,
+    articles: Array.isArray(data) ? data : [],
     loading: isLoading,
-    error: error?.message,
+    error: error?.message ?? null,
   };
 };

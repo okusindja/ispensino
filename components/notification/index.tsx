@@ -18,7 +18,7 @@ const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Box position="relative">
+    <Div position="relative">
       <Button
         variant="neutral"
         size="medium"
@@ -53,7 +53,7 @@ const NotificationBell = () => {
       </Button>
 
       {isOpen && (
-        <Box
+        <Div
           p="L"
           right="0"
           top="100%"
@@ -79,38 +79,47 @@ const NotificationBell = () => {
             </Typography>
           ) : (
             notifications.map((notification) => (
-              <Box
-                key={notification.id}
-                p="M"
-                mb="S"
-                gap="M"
-                display="grid"
-                color={notification.isRead ? 'text' : 'darkText'}
-                bg={notification.isRead ? 'outline' : 'primary'}
-                border="1px solid"
-                borderColor={notification.isRead ? 'outline' : 'primary'}
-                borderRadius="S"
-                onClick={() =>
-                  !notification.isRead && markAsRead(notification.id)
-                }
-                style={{ cursor: 'pointer' }}
-              >
-                <Typography variant="body" size="medium">
-                  {notification.message}
-                </Typography>
-                <Typography
-                  variant="body"
-                  size="extraSmall"
-                  color="text_secondary"
+              <Div display="flex" gap="XL" py="6px" position="relative">
+                {!notification.isRead && (
+                  <Div
+                    width="4px"
+                    height="80%"
+                    left="-8px"
+                    position="absolute"
+                    backgroundColor="primary"
+                  />
+                )}
+                <Div
+                  key={notification.id}
+                  p="M"
+                  mb="S"
+                  gap="M"
+                  color="text"
+                  display="grid"
+                  borderRadius="S"
+                  bg={notification.isRead ? 'outline' : 'transparent'}
+                  onClick={() =>
+                    !notification.isRead && markAsRead(notification.id)
+                  }
+                  style={{ cursor: 'pointer' }}
                 >
-                  {formatRelativeDate(notification.createdAt)}
-                </Typography>
-              </Box>
+                  <Typography variant="body" size="medium">
+                    {notification.message}
+                  </Typography>
+                  <Typography
+                    variant="body"
+                    size="extraSmall"
+                    color="text_secondary"
+                  >
+                    {formatRelativeDate(notification.createdAt)}
+                  </Typography>
+                </Div>
+              </Div>
             ))
           )}
-        </Box>
+        </Div>
       )}
-    </Box>
+    </Div>
   );
 };
 
