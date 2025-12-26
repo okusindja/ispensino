@@ -70,6 +70,7 @@ export default async function handler(
                                 course: {
                                   select: {
                                     title: true,
+                                    teacherId: true,
                                   },
                                 },
                               },
