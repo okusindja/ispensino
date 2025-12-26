@@ -9,8 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "format": "prettier --write .",
-    "check-format": "prettier --check ."
+    "format": "biome lint --write .",
+    "check-format": "biome lint --check ."
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -27,9 +27,11 @@
     "firebase-admin": "^13.4.0",
     "formidable": "^3.5.4",
     "immer": "^10.0.2",
+    "lucide-react": "^0.562.0",
     "next": "14.0.3",
     "next-pwa": "^5.6.0",
     "nookies": "^2.5.2",
+    "openai": "^6.10.0",
     "prettier": "^3.1.0",
     "prisma": "^6.8.2",
     "ramda": "^0.30.1",
@@ -40,6 +42,7 @@
     "react-hot-toast": "^2.5.2",
     "react-loading-skeleton": "^3.5.0",
     "react-multistep": "^5.5.9",
+    "react-select": "^5.10.2",
     "react-switch": "^7.1.0",
     "recharts": "^2.15.0",
     "slugify": "^1.6.6",
@@ -52,6 +55,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.4",
     "@emotion/eslint-plugin": "^11.11.0",
     "@types/formidable": "^3.4.5",
     "@types/lodash.debounce": "^4.0.9",
@@ -61,6 +65,8 @@
     "@types/react": "^18.2.38",
     "@types/react-dom": "^18.2.17",
     "@types/recharts": "^1.8.29",
+    "@types/socket.io": "^3.0.2",
+    "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
     "babel-loader": "^10.0.0",
@@ -86,7 +92,7 @@
     "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "engines": {
-    "node": ">=18.17"
+    "node": ">=22.18.0"
   },
   "packageManager": "pnpm@9.1.0+sha512.67f5879916a9293e5cf059c23853d571beaf4f753c707f40cb22bed5fb1578c6aad3b6c4107ccb3ba0b35be003eb621a16471ac836c87beb53f9d54bb4612724"
 }

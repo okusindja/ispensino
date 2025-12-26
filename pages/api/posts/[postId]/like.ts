@@ -1,21 +1,21 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 
-import { authenticateUser, handleApiError } from '@/lib/api-utils';
-import { prisma } from '@/lib/prisma';
+import { authenticateUser, handleApiError } from "@/lib/api-utils";
+import { prisma } from "@/lib/prisma";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   // Authenticate user
   const authenticatedUser = await authenticateUser(req);
   if (!authenticatedUser)
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   const { postId } = req.query;
 
   // Validate postId
-  if (typeof postId !== 'string') {
-    return res.status(400).json({ error: 'Invalid post ID' });
+  if (typeof postId !== "string") {
+    return res.status(400).json({ error: "Invalid post ID" });
   }
 
   try {
@@ -26,7 +26,7 @@ export default async function handler(
     });
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Check if the post exists
@@ -36,10 +36,10 @@ export default async function handler(
     });
 
     if (!postExists) {
-      return res.status(404).json({ error: 'Post not found' });
+      return res.status(404).json({ error: "Post not found" });
     }
 
-    if (req.method === 'POST') {
+    if (req.method === "POST") {
       // Check if already liked
       const existingLike = await prisma.like.findFirst({
         where: {
@@ -56,7 +56,7 @@ export default async function handler(
 
         return res.status(200).json({
           success: true,
-          action: 'unliked',
+          action: "unliked",
           likeId: null,
         });
       } else {
@@ -76,11 +76,11 @@ export default async function handler(
 
         return res.status(201).json({
           success: true,
-          action: 'liked',
+          action: "liked",
           likeId: newLike.id,
         });
       }
-    } else if (req.method === 'GET') {
+    } else if (req.method === "GET") {
       // Check like status
       const like = await prisma.like.findFirst({
         where: {
@@ -97,10 +97,10 @@ export default async function handler(
         likeId: like?.id || null,
       });
     } else {
-      return res.status(405).json({ error: 'Method not allowed' });
+      return res.status(405).json({ error: "Method not allowed" });
     }
   } catch (error) {
-    console.error('Error in like endpoint:', error);
+    console.error("Error in like endpoint:", error);
     return handleApiError(res, error, 500);
   }
 }

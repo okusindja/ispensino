@@ -3,11 +3,16 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import nookies from 'nookies';
 
-import { NextPageWithUser } from '@/interface/declaration';
+import { NextPageWithUserAndCoursesFromTeacher } from '@/interface/declaration';
 import { adminAuth, prisma } from '@/lib';
 import CoursesView from '@/views/teacher/courses';
+import { Role } from '@prisma/client';
 
-const TeacherCoursesPage: NextPageWithUser = ({ user, loggedUser }) => {
+const TeacherCoursesPage: NextPageWithUserAndCoursesFromTeacher = ({
+  courses,
+  user,
+  loggedUser,
+}) => {
   if (!user) {
     return (
       <Div>
@@ -17,7 +22,7 @@ const TeacherCoursesPage: NextPageWithUser = ({ user, loggedUser }) => {
     );
   }
 
-  if (loggedUser.role !== 'TEACHER') {
+  if (loggedUser.role !== Role.TEACHER) {
     return (
       <Div>
         Apenas professopres podem acessar esta página. Se você é um professor,
@@ -28,7 +33,7 @@ const TeacherCoursesPage: NextPageWithUser = ({ user, loggedUser }) => {
     );
   }
 
-  return <CoursesView user={loggedUser} />;
+  return <CoursesView courses={courses} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -36,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const sessionCookie = cookies.session || '';
   let user = null;
   let teacher = null;
+  let courses = null;
   try {
     const decodedClaims = await adminAuth.verifySessionCookie(
       sessionCookie,
@@ -46,9 +52,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       email: decodedClaims.email || null,
     };
     teacher = await prisma.user.findUnique({
-      where: { firebaseId: user.uid, role: 'TEACHER' },
+      where: { firebaseId: user.uid, role: Role.TEACHER },
       include: {
         teachingCourses: true,
+      },
+    });
+    courses = await prisma.course.findMany({
+      where: {
+        teacherId: teacher?.id,
       },
     });
     if (!teacher) {
@@ -68,7 +79,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  return { props: { user, loggedUser: JSON.parse(JSON.stringify(teacher)) } };
+  return {
+    props: {
+      user,
+      loggedUser: JSON.parse(JSON.stringify(teacher)),
+      courses: JSON.parse(JSON.stringify(courses)),
+    },
+  };
 };
 
 export default TeacherCoursesPage;

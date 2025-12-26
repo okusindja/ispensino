@@ -4,7 +4,7 @@ import space from '@/design-system/common/space';
 const container = {
   gap: space.L,
   display: 'grid',
-  padding: `${space.M} ${space.M}`,
+  padding: `${space.M} ${space.L}`,
   justifyItems: 'center',
   gridTemplateColumns: 'repeat(4, 1fr)',
   [`@media (min-width: ${breakpoints[1]})`]: {

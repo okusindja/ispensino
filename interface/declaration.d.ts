@@ -1,4 +1,13 @@
-import { Category, Course, Enrollment, Lesson, User } from '@prisma/client';
+import {
+  Category,
+  Course,
+  Enrollment,
+  Lesson,
+  Post,
+  ScientificArticle,
+  ScientificArticleAuthor,
+  User,
+} from '@prisma/client';
 import { Server as NetServer } from 'net';
 import { NextPage } from 'next';
 import { NextApiResponse } from 'next';
@@ -6,6 +15,7 @@ import { Server as SocketIOServer } from 'socket.io';
 
 import { HomePageProps } from '@/views/home/home.types';
 import { LessonPageProps } from '@/views/lessons/details/lesson-details.types';
+import { PostProps } from './types';
 
 export interface NextPageDefaultProps {
   now: number;
@@ -47,6 +57,18 @@ export interface NextPageWithUserProps {
   loggedUser: UserProps;
   user: SessionUserProps;
 }
+export interface NextPageWithUserAndCoursesFromTeacherProps {
+  loggedUser: UserProps;
+  user: SessionUserProps;
+  courses: CourseProps[];
+}
+
+export interface NextPageWithUserAndPostsProps {
+  loggedUser?: UserProps & { following: number; followers: number };
+  user?: SessionUserProps;
+  profileUser?: UserProps & { following: number; followers: number };
+}
+
 export interface NextPageWithCourseAndTeacherProps {
   course: Course & {
     lessons: Lesson[];
@@ -71,8 +93,39 @@ export interface NextPageWithLessonProps extends LessonPageProps {
   courseId: string;
 }
 
+export interface NextPageWithMonographProps {
+  monograph: Monograph | null;
+}
+
+// export interface NextPageWithMonographsProps {
+//   monographs: Monograph[];
+// }
+
+export interface NextPageWithScientificArticleProps {
+  scientificArticle: ScientificArticle & { authors: ScientificArticleAuthor[] };
+}
+
+export type NextPageWithMonographs = NextPage<// NextPageWithMonographsProps &
+NextPageDefaultProps>;
+
+export type NextPageWithMonograph = NextPage<
+  NextPageWithMonographProps & NextPageDefaultProps
+>;
+
+export type NextPageWithScientificArticle = NextPage<
+  NextPageWithScientificArticleProps & NextPageDefaultProps
+>;
+
+export type NextPageWithUserAndCoursesFromTeacher = NextPage<
+  NextPageWithUserAndCoursesFromTeacherProps & NextPageDefaultProps
+>;
+
 export type NextPageWithUser = NextPage<
   NextPageWithUserProps & NextPageDefaultProps
+>;
+
+export type NextPageWithUserAndPosts = NextPage<
+  NextPageWithUserAndPostsProps & NextPageDefaultProps
 >;
 
 export type NextPageWithCourse = NextPage<

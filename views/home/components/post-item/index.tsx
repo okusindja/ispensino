@@ -8,6 +8,7 @@ import {
   MessageSVG,
   // MessageFilledSVG,
   OptionsHorizontalSVG,
+  SendSVG,
   // SendSVG,
 } from '@/components/svg';
 import { useAuth } from '@/contexts';
@@ -16,14 +17,16 @@ import { Button } from '@/elements';
 import { Typography } from '@/elements/typography';
 import { PostProps } from '@/interface/types';
 import { formatRelativeDate } from '@/utils';
+import { useRouter } from 'next/router';
 
 interface PostItemProps {
   post: PostProps;
-  onLike: (postId: string) => void;
-  onComment: (postId: string, content: string) => Promise<void>;
+  onLike?: (postId: string) => void;
+  onComment?: (postId: string, content: string) => Promise<void>;
 }
 
 const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
+  const router = useRouter();
   const { colors } = useTheme() as DesignSystemTheme;
   const { user: currentUser } = useAuth();
   const [commentContent, setCommentContent] = useState('');
@@ -33,7 +36,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
   const commentsEndRef = useRef<HTMLDivElement>(null);
 
   const comments = post.comments || [];
-  // const likes = post.likes || [];
+  const likes = post.likes || [];
   // const attachments = post.attachments || [];
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
@@ -41,7 +44,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
     if (!commentContent.trim()) return;
 
     setIsCommenting(true);
-    await onComment(post.id, commentContent);
+    await onComment?.(post.id, commentContent);
     setCommentContent('');
     setTimeout(() => {
       commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -53,7 +56,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
     if (isLiking) return;
     setIsLiking(true);
     try {
-      await onLike(post.id);
+      onLike?.(post.id);
     } finally {
       setIsLiking(false);
     }
@@ -76,8 +79,7 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
     const parts = content.split(/(@\w+|#\w+)/g);
     return parts.map((part, i) => {
       if (part.startsWith('@')) {
-        // const username = part.substring(1);
-        // Check if this is a valid user mention (you might want to enhance this logic)
+        //const username = part.substring(1);
         return (
           <Typography
             key={i}
@@ -110,7 +112,6 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
 
   return (
     <Div my="M" borderRadius="M" overflow="hidden" backgroundColor="surface">
-      {/* Author Header */}
       <Div
         p="L"
         pb="S"
@@ -119,13 +120,14 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         backgroundColor="surface"
       >
         <Div
-          position="relative"
+          bg="white"
           width="3rem"
           height="3rem"
           minWidth="3rem"
-          bg="white"
-          borderRadius="full"
+          cursor="pointer"
           overflow="hidden"
+          borderRadius="full"
+          position="relative"
           border={`2px solid ${colors.primary}`}
         >
           <Image
@@ -141,7 +143,11 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
             }
           />
         </Div>
-        <Div ml="M" flex="1">
+        <Div
+          ml="M"
+          cursor="pointer"
+          onClick={() => router.push(`/profile/social/${post.author.id}`)}
+        >
           <Typography
             variant="fancy"
             size="medium"
@@ -156,9 +162,11 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
           </Typography>
         </Div>
         <Button
-          variant="neutral"
-          size="small"
           isIcon
+          ml="auto"
+          size="small"
+          color="text"
+          variant="neutral"
           onClick={() => console.log('Post options')}
         >
           <OptionsHorizontalSVG
@@ -169,14 +177,12 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         </Button>
       </Div>
 
-      {/* Post Content */}
       <Div p="L" pb="S" backgroundColor="surface">
         <Typography variant="fancy" size="medium" color="text" lineHeight="1.5">
           {renderContentWithTags(post.content)}
         </Typography>
       </Div>
 
-      {/* Post Media */}
       {post.attachments?.length > 0 && (
         <Div
           position="relative"
@@ -196,7 +202,6 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         </Div>
       )}
 
-      {/* Actions Bar */}
       <Div p="M" gap="L" display="flex" alignItems="center">
         <Button
           isIcon
@@ -221,13 +226,13 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
               maxWidth="1.65rem"
               maxHeight="1.65rem"
               width="100%"
-              strokeColor="white"
+              strokeColor={colors.text}
               fill="none"
             />
           )}
-          {post.likes.length > 0 && (
+          {likes.length > 0 && (
             <Typography variant="fancy" size="small">
-              {post.likes.length}
+              {likes.length}
             </Typography>
           )}
         </Button>
@@ -251,7 +256,6 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
         </Button>
       </Div>
 
-      {/* Comments Section */}
       {showComments && (
         <Div maxHeight="300px" overflowY="auto" backgroundColor="surface_light">
           <Div p="L">
@@ -306,11 +310,10 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
             <div ref={commentsEndRef} />
           </Div>
 
-          {/* Comment Input */}
           <Form
             p="M"
-            display="flex"
             gap="M"
+            display="flex"
             alignItems="center"
             onSubmit={handleCommentSubmit}
             borderTop={`1px solid ${colors.outline}`}
@@ -328,28 +331,35 @@ const PostItem = ({ post, onLike, onComment }: PostItemProps) => {
                 sizes="100%"
                 quality={100}
                 alt={currentUser?.name || 'You'}
-                src={currentUser?.image || '/default-avatar.png'}
+                src={
+                  currentUser?.image ||
+                  'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                }
                 style={{ objectFit: 'cover' }}
               />
             </Div>
             <Input
-              type="text"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              placeholder="Write a comment..."
+              px="M"
+              py="L"
               flex="1"
-              p="S"
+              type="text"
               borderRadius="M"
+              value={commentContent}
+              placeholder="Write a comment..."
               border={`1px solid ${colors.outline}`}
+              onChange={(e) => setCommentContent(e.target.value)}
             />
             <Button
-              type="submit"
-              variant="primary"
-              size="small"
               isIcon
+              size="small"
+              type="submit"
+              display="flex"
+              variant="neutral"
+              alignItems="center"
+              justifyContent="center"
               disabled={isCommenting || !commentContent.trim()}
             >
-              Enviar
+              <SendSVG maxWidth="1.5rem" maxHeight="1.5rem" width="100%" />
             </Button>
           </Form>
         </Div>

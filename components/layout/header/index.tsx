@@ -6,7 +6,7 @@ import { FC } from 'react';
 import useSWR from 'swr';
 
 import { Notification } from '@/components';
-import { ArrowLeftSVG, FolderSVG, LogoSVG } from '@/components/svg';
+import { ArrowLeftSVG, FolderSVG, LogoSVG, UserSVG } from '@/components/svg';
 import { Routes, RoutesEnum } from '@/constants';
 import { fetcherWithCredentials } from '@/constants/fetchers';
 import { Box, Button } from '@/elements';
@@ -21,6 +21,7 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
     fetcherWithCredentials
   );
   const isTeacher = data?.role === 'TEACHER';
+  const isAdmin = data?.role === 'ADMIN';
 
   if (!data && !isLoading) return <>Erro</>;
 
@@ -33,6 +34,7 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
         zIndex="10"
         width="100%"
         position="fixed"
+        py={['0', '0', 'S', 'S']}
         boxShadow="1px 5px 10px rgba(0, 0, 0, 0.06)"
         backgroundColor={!isCoursesPage ? 'surface' : 'primary'}
       >
@@ -59,18 +61,37 @@ const Header: FC<{ hasGoBack?: boolean }> = ({ hasGoBack = false }) => {
                 <ArrowLeftSVG width="100%" maxWidth="3rem" maxHeight="3rem" />
               </Button>
             )}
-            {isTeacher && (
-              <Button
-                isIcon
-                color={!isCoursesPage ? 'text' : 'textInverted'}
-                size="medium"
-                variant="neutral"
-                onClick={() => router.push('/teacher')}
-              >
-                <FolderSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
-              </Button>
-            )}
-            <Notification />
+            <Div display="flex" alignItems="center" gap="L">
+              {isTeacher && (
+                <>
+                  <Button
+                    isIcon
+                    color={!isCoursesPage ? 'text' : 'textInverted'}
+                    size="medium"
+                    variant="neutral"
+                    onClick={() => router.push('/teacher')}
+                  >
+                    <FolderSVG
+                      width="100%"
+                      maxWidth="1.5rem"
+                      maxHeight="1.5rem"
+                    />
+                  </Button>
+                </>
+              )}
+              {isAdmin && (
+                <Button
+                  isIcon
+                  color={!isCoursesPage ? 'text' : 'textInverted'}
+                  size="medium"
+                  variant="neutral"
+                  onClick={() => router.push('/adm')}
+                >
+                  <UserSVG width="100%" maxWidth="1.5rem" maxHeight="1.5rem" />
+                </Button>
+              )}
+              <Notification />
+            </Div>
           </Div>
         </Box>
       </StylinHeader>

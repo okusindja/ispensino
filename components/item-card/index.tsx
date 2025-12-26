@@ -23,7 +23,7 @@ const ItemCard: FC<ItemCardProps> = ({
       overflow="hidden"
       backgroundColor="surface"
       boxShadow="5px 5px 10px rgba(0, 0, 0, 0.03)"
-      gridColumn={['span 2', 'span 2', 'span 6', 'span 6']}
+      gridColumn={['span 2', 'span 2', 'span 4', 'span 4']}
     >
       <Link href={to} title={title}>
         <Div
@@ -31,7 +31,7 @@ const ItemCard: FC<ItemCardProps> = ({
           borderRadius="S"
           overflow="hidden"
           position="relative"
-          height="7rem"
+          height={['7rem', '7rem', '10rem', '10rem']}
         >
           <Image
             fill
@@ -39,7 +39,7 @@ const ItemCard: FC<ItemCardProps> = ({
             quality={100}
             alt="Placeholder"
             style={{ objectFit: 'cover' }}
-            src={thumbnail || 'https://picsum.photos/200/300'}
+            src={thumbnail || '/icons/icon-512x512.png'}
           />
         </Div>
         <Div
@@ -51,18 +51,22 @@ const ItemCard: FC<ItemCardProps> = ({
           flexDirection="column"
           backgroundColor="surface"
         >
-          <Div display="flex" alignItems="center" gap="S" color="text">
-            <TagSVG maxWidth=".875rem" maxHeight="14px" width="100%" />
-            <Typography variant="fancy" size="small" color="text">
-              {introduction}
-            </Typography>
-          </Div>
-          <Typography variant="fancy" size="large" color="text">
+          {introduction && (
+            <Div display="flex" alignItems="center" gap="S" color="text">
+              <TagSVG maxWidth=".875rem" maxHeight="14px" width="100%" />
+              <Typography variant="fancy" size="small" color="text" lines={1}>
+                {introduction}
+              </Typography>
+            </Div>
+          )}
+          <Typography variant="fancy" size="large" color="text" lines={2}>
             {title}
           </Typography>
-          <Typography variant="body" size="extraSmall" color="text">
-            {description}
-          </Typography>
+          {description && (
+            <Typography variant="body" size="extraSmall" color="text">
+              {description}
+            </Typography>
+          )}
         </Div>
       </Link>
     </Div>

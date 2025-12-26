@@ -2,7 +2,14 @@
 import { Global } from '@emotion/react';
 import { ThemeProvider } from '@stylin.js/elements';
 import { ThemeProvider as ThemePoviderNormal } from '@stylin.js/react';
-import { createContext, FC, PropsWithChildren, useContext } from 'react';
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { DarkTheme, GlobalStyles, LightTheme } from '@/design-system';
 import { useLocalStorage } from '@/hooks';
@@ -34,7 +41,15 @@ const Theme: FC<PropsWithChildren<{ dark: boolean }>> = ({
 
 const ThemeManager: FC<PropsWithChildren> = ({ children }) => {
   const [dark, setDark] = useLocalStorage('ISPENSINO-theme', false);
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
   return (
     <ThemeContext.Provider value={{ dark, setDark }}>
       <Theme dark={dark}>{children}</Theme>

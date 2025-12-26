@@ -46,28 +46,19 @@ const PostForm = ({ onSuccess, onError }: PostFormProps) => {
   };
 
   return (
-    <Div
-      p="L"
-      borderRadius="M"
-      backgroundColor="surface"
-      maxWidth="600px"
-      width="90vw"
-    >
-      <Typography variant="headline" size="medium" mb="L">
-        Create New Post
-      </Typography>
-
+    <Div p="XL" borderRadius="M" backgroundColor="surface" width="100%">
       <Form onSubmit={handleSubmit}>
         <Textarea
-          width="100%"
-          minHeight="150px"
           p="M"
           mb="M"
-          borderRadius="S"
-          border={`1px solid ${colors.outline}`}
+          width="100%"
+          fontSize="M"
           value={content}
+          borderRadius="S"
+          minHeight="150px"
+          border={`1px solid ${colors.outline}`}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="What's on your mind?"
+          placeholder="O que queres partilhar com a comunidade científica?"
         />
 
         {error && (

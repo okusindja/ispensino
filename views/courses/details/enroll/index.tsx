@@ -35,8 +35,8 @@ const Enroll: FC<EnrollProps> = ({ course }) => {
       });
 
       addToast({
-        title: 'Success',
-        description: 'You have successfully enrolled in the course.',
+        title: 'Parabéns!',
+        description: 'Parabéns! Acabou de se matricular neste curso.',
         type: 'success',
       });
 
@@ -190,8 +190,8 @@ const Enroll: FC<EnrollProps> = ({ course }) => {
             onClick={handleEnroll}
             disabled={Loading}
           >
-            Matricular-me por{' '}
-            {course.price ? `${course.price} AOA` : 'gratuitamente'}
+            Matricular-me{' '}
+            {course.price ? `por ${course.price} AOA` : 'gratuitamente'}
           </Button>
         </Div>
       </Box>

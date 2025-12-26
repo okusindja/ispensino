@@ -39,6 +39,14 @@ model User {
   tags            Tag[]            @relation("UserTags")
   qualifications  String[]
   specialization  String?
+
+  ScientificArticleAuthor ScientificArticleAuthor[]
+  LessonActivity          LessonActivity[]
+  UserBadge               UserBadge[]
+  UserMetric              UserMetric[]
+  AutoCourseJob           AutoCourseJob[]
+  reportedReports  Report[] @relation("ReportedReports")
+  resolvedReports  Report[] @relation("ResolvedReports")
 }
 
 enum Role {
@@ -66,12 +74,16 @@ model Post {
 }
 
 model Tag {
-  id        String    @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
   type      TagType
   posts     Post[]
-  users     User[]    @relation("UserTags")
+  users     User[]     @relation("UserTags")
   resources Resource[] @relation("ResourceTags")
+
+  Book Book[] @relation("ResourceTags")
+
+  ScientificArticle ScientificArticle[] @relation("ArticleTags")
 }
 
 enum TagType {
@@ -169,27 +181,112 @@ model Category {
   description String
   resources   Resource[]
   courses     Course[]
+
+  ScientificArticle ScientificArticle[]
 }
 
 model Course {
-  id          String       @id @default(uuid())
-  title       String
-  description String
-  price       Float?       @default(0.0)
-  isFree      Boolean      @default(true)
-  isPublished Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  thumbnail   String?
-  slug        String       @unique
-  startDate   DateTime?
-  level       CourseLevel  @default(BEGINNER)
-  teacher     User         @relation("TeacherCourses", fields: [teacherId], references: [id])
-  teacherId   String
-  lessons     Lesson[]
-  enrollments Enrollment[]
-  categories  Category[]
-  posts       Post[]
+  id             String           @id @default(uuid())
+  title          String
+  description    String
+  price          Float?           @default(0.0)
+  isFree         Boolean          @default(true)
+  isPublished    Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  thumbnail      String?
+  slug           String           @unique
+  startDate      DateTime?
+  level          CourseLevel      @default(BEGINNER)
+  teacher        User             @relation("TeacherCourses", fields: [teacherId], references: [id])
+  teacherId      String
+  lessons        Lesson[]
+  enrollments    Enrollment[]
+  categories     Category[]
+  posts          Post[]
+  LessonActivity LessonActivity[]
+}
+
+enum AcademicalCourses {
+  INFORMATION_TECHNOLOGY
+  ECONOMY
+  MANAGEMENT
+  CHEMICAL_ENGINEERING
+  MECHANICAL_ENGINEERING
+  CIVIL_ENGINEERING
+  ELECTRICAL_ENGINEERING
+  PETROLEUM_ENGINEERING
+  INDUSTRIAL_PRODUCTION_ENGINEERING
+}
+
+model Monograph {
+  id           String            @id @default(uuid())
+  title        String
+  author       String
+  advisor      String
+  course       AcademicalCourses
+  publishedAt  DateTime
+  resourceType ResourceType      @default(MONOGRAPH)
+  url          String
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  tags         String[]
+}
+
+model ScientificArticle {
+  id           String       @id @default(uuid())
+  title        String
+  abstract     String
+  keywords     String[] // multiple keywords
+  doi          String?      @unique
+  url          String // main article PDF
+  journal      String?
+  resourceType ResourceType @default(SCIENTIFIC_ARTICLE)
+  volume       String?
+  issue        String?
+  pages        String?
+  publishedAt  DateTime
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  license      LicenseType  @default(CC_BY)
+
+  // Relations
+  authors    ScientificArticleAuthor[]
+  references Reference[]
+  categories Category[]
+  tags       Tag[]                     @relation("ArticleTags")
+}
+
+model ScientificArticleAuthor {
+  id          String            @id @default(uuid())
+  article     ScientificArticle @relation(fields: [articleId], references: [id])
+  articleId   String
+  user        User?             @relation(fields: [userId], references: [id]) // if author is platform user
+  userId      String?
+  name        String // fallback in case author is external
+  affiliation String?
+  email       String?
+}
+
+model Reference {
+  id        String            @id @default(uuid())
+  article   ScientificArticle @relation(fields: [articleId], references: [id])
+  articleId String
+  citation  String // raw reference text (APA/MLA/ISO)
+  doi       String?
+  url       String?
+}
+
+model Book {
+  id           String       @id @default(uuid())
+  title        String
+  author       String
+  publishedAt  DateTime
+  url          String
+  resourceType ResourceType @default(BOOK)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  tags         Tag[]        @relation("ResourceTags")
 }
 
 model Enrollment {
@@ -226,20 +323,22 @@ enum PaymentStatus {
 }
 
 model Lesson {
-  id            String            @id @default(uuid())
-  title         String
-  description   String
-  order         Int
-  videoUrl      String
-  estimatedTime Int?
-  course        Course            @relation(fields: [courseId], references: [id])
-  courseId      String
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  materials     LessonMaterial[]
-  assessment    LessonAssessment?
-  comments      Comment[]
-  isPreview     Boolean           @default(false)
+  id             String            @id @default(uuid())
+  title          String
+  description    String
+  order          Int
+  videoUrl       String
+  estimatedTime  Int?
+  course         Course            @relation(fields: [courseId], references: [id])
+  courseId       String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  materials      LessonMaterial[]
+  assessment     LessonAssessment?
+  comments       Comment[]
+  isPreview      Boolean           @default(false)
+  Transcript     Transcript?
+  LessonActivity LessonActivity[]
 }
 
 model LessonMaterial {
@@ -328,15 +427,129 @@ enum NotificationType {
   COMMENT
   FOLLOW
   TAG
+  REPORT
+  REPORT_RESOLUTION
 }
 
 model Notification {
-  id          String   @id @default(uuid())
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
-  type        NotificationType
-  message     String
-  isRead      Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String           @id @default(uuid())
+  user      User             @relation(fields: [userId], references: [id])
+  userId    String
+  type      NotificationType
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  metadata  Json?
+}
+model Transcript {
+  id        String   @id @default(uuid())
+  lessonId  String   @unique
+  content   String   @db.Text
+  segments  Json? // array of {start, end, text}
+  createdAt DateTime @default(now())
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+}
+
+model LessonActivity {
+  id        String   @id @default(uuid())
+  courseId  String
+  lessonId  String
+  userId    String
+  event     String // e.g. "pause", "seek", "ask_question"
+  data      Json?
+  createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id])
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// Gamification
+model Badge {
+  id          String      @id @default(uuid())
+  code        String      @unique
+  title       String
+  description String?
+  icon        String?
+  criteria    Json? // machine-readable criteria
+  createdAt   DateTime    @default(now())
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  badgeId   String
+  awardedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+}
+
+model UserMetric {
+  id        String   @id @default(uuid())
+  userId    String
+  xp        Int      @default(0)
+  level     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model AutoCourseJob {
+  id        String   @id @default(uuid())
+  teacherId String
+  videoUrl  String
+  input     Json
+  status    String   @default("PENDING")
+  output    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  teacher   User     @relation(fields: [teacherId], references: [id])
+}
+
+// Report System
+enum ReportStatus {
+  PENDING
+  UNDER_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
+enum ReportTargetType {
+  USER
+  POST
+  COURSE
+  MONOGRAPH
+  SCIENTIFIC_ARTICLE
+  COMMENT
+  RESOURCE
+}
+
+model Report {
+  id              String           @id @default(uuid())
+  reporterId      String
+  targetId        String
+  targetType      ReportTargetType
+  reason          String
+  customReason    String?
+  status          ReportStatus     @default(PENDING)
+  resolutionNotes String?
+  actionTaken     String?
+  metadata        Json?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  resolvedAt      DateTime?
+  resolvedById    String?
+
+  // Relations
+  reporter    User   @relation("ReportedReports", fields: [reporterId], references: [id])
+  resolvedBy  User?  @relation("ResolvedReports", fields: [resolvedById], references: [id])
+
+  // Indexes for better query performance
+  @@index([reporterId])
+  @@index([targetId])
+  @@index([targetType])
+  @@index([status])
+  @@index([createdAt])
+  @@index([resolvedById])
 }

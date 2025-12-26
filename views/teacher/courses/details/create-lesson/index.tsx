@@ -1,7 +1,9 @@
 import { FC } from 'react';
-
+import { Div } from '@stylin.js/elements';
 import { Layout } from '@/components';
-
+import { Box } from '@/elements';
+import { Typography } from '@/elements/typography';
+import { BookOpen, FileText, Video, Upload } from 'lucide-react';
 import LessonForm from './create-lesson-form';
 
 const CreateLessonView: FC<{ courseId: string }> = ({ courseId }) => {
@@ -11,20 +13,34 @@ const CreateLessonView: FC<{ courseId: string }> = ({ courseId }) => {
 
   return (
     <Layout hasGoBack>
-      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="border-b border-gray-200 pb-4 mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Create New Lesson
-            </h1>
-            <p className="mt-1 text-sm text-gray-500">
-              Add a new lesson to your course with video and materials
-            </p>
-          </div>
+      <Box variant="container" py="XL">
+        {/* Header */}
+        <Div width="100%" gridColumn="1/-1" mb="XL">
+          <Typography color="text" variant="title" size="medium" mb="XS">
+            <BookOpen
+              size={24}
+              style={{ marginRight: '12px', verticalAlign: 'middle' }}
+            />
+            Criar Nova Aula
+          </Typography>
+          <Typography color="textVariant" size="small" variant={'body'}>
+            Adicione uma nova aula ao seu curso com vídeo e materiais
+          </Typography>
+        </Div>
 
-          <LessonForm courseId={courseId as string} onSuccess={handleSuccess} />
-        </div>
-      </div>
+        {/* Main Content Card */}
+        <Div
+          width="100%"
+          gridColumn="1/-1"
+          p="XL"
+          borderRadius="L"
+          border="1px solid"
+          borderColor="outline"
+          backgroundColor="surface"
+        >
+          <LessonForm courseId={courseId} onSuccess={handleSuccess} />
+        </Div>
+      </Box>
     </Layout>
   );
 };

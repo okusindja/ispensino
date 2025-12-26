@@ -17,12 +17,11 @@ import { LessonPageProps } from './lesson-details.types';
 const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
   const router = useRouter();
   const { user } = useAuth();
+
   const [toggleComments, setToggleComments] = useState(false);
 
-  // Determine if current user is the course teacher
   const isTeacher = lesson.course.teacher.firebaseId === user?.uid;
 
-  // Sort lessons by order and find current position
   const { sortedLessons, currentLessonIndex } = useMemo(() => {
     const lessons = [...lesson.course.lessons].sort(
       (a, b) => a.order - b.order
@@ -34,7 +33,6 @@ const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
     };
   }, [lesson]);
 
-  // Get next lesson and determine if it's accessible
   const nextLesson = useMemo(() => {
     if (currentLessonIndex === -1) return null;
     return sortedLessons[currentLessonIndex + 1];
@@ -44,7 +42,6 @@ const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
     nextLesson &&
     (!lesson.assessment || lesson.assessment.userAssessments[0]?.isPassed);
 
-  // Determine if a lesson is accessible
   const isLessonAccessible = (targetLesson: {
     order: number;
     assessment?: { userAssessments?: { isPassed?: boolean }[] };

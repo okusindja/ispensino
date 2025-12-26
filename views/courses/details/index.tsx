@@ -9,6 +9,7 @@ import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
 
 import { CourseDetailsProps } from './details.types';
+import { VolumeUpSVG } from '@/components/svg';
 
 const CourseDetails: FC<CourseDetailsProps> = ({ course, isEnrolled }) => {
   const firstLesson = course.lessons.find((lesson) => lesson.order === 1);
@@ -16,6 +17,8 @@ const CourseDetails: FC<CourseDetailsProps> = ({ course, isEnrolled }) => {
   const handleEnroll = () => {
     router.push(`/content/courses/${course.slug}/checkout`);
   };
+
+  console.log(course.id);
 
   return (
     <Layout hasGoBack>
@@ -90,6 +93,18 @@ const CourseDetails: FC<CourseDetailsProps> = ({ course, isEnrolled }) => {
                 </Typography>
               }
             />
+            <Button
+              variant="secondary"
+              size="medium"
+              color="text"
+              mt="2XL"
+              onClick={() => router.push(`/voice/${course?.id}`)}
+            >
+              <VolumeUpSVG width="100%" maxWidth="2rem" maxHeight="2rem" />
+              <Typography variant="fancy" size="medium">
+                Turma de voz
+              </Typography>
+            </Button>
             {course.lessons.length === 0 && (
               <Typography variant="body" size="medium" color="text">
                 Nenhuma aula disponível
