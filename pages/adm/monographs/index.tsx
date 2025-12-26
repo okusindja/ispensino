@@ -8,7 +8,7 @@ import { NextPageWithMonographs } from '@/interface/declaration';
 import { adminAuth, prisma } from '@/lib';
 import { MonographListView } from '@/views';
 
-const MonographsPage: NextPageWithMonographs = ({ user, monographs }) => {
+const MonographsPage: NextPageWithMonographs = ({ user }) => {
   if (!user) {
     return (
       <Div>
@@ -18,7 +18,7 @@ const MonographsPage: NextPageWithMonographs = ({ user, monographs }) => {
     );
   }
 
-  return <MonographListView monographs={monographs} />;
+  return <MonographListView />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
