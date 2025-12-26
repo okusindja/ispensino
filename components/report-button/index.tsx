@@ -139,7 +139,11 @@ const ReportDialogContent = ({
         window.location.reload();
       }, 2000);
     } catch (err) {
-      setError(err.message || 'Ocorreu um erro. Tente novamente.');
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Ocorreu um erro. Tente novamente.';
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
