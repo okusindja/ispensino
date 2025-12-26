@@ -13,13 +13,10 @@ import { Box, Button } from '@/elements';
 import { Typography } from '@/elements/typography';
 
 import { LessonPageProps } from './lesson-details.types';
-import { useAwardXp } from '@/hooks/use-award-xp';
 
 const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
   const router = useRouter();
   const { user } = useAuth();
-  // anywhere in a handler
-  const { awardXp } = useAwardXp();
 
   const [toggleComments, setToggleComments] = useState(false);
 
