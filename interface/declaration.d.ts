@@ -57,6 +57,11 @@ export interface NextPageWithUserProps {
   loggedUser: UserProps;
   user: SessionUserProps;
 }
+export interface NextPageWithUserAndCoursesFromTeacherProps {
+  loggedUser: UserProps;
+  user: SessionUserProps;
+  courses: CourseProps[];
+}
 
 export interface NextPageWithUserAndPostsProps {
   loggedUser?: UserProps & { following: number; followers: number };
@@ -109,6 +114,10 @@ export type NextPageWithMonograph = NextPage<
 
 export type NextPageWithScientificArticle = NextPage<
   NextPageWithScientificArticleProps & NextPageDefaultProps
+>;
+
+export type NextPageWithUserAndCoursesFromTeacher = NextPage<
+  NextPageWithUserAndCoursesFromTeacherProps & NextPageDefaultProps
 >;
 
 export type NextPageWithUser = NextPage<

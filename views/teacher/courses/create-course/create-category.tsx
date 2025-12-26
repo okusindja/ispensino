@@ -39,7 +39,12 @@ const CreateCategoryForm: FC<CreateCategoryProps> = ({
   };
 
   return (
-    <Form onSubmit={handleSubmit(handleFormSubmit)} width="100%">
+    <Form
+      onSubmit={handleSubmit(handleFormSubmit)}
+      px="XL"
+      bg="background"
+      width="100%"
+    >
       <FormField<CategoryFormData>
         name="name"
         type="text"

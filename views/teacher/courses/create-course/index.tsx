@@ -201,8 +201,7 @@ const CreateCourseView = () => {
           <Box display="flex" gap="M">
             <Box
               as="button"
-              onClick={() => router.push('/teacher/courses')}
-              // disabled={isSubmitting || loading}
+              onClick={() => router.push('/teacher')}
               p="M"
               border="none"
               bg="lightGray"

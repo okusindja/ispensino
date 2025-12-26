@@ -36,18 +36,15 @@ const LessonDetailsView: FC<LessonPageProps> = ({ lesson }) => {
     };
   }, [lesson]);
 
-  const nextLesson = useMemo(async () => {
+  const nextLesson = useMemo(() => {
     if (currentLessonIndex === -1) return null;
     return sortedLessons[currentLessonIndex + 1];
-    await awardXp({ xp: 15, reason: 'watched_50', courseId, lessonId });
-    mutate(); // revalidate metrics hook
   }, [sortedLessons, currentLessonIndex]);
 
   const isNextLessonAccessible =
     nextLesson &&
     (!lesson.assessment || lesson.assessment.userAssessments[0]?.isPassed);
 
-  // Determine if a lesson is accessible
   const isLessonAccessible = (targetLesson: {
     order: number;
     assessment?: { userAssessments?: { isPassed?: boolean }[] };

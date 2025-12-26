@@ -45,6 +45,8 @@ model User {
   UserBadge               UserBadge[]
   UserMetric              UserMetric[]
   AutoCourseJob           AutoCourseJob[]
+  reportedReports  Report[] @relation("ReportedReports")
+  resolvedReports  Report[] @relation("ResolvedReports")
 }
 
 enum Role {
@@ -425,6 +427,8 @@ enum NotificationType {
   COMMENT
   FOLLOW
   TAG
+  REPORT
+  REPORT_RESOLUTION
 }
 
 model Notification {
@@ -436,8 +440,8 @@ model Notification {
   isRead    Boolean          @default(false)
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
+  metadata  Json?
 }
-
 model Transcript {
   id        String   @id @default(uuid())
   lessonId  String   @unique
@@ -501,4 +505,51 @@ model AutoCourseJob {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   teacher   User     @relation(fields: [teacherId], references: [id])
+}
+
+// Report System
+enum ReportStatus {
+  PENDING
+  UNDER_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
+enum ReportTargetType {
+  USER
+  POST
+  COURSE
+  MONOGRAPH
+  SCIENTIFIC_ARTICLE
+  COMMENT
+  RESOURCE
+}
+
+model Report {
+  id              String           @id @default(uuid())
+  reporterId      String
+  targetId        String
+  targetType      ReportTargetType
+  reason          String
+  customReason    String?
+  status          ReportStatus     @default(PENDING)
+  resolutionNotes String?
+  actionTaken     String?
+  metadata        Json?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  resolvedAt      DateTime?
+  resolvedById    String?
+
+  // Relations
+  reporter    User   @relation("ReportedReports", fields: [reporterId], references: [id])
+  resolvedBy  User?  @relation("ResolvedReports", fields: [resolvedById], references: [id])
+
+  // Indexes for better query performance
+  @@index([reporterId])
+  @@index([targetId])
+  @@index([targetType])
+  @@index([status])
+  @@index([createdAt])
+  @@index([resolvedById])
 }

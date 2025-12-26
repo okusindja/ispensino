@@ -1,15 +1,15 @@
+// pages/monographs/index.tsx
 import { Div } from '@stylin.js/elements';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import nookies from 'nookies';
 
-import { NextPageWithUser } from '@/interface/declaration';
+import { NextPageWithMonographs } from '@/interface/declaration';
 import { adminAuth, prisma } from '@/lib';
-import TeacherHomeView from '@/views/teacher';
-import { AdminDashboard } from '@/views';
-import { Role } from '@prisma/client';
+import { MonographListView } from '@/views';
+import AdminReportsView from '@/views/adm/reports';
 
-const AdminPage: NextPageWithUser = ({ user, loggedUser }) => {
+const ReportsPage: NextPageWithMonographs = ({ user }) => {
   if (!user) {
     return (
       <Div>
@@ -19,25 +19,15 @@ const AdminPage: NextPageWithUser = ({ user, loggedUser }) => {
     );
   }
 
-  if (loggedUser.role !== Role.ADMIN) {
-    return (
-      <Div>
-        Apenas professopres podem acessar esta página. Se você é um professor,
-        por favor,
-        <br />
-        <Link href="/auth">login</Link> again.
-      </Div>
-    );
-  }
-
-  return <AdminDashboard />;
+  return <AdminReportsView />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx);
   const sessionCookie = cookies.session || '';
   let user = null;
-  let teacher = null;
+  let monographs = null;
+
   try {
     const decodedClaims = await adminAuth.verifySessionCookie(
       sessionCookie,
@@ -47,17 +37,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       uid: decodedClaims.uid,
       email: decodedClaims.email || null,
     };
-    teacher = await prisma.user.findUnique({
-      where: { firebaseId: user.uid, role: Role.ADMIN },
+
+    monographs = await prisma.monograph.findMany({
+      orderBy: { createdAt: 'desc' },
     });
-    if (!teacher) {
-      return {
-        redirect: {
-          destination: '/auth',
-          permanent: false,
-        },
-      };
-    }
   } catch (error) {
     console.error('Session cookie verification error:', error);
     return {
@@ -67,7 +50,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  return { props: { user, loggedUser: JSON.parse(JSON.stringify(teacher)) } };
+
+  return {
+    props: {
+      user,
+    },
+  };
 };
 
-export default AdminPage;
+export default ReportsPage;

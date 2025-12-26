@@ -550,7 +550,7 @@ const Assessment: FC<AssessmentProps> = ({ lessonId, courseId }) => {
                   <SpinnerSVG width="100%" maxWidth="2rem" maxHeight="2rem" />
                 </Div>
               ) : (
-                'Submit Assessment'
+                'Submeter Avaliação'
               )}
             </Button>
           </Div>

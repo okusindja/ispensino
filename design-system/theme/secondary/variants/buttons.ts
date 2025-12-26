@@ -67,8 +67,7 @@ const neutral = css`
 const primaryVariant = css`
   ${common};
   color: ${colors.primary};
-  background: linear-gradient(60deg, ${colors.secondary}, ${colors.tertiary});
-`;
+  background: ${colors.surface_dark};`;
 
 export default {
   primary,

@@ -60,7 +60,6 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
   return (
     <DialogContext.Provider value={{ openDialog, closeDialog }}>
       {children}
-
       <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
         <Dialog.Trigger asChild>
           <Div display="none" />
@@ -71,8 +70,8 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
             <Div
               position="fixed"
               inset="0"
-              bg="rgba(0,0,0,0.5)"
               zIndex="1000"
+              bg="rgba(0,0,0,0.5)"
               key="overlay"
               style={{
                 opacity: isOpen ? 1 : 0,
@@ -100,7 +99,6 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
                 }
                 maxWidth="90vw"
                 maxHeight="90vh"
-                bg="white"
                 borderRadius="L"
                 boxShadow="0px 4px 16px rgba(0,0,0,0.1)"
                 zIndex="1001"
@@ -122,6 +120,7 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
                       mb="M"
                       p="XL"
                       pb="0"
+                      backgroundColor="background"
                     >
                       {dialogOptions.title}
                     </Typography>
@@ -136,13 +135,16 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
                       variant="body"
                       size="small"
                       color="text"
+                      backgroundColor="background"
                     >
                       {dialogOptions.description}
                     </Typography>
                   </Dialog.Description>
                 )}
 
-                <Div mb="XL">{dialogContent}</Div>
+                <Div mb="XL" backgroundColor="background">
+                  {dialogContent}
+                </Div>
 
                 {dialogOptions.showClose !== false && (
                   <Dialog.Close asChild>
@@ -155,6 +157,7 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
                       right="M"
                       aria-label="Close dialog"
                       onClick={closeDialog}
+                      backgroundColor="background"
                     >
                       <CloseIcon size={20} />
                     </Button>

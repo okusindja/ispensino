@@ -42,6 +42,16 @@ const AdminDashboard = () => {
           to="/adm/scientific-articles/create"
           thumbnail="/icons/icon-512x512.png"
         />
+        <ItemCard
+          title="Denúncias"
+          to="/adm/report"
+          thumbnail="/icons/icon-512x512.png"
+        />
+        <ItemCard
+          title="Livraria"
+          to="/adm/report"
+          thumbnail="/icons/icon-512x512.png"
+        />
       </Box>
     </Layout>
   );

@@ -1,6 +1,5 @@
 import { User } from '@prisma/client';
 import { Div } from '@stylin.js/elements';
-import Link from 'next/link';
 import { FC } from 'react';
 
 import { Layout } from '@/components';
@@ -28,8 +27,8 @@ const TeacherHome: FC<{ user: User }> = ({ user }) => {
           thumbnail="/icons/icon-512x512.png"
         />
         <ItemCard
-          title="Alunos"
-          to="/teacher/students"
+          title="Todos cursos"
+          to="/teacher/courses"
           thumbnail="/icons/icon-512x512.png"
         />
         <ItemCard
