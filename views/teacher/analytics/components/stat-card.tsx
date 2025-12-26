@@ -38,7 +38,7 @@ export const StatCard: FC<StatCardProps> = ({
         alignItems="flex-start"
         mb="M"
       >
-        <Typography size="small" color="textVariant">
+        <Typography variant="body" size="small" color="textVariant">
           {title}
         </Typography>
         <Div color="textVariant">{icon}</Div>
@@ -49,7 +49,7 @@ export const StatCard: FC<StatCardProps> = ({
           {value}
         </Typography>
         {suffix && (
-          <Typography size="small" color="textVariant" ml="XS">
+          <Typography variant="body" size="small" color="textVariant" ml="XS">
             {suffix}
           </Typography>
         )}
@@ -57,11 +57,21 @@ export const StatCard: FC<StatCardProps> = ({
 
       {change !== 0 && (
         <Div display="flex" alignItems="center">
-          <Typography size="extraSmall" color={changeColor} fontWeight="500">
+          <Typography
+            variant="body"
+            size="extraSmall"
+            color={changeColor}
+            fontWeight="500"
+          >
             {isPositive ? '+' : ''}
             {change}%
           </Typography>
-          <Typography size="extraSmall" color="textVariant" ml="XS">
+          <Typography
+            variant="body"
+            size="extraSmall"
+            color="textVariant"
+            ml="XS"
+          >
             from last period
           </Typography>
         </Div>

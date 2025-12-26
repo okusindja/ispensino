@@ -424,8 +424,10 @@ const TeacherFinancialView = ({ user }: Props) => {
                 <Typography size="small" color="textVariant" variant={'body'}>
                   Receita Total
                 </Typography>
-                <Div color={overview?.growthRate >= 0 ? 'success' : 'error'}>
-                  {overview?.growthRate >= 0 ? (
+                <Div
+                  color={(overview?.growthRate ?? 0) >= 0 ? 'success' : 'error'}
+                >
+                  {(overview?.growthRate ?? 0) >= 0 ? (
                     <TrendingUp size={20} />
                   ) : (
                     <TrendingDown size={20} />
@@ -443,10 +445,10 @@ const TeacherFinancialView = ({ user }: Props) => {
               </Typography>
               <Typography
                 size="extraSmall"
-                color={overview?.growthRate >= 0 ? 'success' : 'error'}
+                color={(overview?.growthRate ?? 0) >= 0 ? 'success' : 'error'}
                 variant={'body'}
               >
-                {overview?.growthRate >= 0 ? '+' : ''}
+                {(overview?.growthRate ?? 0) >= 0 ? '+' : ''}
                 {formatPercentage(overview?.growthRate || 0)} vs período
                 anterior
               </Typography>
@@ -1085,7 +1087,6 @@ const TeacherFinancialView = ({ user }: Props) => {
           >
             <Box>
               <Typography
-                color="text"
                 size="small"
                 fontWeight="500"
                 mb="M"
@@ -1104,7 +1105,7 @@ const TeacherFinancialView = ({ user }: Props) => {
                 </Li>
                 <Li style={{ marginBottom: '8px' }}>
                   <Typography color="text" size="small" variant={'body'}>
-                    {overview?.conversionRate > 30
+                    {(overview?.conversionRate ?? 0) > 30
                       ? 'Taxa de conversão excelente'
                       : 'Melhore a taxa de conversão dos cursos gratuitos'}
                   </Typography>

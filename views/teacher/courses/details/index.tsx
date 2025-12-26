@@ -74,7 +74,11 @@ const CourseDetails: FC<CourseDetailsProps> = ({ course }) => {
             variant="primaryVariant"
             size="medium"
             onClick={() =>
-              document.querySelector('[data-radix-dialog-close]')?.click()
+              (
+                document.querySelector(
+                  '[data-radix-dialog-close]'
+                ) as HTMLElement
+              )?.click()
             }
           >
             Cancelar
@@ -85,7 +89,11 @@ const CourseDetails: FC<CourseDetailsProps> = ({ course }) => {
             onClick={() => {
               // Handle delete logic here
               alert('Curso eliminado');
-              document.querySelector('[data-radix-dialog-close]')?.click();
+              (
+                document.querySelector(
+                  '[data-radix-dialog-close]'
+                ) as HTMLElement
+              )?.click();
               router.push('/teacher/courses');
             }}
           >

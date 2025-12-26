@@ -56,7 +56,10 @@ const AdminReportsView = () => {
     sortOrder: 'desc',
   });
 
-  const { data, error, isLoading, mutate } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR<{
+    reports: any[];
+    pagination: { total: number; totalPages: number };
+  }>(
     user?.role === 'ADMIN'
       ? `/api/reports?${new URLSearchParams({
           status: filters.status,
@@ -784,9 +787,13 @@ const UpdateReportDialog = ({ reportId, currentStatus, onSuccess }: any) => {
 
       onSuccess();
       // Close dialog
-      document.querySelector('[data-radix-dialog-close]')?.click();
+      (
+        document.querySelector('[data-radix-dialog-close]') as HTMLElement
+      )?.click();
     } catch (err) {
-      setError(err.message || 'Ocorreu um erro. Tente novamente.');
+      setError(
+        err instanceof Error ? err.message : 'Ocorreu um erro. Tente novamente.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -847,7 +854,9 @@ const UpdateReportDialog = ({ reportId, currentStatus, onSuccess }: any) => {
           variant="primaryVariant"
           size="medium"
           onClick={() =>
-            document.querySelector('[data-radix-dialog-close]')?.click()
+            (
+              document.querySelector('[data-radix-dialog-close]') as HTMLElement
+            )?.click()
           }
           disabled={isSubmitting}
         >
@@ -1170,9 +1179,13 @@ const DeleteReportDialog = ({ reportId, onSuccess }: any) => {
 
       onSuccess();
       // Close dialog
-      document.querySelector('[data-radix-dialog-close]')?.click();
+      (
+        document.querySelector('[data-radix-dialog-close]') as HTMLElement
+      )?.click();
     } catch (err) {
-      setError(err.message || 'Ocorreu um erro. Tente novamente.');
+      setError(
+        err instanceof Error ? err.message : 'Ocorreu um erro. Tente novamente.'
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -1224,7 +1237,9 @@ const DeleteReportDialog = ({ reportId, onSuccess }: any) => {
           variant="primary"
           size="medium"
           onClick={() =>
-            document.querySelector('[data-radix-dialog-close]')?.click()
+            (
+              document.querySelector('[data-radix-dialog-close]') as HTMLElement
+            )?.click()
           }
           disabled={isDeleting}
         >

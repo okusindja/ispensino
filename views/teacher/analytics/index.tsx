@@ -730,10 +730,9 @@ const TeacherAnalyticsView = ({ user }: Props) => {
                                   {student.name || 'Anónimo'}
                                 </Typography>
                                 <Typography
-                                  color="text"
+                                  variant="body"
                                   size="extraSmall"
                                   color="textVariant"
-                                  variant={'body'}
                                 >
                                   {student.email || 'Sem email'}
                                 </Typography>
@@ -813,7 +812,6 @@ const TeacherAnalyticsView = ({ user }: Props) => {
               <Div display="grid" gridTemplateColumns="repeat(3, 1fr)" gap="L">
                 <Box>
                   <Typography
-                    color="text"
                     size="small"
                     fontWeight="500"
                     mb="M"

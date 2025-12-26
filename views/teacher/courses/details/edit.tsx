@@ -847,7 +847,9 @@ const DeleteConfirmationDialog = ({
 
       onSuccess();
       // Close dialog
-      document.querySelector('[data-radix-dialog-close]')?.click();
+      (
+        document.querySelector('[data-radix-dialog-close]') as HTMLElement
+      )?.click();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Ocorreu um erro inesperado'
@@ -904,7 +906,9 @@ const DeleteConfirmationDialog = ({
           variant="primaryVariant"
           size="medium"
           onClick={() =>
-            document.querySelector('[data-radix-dialog-close]')?.click()
+            (
+              document.querySelector('[data-radix-dialog-close]') as HTMLElement
+            )?.click()
           }
           disabled={isDeleting}
         >
