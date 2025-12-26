@@ -20,7 +20,7 @@ const SocialProfileEditPage: NextPageWithUserAndPosts = ({
     );
   }
 
-  return <SocialProfileView user={loggedUser} />;
+  return <SocialProfileView />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
